@@ -21,8 +21,15 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
+  TK_NOTYPE = 256,
+  TK_EQ,
+  TK_NUM,
+  TK_PLUS,
+  TK_MINUS,
+  TK_MUL,
+  TK_DIV,
+  TK_LPAR,
+  TK_RPAR,
   /* TODO: Add more token types */
 
 };
@@ -36,10 +43,17 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {" ", TK_NOTYPE},    // spaces
+  {"+",TK_PLUS},         // plus
   {"==", TK_EQ},        // equal
+  {"-",TK_MINUS},         // minus
+  {"*",TK_MUL},         // multiply
+  {"/",TK_DIV},         // divide
+  {"(",TK_LPAR},         // left parenthesis
+  {")",TK_RPAR},         // right parenthesis
+  {"[0-9]+", TK_NUM},   // number
 };
+
 
 #define NR_REGEX ARRLEN(rules)
 
@@ -70,6 +84,7 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+//根据token类型将其存储到tokens数组中
 static bool make_token(char *e) {
   int position = 0;
   int i;
@@ -78,32 +93,30 @@ static bool make_token(char *e) {
   nr_token = 0;
 
   while (e[position] != '\0') {
-    /* Try all rules one by one. */
-    for (i = 0; i < NR_REGEX; i ++) {
+    for (i = 0; i < NR_REGEX; i++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
-
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
-
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
-         * to record the token in the array `tokens'. For certain types
-         * of tokens, some extra actions should be performed.
-         */
+        if (rules[i].token_type == TK_NOTYPE)
+          continue; // 忽略空格
 
-        switch (rules[i].token_type) {
-          default: TODO();
+        if (nr_token >= 32) {
+          printf("Too many tokens.\n");
+          return false;
         }
+
+        tokens[nr_token].type = rules[i].token_type;
+        strncpy(tokens[nr_token].str, e + position - substr_len, substr_len);
+        tokens[nr_token].str[substr_len] = '\0';
+        nr_token++;
 
         break;
       }
     }
 
     if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      printf("No match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
   }
@@ -111,6 +124,24 @@ static bool make_token(char *e) {
   return true;
 }
 
+//judge whether the token is an operator
+bool is_operator(int type){
+  return type == TK_PLUS || type == TK_MINUS || type == TK_MUL || type == TK_DIV;
+}
+
+//get the precedence of the operator
+int get_precedence(int type){
+  switch(type){
+    case TK_PLUS:
+    case TK_MINUS:
+      return 1;
+    case TK_MUL:
+    case TK_DIV:
+      return 2;
+    default:
+      return 0;
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -118,8 +149,94 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  Token postfix[32];
+  int postfix_len = 0;
+  int op_stack[32];
+  int op_top = 0;
 
-  return 0;
+  for (int i = 0; i < nr_token; i++) {
+    Token token = tokens[i];
+
+    if (token.type == TK_NUM) {
+      postfix[postfix_len++] = token;
+    } else if (token.type == TK_LPAR) {
+      op_stack[op_top++] = token.type;
+    } else if (token.type == TK_RPAR) {
+      while (op_top > 0 && op_stack[op_top - 1] != TK_LPAR) {
+        postfix[postfix_len++] = (Token){op_stack[op_top - 1], ""};
+        op_top--;
+      }
+      if (op_top > 0 && op_stack[op_top - 1] == TK_LPAR)
+        op_top--;
+      else {
+        *success = false;
+        return 0;
+      }
+    } else if (is_operator(token.type)) {
+      while (op_top > 0 && op_stack[op_top - 1] != TK_LPAR && get_precedence(op_stack[op_top - 1]) >= get_precedence(token.type)) {
+        postfix[postfix_len++] = (Token){op_stack[op_top - 1], ""};
+        op_top--;
+      }
+      op_stack[op_top++] = token.type;
+    }
+  }
+
+  while (op_top > 0) {
+    if (op_stack[op_top - 1] == TK_LPAR || op_stack[op_top - 1] == TK_RPAR) {
+      *success = false;
+      return 0;
+    }
+    postfix[postfix_len++] = (Token){op_stack[op_top - 1], ""};
+    op_top--;
+  }
+
+  int value_stack[32];
+  int value_top = 0;
+
+  for (int i = 0; i < postfix_len; i++) {
+    Token token = postfix[i];
+
+    if (token.type == TK_NUM) {
+      int num = atoi(token.str);
+      value_stack[value_top++] = num;
+    } else if (is_operator(token.type)) {
+      if (value_top < 2) {
+        *success = false;
+        return 0;
+      }
+      int b = value_stack[--value_top];
+      int a = value_stack[--value_top];
+      int result;
+      switch (token.type) {
+        case TK_PLUS:
+          result = a + b;
+          break;
+        case TK_MINUS:
+          result = a - b;
+          break;
+        case TK_MUL:
+          result = a * b;
+          break;
+        case TK_DIV:
+          if (b == 0) {
+            *success = false;
+            return 0;
+          }
+          result = a / b;
+          break;
+        default:
+          *success = false;
+          return 0;
+      }
+      value_stack[value_top++] = result;
+    }
+  }
+
+  if (value_top != 1) {
+    *success = false;
+    return 0;
+  }
+
+  *success = true;
+  return value_stack[0];
 }

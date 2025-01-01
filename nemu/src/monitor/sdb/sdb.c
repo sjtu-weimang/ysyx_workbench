@@ -53,7 +53,17 @@ static int cmd_siN(char *args){
   cpu_exec(n);
   return 0;
 }
-
+//表达式求值的命令
+static int cmd_p(char *args) {
+  bool success = true;
+  word_t result = expr(args, &success);
+  if (success) {
+    printf("result = %u\n", result);
+  } else {
+    printf("Invalid expression\n");
+  }
+  return 0;
+}
 //打印程序的状态命令
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
@@ -89,6 +99,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single step execution of the program", cmd_siN },
   { "info", "Print program state", cmd_info },
+  { "p", "Expression evaluation", cmd_p },
   /* TODO: Add more commands */
 
 };
