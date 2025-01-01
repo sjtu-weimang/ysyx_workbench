@@ -55,10 +55,20 @@ void reg_test() {
 
 //打印机村其状态
 void isa_reg_display() {
-  printf("the state of reg:\n");
-  for (int i = 0; i < 8; i++) {
-    printf("%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
-  }
+    printf("The state of registers:\n");
+
+    // 打印通用寄存器
+    printf("EAX: 0x%08x\n", cpu.eax);
+    printf("ECX: 0x%08x\n", cpu.ecx);
+    printf("EDX: 0x%08x\n", cpu.edx);
+    printf("EBX: 0x%08x\n", cpu.ebx);
+    printf("ESP: 0x%08x\n", cpu.esp);
+    printf("EBP: 0x%08x\n", cpu.ebp);
+    printf("ESI: 0x%08x\n", cpu.esi);
+    printf("EDI: 0x%08x\n", cpu.edi);
+
+    // 打印程序计数器
+    printf("PC : 0x%08x\n", cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
