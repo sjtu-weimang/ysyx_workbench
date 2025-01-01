@@ -42,11 +42,21 @@ static char* rl_gets() {
   return line_read;
 }
 
+//单步执行的命令
+static int cmd_siN(char *args){
+  char *arg = strtok(NULL, " ");
+  int n = 1;
+  if (arg != NULL) {
+    sscanf(arg, "%d", &n);
+  }
+  printf("n = %d\n", n);
+  cpu_exec(n);
+  return 0;
+}
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
 }
-
 
 static int cmd_q(char *args) {
   return -1;
@@ -62,11 +72,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Single step execution of the program", cmd_siN },
   /* TODO: Add more commands */
 
 };
 
+//获取命令的数量
 #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_help(char *args) {
