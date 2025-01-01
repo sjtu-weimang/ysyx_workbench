@@ -53,7 +53,7 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
-//打印机村其状态
+//打印寄存器的状态
 void isa_reg_display() {
     printf("The state of registers:\n");
 
