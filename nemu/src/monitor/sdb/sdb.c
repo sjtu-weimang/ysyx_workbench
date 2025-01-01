@@ -64,6 +64,24 @@ static int cmd_p(char *args) {
   }
   return 0;
 }
+//扫描内存的命令
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  int n;
+  vaddr_t addr;
+  sscanf(arg, "%d", &n);
+  arg = strtok(NULL, " ");
+  sscanf(arg, "%x", &addr);
+  for (int i = 0; i < n; i++) {
+    printf("0x%08x: ", addr);
+    for (int j = 0; j < 4; j++) {
+      printf("0x%02x ", vaddr_read(addr, 1));
+      addr++;
+    }
+    printf("\n");
+  }
+  return 0;
+}
 //打印程序的状态命令
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
@@ -100,6 +118,7 @@ static struct {
   { "si", "Single step execution of the program", cmd_siN },
   { "info", "Print program state", cmd_info },
   { "p", "Expression evaluation", cmd_p },
+  { "x","Scann the memory address",cmd_x},
   /* TODO: Add more commands */
 
 };
