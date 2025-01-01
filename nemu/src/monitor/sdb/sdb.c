@@ -53,6 +53,20 @@ static int cmd_siN(char *args){
   cpu_exec(n);
   return 0;
 }
+
+//打印程序的状态命令
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  }else if (strcmp(arg, "w") == 0) {
+    //wp_display();
+    printf("wp_display to be implement\n");
+  }else {
+    printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
@@ -73,6 +87,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single step execution of the program", cmd_siN },
+  { "info", "Print program state", cmd_info },
   /* TODO: Add more commands */
 
 };
