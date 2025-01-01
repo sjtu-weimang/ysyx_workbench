@@ -53,8 +53,12 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
+//打印机村其状态
 void isa_reg_display() {
-  printf("EAX 0x%08x %10u\n", cpu.eax, cpu.eax);
+  printf("the state of reg:\n");
+  for (int i = 0; i < 8; i++) {
+    printf("%s: 0x%08x\n", regsl[i], cpu.gpr[i]._32);
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
