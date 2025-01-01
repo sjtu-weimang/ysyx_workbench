@@ -54,6 +54,7 @@ void reg_test() {
 }
 
 void isa_reg_display() {
+  printf("EAX 0x%08x %10u\n", cpu.eax, cpu.eax);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
