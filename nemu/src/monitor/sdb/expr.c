@@ -43,15 +43,15 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" ", TK_NOTYPE},    // spaces
-  {"+",TK_PLUS},         // plus
-  {"==", TK_EQ},        // equal
-  {"-",TK_MINUS},         // minus
-  {"*",TK_MUL},         // multiply
-  {"/",TK_DIV},         // divide
-  {"(",TK_LPAR},         // left parenthesis
-  {")",TK_RPAR},         // right parenthesis
-  {"[0-9]+", TK_NUM},   // number
+  {" +", TK_NOTYPE},    // 空格
+  {"\\+", TK_PLUS},     // 加号
+  {"-", TK_MINUS},      // 减号
+  {"\\*", TK_MUL},      // 乘号
+  {"/", TK_DIV},        // 除号
+  {"==", TK_EQ},        // 等号
+  {"[0-9]+", TK_NUM},   // 数字
+  {"\\(", TK_LPAR},      // 左括号
+  {"\\)", TK_RPAR},      // 右括号
 };
 
 
