@@ -20,6 +20,8 @@
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
+
+//初始化 wp_pool head指向已分配的wp，free_指向未分配的wp
 void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
@@ -39,7 +41,7 @@ bool check_watchpoint(WP **point){
   while (cur){
     if (cur->condation){
       *point = cur;
-      //IFDEF(CONFIG_DEBUG, Log("Break"));
+      IFDEF(CONFIG_DEBUG, Log("Break"));
       return true;
     }
     cur = cur->next;
@@ -47,18 +49,19 @@ bool check_watchpoint(WP **point){
   return false;
 }
 
-
+//从free_链表中返回一个空闲的监视点结构
 WP* new_wp(const char *condation, bool *success){
   if (free_->next == NULL){
     assert(0);
   }
-  
+  //返回free_的下一个监视点，free_->next指向下一个监视点
   WP* result = free_->next;
-  result->NO = number ++;
+  result->NO = number++;
   free_->next = result->next;
   result->next = NULL;
   strcpy(result->condation, condation);
   
+  //如果head为空，head指向res，否则将res插到队头
   if (head == NULL){
     head = result;
   }else{
@@ -69,11 +72,13 @@ WP* new_wp(const char *condation, bool *success){
   return result;
 }
 
+//将释放的结点插到free_链表的头部
 static void insert_free(WP *wp){
   wp->next = free_->next;
   free_->next = wp;
 }
 
+//将wp归还到free_链表中
 void free_wp(int NO){
   if (head->NO == NO){
     WP* buffer = head->next;
@@ -81,7 +86,7 @@ void free_wp(int NO){
     head = buffer;
     return ;
   }
-
+  //从链表中删除一个节点前，要保存前一个节点
   WP* prev = head;
   while (prev->next){
     if (prev->next->NO == NO){
@@ -96,6 +101,7 @@ void free_wp(int NO){
   printf("未找到 \e[1;36mWatchPoint(NO.%d)\e[0m\n", NO);
 }
 
+//遍历链表
 void wp_display(){
   printf("NO.\tCondation\n");
   WP* cur = head;
