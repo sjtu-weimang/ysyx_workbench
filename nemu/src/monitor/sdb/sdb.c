@@ -110,8 +110,8 @@ static int cmd_info(char *args) {
     printf("the states of riscv32 registers displayed:\n");
     isa_reg_display();
   }else if (strcmp(arg, "w") == 0) {
-    //wp_display();
-    printf("wp_display to be implement\n");
+    wp_display();
+    //printf("wp_display to be implement\n");
   }else {
     printf("Unknown command '%s'\n", arg);
   }

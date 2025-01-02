@@ -96,7 +96,7 @@ void free_wp(int NO){
   printf("未找到 \e[1;36mWatchPoint(NO.%d)\e[0m\n", NO);
 }
 
-void watchpoint_display(){
+void wp_display(){
   printf("NO.\tCondation\n");
   WP* cur = head;
   while (cur){
