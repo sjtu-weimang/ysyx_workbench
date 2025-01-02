@@ -58,21 +58,25 @@ static int cmd_p(char *args) {
   bool success = true;
   word_t result = expr(args, &success);
   if (success) {
-    printf("result = %u\n", result);
+    printf("%s= \e[1;36m%u\e[0m\n",args,result);
   } else {
     printf("Invalid expression\n");
   }
   return 0;
 }
+
 //扫描内存的命令
 static int cmd_x(char *args) {
   char *arg = strtok(NULL, " ");
-  int n;
-  vaddr_t addr;
-  sscanf(arg, "%d", &n);
+  int n=-1;
+  bool success=true;
+  vaddr_t addr=0x80000000;
+  sscanf(arg, "%d", &n); //把表达式转化为整数常量
   arg = strtok(NULL, " ");
-  sscanf(arg, "%x", &addr);
-  for (int i = 0; i < n; i++) {
+  //sscanf(arg, "%x", &addr);
+  addr=expr(arg,&success);
+  if(!success)return 0;
+  for(int i = 0; i < n; i++){
     printf("0x%08x: ", addr);
     for (int j = 0; j < 4; j++) {
       printf("0x%02x ", vaddr_read(addr, 1));
@@ -82,10 +86,27 @@ static int cmd_x(char *args) {
   }
   return 0;
 }
+
+//设置监视点的命令
+static int cmd_w(char* args){
+    bool success=true;
+    WP* point =new_wp(args,&success);
+    if(!success){
+      printf("Some things wrong happend.\n");
+    }else{
+      printf("create a WatchPoint(No.%d):%s\n",point->NO,point
+      ->condation);
+    }
+    return 0;
+  }
+
 //打印程序的状态命令
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
-  if (strcmp(arg, "r") == 0) {
+  if (arg==NULL){
+    printf("info指令缺少参数\n");
+  }
+  else if (strcmp(arg, "r") == 0) {
     printf("the states of riscv32 registers displayed:\n");
     isa_reg_display();
   }else if (strcmp(arg, "w") == 0) {
@@ -119,6 +140,7 @@ static struct {
   { "info", "Print program state", cmd_info },
   { "p", "Expression evaluation", cmd_p },
   { "x","Scann the memory address",cmd_x},
+  { "w","Set watch point",cmd_w}
   /* TODO: Add more commands */
 
 };
