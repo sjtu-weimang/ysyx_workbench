@@ -255,41 +255,40 @@ bool check_parenteses(int p,int q){
   for(int i=p;i<=q;i++){
     if(tokens[i].type=='(')balance++;
     if(tokens[i].type==')')balance--;
-    if(balance==0 && i!=q) return false;
+    if(balance<0)return false;
   }
-  return true;
+  return balance==0;
 }
 
-// 查找主运算符的位置
+// 找到主运算符的位置
 int find_main_op(int p, int q) {
   int balance = 0;
-  int main_op_pos = -1;
-  int min_priority = 9999; // 优先级最低的运算符
-
+  int op_pos = -1;
   for (int i = p; i <= q; i++) {
-    if (tokens[i].type == '(') balance++;
-    if (tokens[i].type == ')') balance--;
-    if (balance != 0) continue; // 忽略括号内的运算符
-
-    int priority = 9999;
-    switch (tokens[i].type) {
-      case '+':
-      case '-':
-        priority = 1; // 加减法优先级最低
+    if (tokens[i].type == '(')
+      balance++;
+    else if (tokens[i].type == ')')
+      balance--;
+    if (balance == 0) {
+      if (tokens[i].type == '+' || tokens[i].type == '-') {
+        op_pos = i;
         break;
-      case '*':
-      case '/':
-        priority = 2; // 乘除法优先级较高
-        break;
-    }
-
-    if (priority <= min_priority) {
-      min_priority = priority;
-      main_op_pos = i;
+      }
     }
   }
-
-  return main_op_pos;
+  if (op_pos == -1) {
+    for (int i = p; i <= q; i++) {
+      if (tokens[i].type == '(')
+        balance++;
+      else if (tokens[i].type == ')')
+        balance--;
+      if (balance == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) {
+        op_pos = i;
+        break;
+      }
+    }
+  }
+  return op_pos;
 }
 //递归计算表达式的值
 int eval(int p,int q){
