@@ -343,6 +343,6 @@ word_t expr(char *e, bool *success){
     *success = false;
     return 0;
   }
-  int p=0,q=nr_token;
+  int p=0,q=nr_token-1;
   return eval(p,q);
 }
