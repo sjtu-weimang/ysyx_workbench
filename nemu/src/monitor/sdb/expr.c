@@ -247,7 +247,7 @@ int get_precedence(int type){
 
 
 //检查表达式是否被一对匹配的括号包围
-bool check_parenteses(int p,int q){
+bool check_parentheses(int p,int q){
   if(tokens[p].type!='('||tokens[q].type!=')'){
     return false;
   }
@@ -290,53 +290,48 @@ int find_main_op(int p, int q) {
   }
   return op_pos;
 }
-//递归计算表达式的值
-int eval(int p,int q){
-  if(p>q){
-    //无效表达式
-    printf("Bad expresssion.\n");
-    return 0;
-  }else if(p==q){
-    //单个token，必须是数字
-    if(tokens[p].type==TK_NUM){
-      int val=atoi(tokens[p].str);
-      return val;
-    }else{
-      printf("Expected a number,but got: %s\n",tokens[p].str);
-      return 0;
-    }
-  }else if(check_parenteses(p,q)){
-    //递归计算去掉括号后的表达式
-    return eval(p+1,q-1);
-  }else{
-    //查找主运算符
-    int op_pos=find_main_op(p,q);
-    if(op_pos==-1){
-      printf("No main operator found.\n");
-      return 0;
-    }
-
-    int val1=eval(p,op_pos-1);
-    int val2=eval(op_pos+1,q);
-
-    switch(tokens[op_pos].type){
-      case '+':return val1+val2;break;
-      case '-':return val1-val2;break;
-      case '*':return val1*val2;break;
-      case '/':
-        if(val2==0){
-          printf("Division by zero.\n");
-          return 0;
-        }
-        return val1/val2;
-      default:
-        printf("Unknown operator: %s\n",tokens[op_pos].str);
-        return 0;
+// 递归计算表达式的值
+double eval(int p, int q) {
+  if (p > q) {
+    fprintf(stderr, "Bad expression.\n");
+    return 0.0;
+  }
+  if (p == q) {
+    if (tokens[p].type == TK_NUM) {
+      return atof(tokens[p].str);
+    } else {
+      fprintf(stderr, "Expected a number at position %d.\n", p);
+      return 0.0;
     }
   }
-
+  if (check_parentheses(p, q)) {
+    return eval(p + 1, q - 1);
+  }
+  int op_pos = find_main_op(p, q);
+  if (op_pos == -1) {
+    fprintf(stderr, "No operator found between positions %d and %d.\n", p, q);
+    return 0.0;
+  }
+  double val1 = eval(p, op_pos - 1);
+  double val2 = eval(op_pos + 1, q);
+  switch (tokens[op_pos].type) {
+    case '+':
+      return val1 + val2;
+    case '-':
+      return val1 - val2;
+    case '*':
+      return val1 * val2;
+    case '/':
+      if (val2 == 0.0) {
+        fprintf(stderr, "Division by zero.\n");
+        return 0.0;
+      }
+      return val1 / val2;
+    default:
+      assert(0);
+      return 0.0;
+  }
 }
-
 //使用递归的方式计算表达式的值
 word_t expr(char *e, bool *success){
     if (!make_token(e)) {
