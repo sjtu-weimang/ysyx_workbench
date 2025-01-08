@@ -41,7 +41,7 @@ bool check_watchpoint(WP **point){
   //point是指针的指针，用来指示引发中断的变量
   //假设观察点的变量都是无符号整数
     static WP* last=NULL;
-          bool *success=NULL;
+    bool success=true;
     static uint32_t last_value=0x80000000;//代指一个未初始化的数值
    if(last==NULL){
      last=head;
@@ -52,7 +52,7 @@ bool check_watchpoint(WP **point){
 
       uint32_t cur_value;
       
-      cur_value=expr(cur->expression,success);
+      cur_value=expr(cur->expression,&success);
       cur_value=1;
       //printf("cur_expression: %s",cur->expression);
       printf("cur_value:%d\n",cur_value);
