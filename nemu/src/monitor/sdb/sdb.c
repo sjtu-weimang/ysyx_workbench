@@ -116,6 +116,18 @@ static int cmd_info(char *args) {
   }
   return 0;
 }
+
+//删除监视点的指令
+static int cmd_d(char * args){
+  if (args==NULL){
+    printf("指令缺少参数N.\n");
+    return -1;
+  }
+  int N=atoi(args);
+  free_wp(N);
+  printf("Watch point %d has been deleted.\n",N);
+  return 0;
+}
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
@@ -140,7 +152,8 @@ static struct {
   { "info", "Print program state", cmd_info },
   { "p", "Expression evaluation", cmd_p },
   { "x","Scann the memory address",cmd_x},
-  { "w","Set watch point",cmd_w}
+  { "w","Set watch point",cmd_w},
+  {"d","Delete the watch point with code N",cmd_d}
   /* TODO: Add more commands */
 
 };
