@@ -125,7 +125,6 @@ static int cmd_d(char * args){
   }
   int N=atoi(args);
   free_wp(N);
-  printf("Watch point %d has been deleted.\n",N);
   return 0;
 }
 static int cmd_c(char *args) {

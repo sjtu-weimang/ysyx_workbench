@@ -79,12 +79,13 @@ static void insert_free(WP *wp){
 }
 
 //将wp归还到free_链表中
-void free_wp(int NO){
+int free_wp(int NO){
   if (head->NO == NO){
+    //如果只有一个wp，释放head
     WP* buffer = head->next;
     insert_free(head);
     head = buffer;
-    return ;
+    return 1;
   }
   //从链表中删除一个节点前，要保存前一个节点
   WP* prev = head;
@@ -93,12 +94,13 @@ void free_wp(int NO){
       WP* buffer = prev->next->next;
       insert_free(prev->next);
       prev->next = buffer;
-      return ;
+      return 1;
     }
     prev = prev->next;
   }
-
+  //要删除的结点编号不存在
   printf("未找到 \e[1;36mWatchPoint(NO.%d)\e[0m\n", NO);
+  return 0;
 }
 
 //遍历链表
@@ -113,5 +115,7 @@ void wp_display(){
 
 //删除观察点
 void delete_watchpoint(int no){
-  free_wp(no);
+  if(free_wp(no)){
+    printf("Watch point %d has been deleted.\n",no);
+  }
 }
