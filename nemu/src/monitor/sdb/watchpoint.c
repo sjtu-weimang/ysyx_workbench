@@ -51,6 +51,7 @@ bool check_watchpoint(WP **point){
 
 //从free_链表中返回一个空闲的监视点结构
 WP* new_wp(const char *condation, bool *success){
+  //所有可用的监视点都被分配
   if (free_->next == NULL){
     assert(0);
   }
@@ -99,7 +100,7 @@ int free_wp(int NO){
     prev = prev->next;
   }
   //要删除的结点编号不存在
-  printf("未找到 \e[1;36mWatchPoint(NO.%d)\e[0m\n", NO);
+  printf("Can't find Watch Point(NO.%d) \n", NO);
   return 0;
 }
 
