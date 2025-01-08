@@ -115,7 +115,13 @@ void wp_display(){
 
 //删除观察点
 void delete_watchpoint(int no){
+  //在没有观察点时使用删除操作
+  if(head==NULL){
+    printf("Watch point has not been set!\n");
+    return;
+  }
   if(free_wp(no)){
     printf("Watch point %d has been deleted.\n",no);
   }
+  return ;
 }
