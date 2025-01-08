@@ -156,8 +156,10 @@ static bool make_token(const char *e) {
   return true;
 }
 
+//pq为左右指针，position记录出现bug的位置
 word_t eval(int p, int q, bool *success, int *position);
 
+//递归解析表达式
 word_t expr(const char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -173,6 +175,7 @@ word_t expr(const char *e, bool *success) {
   return ans;
 }
 
+//检查括号是否匹配
 #define STACK_SIZE 1024
 bool check_parentheses(int p, int q, int *position){
   //char *stack = calloc(STACK_SIZE, sizeof(char));
@@ -180,6 +183,7 @@ bool check_parentheses(int p, int q, int *position){
   *position = -1;
   int top = -1, index = p;
   bool is_parentheses = tokens[p].type == '(';
+  //遇到左括号压站，右括号出栈(记录栈顶位置)
   while (index <= q){
     if (tokens[index].type == '('){
       stack[++top] = '(';
@@ -191,11 +195,13 @@ bool check_parentheses(int p, int q, int *position){
         top--;
       }
     }
+    //扫描完之前，永远都该有一个前括号
     if (index < q)
-      is_parentheses = (top >= 0) && is_parentheses; // 永远都该有一个前括号
+      is_parentheses = (top >= 0) && is_parentheses; 
     index++;
   }
-  if (top != -1){ //栈空
+  //扫描完毕后应保证栈是空的
+  if (top != -1){ 
     *position = p;
     return false;
   }
@@ -204,6 +210,7 @@ bool check_parentheses(int p, int q, int *position){
 
 #define PRIOROTY_BASE 16
 
+//规定运算符的优先级
 int prio(char type){
   switch (type) {
   case '|':
@@ -228,7 +235,7 @@ int prio(char type){
     return -1;
   }
 }
-
+  //由于规定了表达式中为无符号数，负数会溢出
 u_int32_t eval(int p, int q, bool *success, int *position) {
   if (p > q) {
     *success = false;
@@ -274,7 +281,7 @@ u_int32_t eval(int p, int q, bool *success, int *position) {
       break;
     
     case MINUS://取负
-      return -eval(p + 1, q, success, position);
+      return eval(p + 1, q, success, position);
     default:
       assert(0);
     }
