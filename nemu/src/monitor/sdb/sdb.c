@@ -103,7 +103,7 @@ static int cmd_w(char* args){
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
   if (arg==NULL){
-    printf("info指令缺少参数\n");
+    printf("info \n");
   }
   else if (strcmp(arg, "r") == 0) {
     printf("the states of riscv32 registers displayed:\n");
@@ -120,7 +120,7 @@ static int cmd_info(char *args) {
 //删除监视点的指令
 static int cmd_d(char * args){
   if (args==NULL){
-    printf("指令缺少参数N.\n");
+    printf("d instruciton is missing parameter N.\n");
     return 0;
   }
   int N=atoi(args);
