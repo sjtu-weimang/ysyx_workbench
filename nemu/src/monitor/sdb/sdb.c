@@ -75,7 +75,7 @@ static int cmd_x(char *args) {
   //sscanf(arg, "%x", &addr);
   addr=expr(arg,&success);
   if(!success){
-    printf("expression in invalid.\n");
+    printf("expression is invalid.\n");
     return 0;}
   if(addr<0x8000000 || addr>0xffffffff){
     printf("invalid address.\n");
