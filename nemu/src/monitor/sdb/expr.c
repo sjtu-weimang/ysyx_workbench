@@ -274,25 +274,23 @@ u_int32_t eval(int p, int q, bool *success, int *position) {
     }
     // IFDEF(CONFIG_DEBUG, Log("读取数据 %d %s %x", buffer, tokens[p].str, tokens[p].type));
     return buffer;
-  }else if (q - p == 1 || check_parentheses(p + 1, q, position) == true){//长度为2的子表达式呈型于 -[NUM] *[NUM]
+  }else if (q - p == 1 || check_parentheses(p + 1, q, position) == true){//长度为2的子表达式呈型于 -[NUM] 或 *[NUM]
     switch (tokens[p].type) {
     case DEREF:
       return *((uint32_t *)guest_to_host(eval(p + 1, q, success, position)));
       break;
     
     case MINUS://取负
-      return eval(p + 1, q, success, position);
+      return -eval(p + 1, q, success, position);
     default:
       assert(0);
     }
   } else if (check_parentheses(p, q, position) == true) {
-    /* The expression is surrounded by a matched pair of parentheses.
-     * If that is the case, just throw away the parentheses.
-     */
-    // IFDEF(CONFIG_DEBUG, Log("解括号"));
+    //去除嵌套的括号
     return eval(p + 1, q - 1, success, position);
+    //经过上一步之后最多只有一层括号
   } else {
-    // IFDEF(CONFIG_DEBUG, Log("计算"));
+    //
     if (*position != -1){
       *success = false;
       return 0;
@@ -302,7 +300,7 @@ u_int32_t eval(int p, int q, bool *success, int *position) {
       if (tokens[i].type == '('){
         level++;
       } else if (tokens[i].type == ')'){
-        level--;// 不再检查合法性，一定合法
+        level--;
       } else if (level == -1 && prio(tokens[i].type) >= 0){//说明层次不在括号里且是运算符
         if (op == -1 || prio(tokens[i].type) <= prio(tokens[op].type)){// 寻找主运算符
           op = i;
