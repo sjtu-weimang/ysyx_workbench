@@ -13,25 +13,25 @@ enum {
   TK_NOTYPE = 0x41, TK_EQ, 
   NUM, HEX, TK_UEQ, REG, DEREF, MINUS
 };
-
+//词法分析规则
 static struct rule {
   const char *regex;
   int token_type;
-} rules[] = {//这里面不要有字符的type，因为标识从A开始
+} rules[] = {
   {"0x[0-9A-Fa-f]+", HEX}, //16进制数字
   {"\\$[0-9a-z]+", REG},//寄存器
-  {"[0-9]+",NUM},       // 数字
+  {"[0-9]+",NUM},       // 10进制数字
   {"\\(", '('},         // 左括号
   {"\\)", ')'},         // 右括号
-  {"\\+", '+'},         // plus
-  {"\\-", '-'},         // sub
-  {"\\*", '*'},         // mul
-  {"\\/", '/'},         // divide
+  {"\\+", '+'},         // 加
+  {"\\-", '-'},         // 减
+  {"\\*", '*'},         // 乘
+  {"\\/", '/'},         // 除
   {" +", TK_NOTYPE},    // spaces
-  {"==", TK_EQ},        // equal
-  {"!=", TK_UEQ},
-  {"&&", '&'},
-  {"\\|\\|", '|'}
+  {"==", TK_EQ},        // 等
+  {"!=", TK_UEQ},       // 不等
+  {"&&", '&'},          // and
+  {"\\|\\|", '|'}       // or
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -51,6 +51,7 @@ void init_regex() {
   assert(ARRLEN(rules) < 26);
 
   for (i = 0; i < NR_REGEX; i ++) {
+    //编译正则表达式
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
@@ -69,16 +70,18 @@ static int nr_token __attribute__((used))  = 0;
 
 int prio(char type);
 
+//通过词法分析器将expr变为token数组
 static bool make_token(const char *e) {
   int position = 0;
   int i;
   regmatch_t pmatch;
 
   nr_token = 0;
-
+  //逐个扫描expr直到遇到'\0'
   while (e[position] != '\0') {
-    /* Try all rules one by one. */
+    /* 主条匹配正则规则 */
     for (i = 0; i < NR_REGEX; i ++) {
+      //rm_so 匹配串的起始位置，rm_eo 匹配串的结束位置
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         const char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
@@ -86,7 +89,7 @@ static bool make_token(const char *e) {
         if (substr_len > 32){
           assert(0);
         }
-
+        //打印匹配信息
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
@@ -98,8 +101,10 @@ static bool make_token(const char *e) {
          */
 
         switch (rules[i].token_type) {
+          //检查是否为负数或解引用操作符
           case '*':
           case '-':
+            //在一个expr 首部出现 或 前一个token为高优先级运算符的 - * 被识别为负和解引用
             if (nr_token == 0 || tokens[nr_token - 1].type == '(' || prio(tokens[nr_token - 1].type) > 0){
               switch (rules[i].token_type)
               {
@@ -109,20 +114,22 @@ static bool make_token(const char *e) {
               case '-':
                 tokens[nr_token].type = MINUS;
                 break;
-              }
+              }  //前一个token为数字或右括号，识别为减和乘
             }else if (tokens[nr_token - 1].type == ')' 
               || tokens[nr_token - 1].type == NUM || tokens[nr_token - 1].type == HEX
               || tokens[nr_token - 1].type == REG){
               tokens[nr_token].type = rules[i].token_type;
             }else {
+              //其他情况非法
               IFDEF(CONFIG_DEBUG, Log("遇到了%#x作为前缀", tokens[i - 1].type));
               assert(0);
             }
             nr_token++;
             break;
-
+          //空格跳过
           case TK_NOTYPE:
             break;
+          //数字和寄存器存到token.str中
           case NUM:
           case HEX:
           case REG:
@@ -130,6 +137,7 @@ static bool make_token(const char *e) {
             tokens[nr_token].str[substr_len] = '\0';
             // IFDEF(CONFIG_DEBUG, Log("[DEBUG ]读入了一个数字%s", tokens[nr_token].str));
           default: 
+          //其他符号只存入token.type
             tokens[nr_token].type = rules[i].token_type;
             nr_token++;
             break;
