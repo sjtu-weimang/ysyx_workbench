@@ -165,9 +165,10 @@ word_t expr(const char *e, bool *success) {
     *success = false;
     return 0;
   }
-  printf("start parsing .....\n");
+  //printf("start parsing .....\n");
   *success = true;
   int position = 0;
+  printf("%d",nr_token);
   int ans = eval(0, nr_token - 1, success, &position);
   if (!*success){
     printf("some problem happens at position %d\n%s\n%*.s^\n", position, e, position, "");
