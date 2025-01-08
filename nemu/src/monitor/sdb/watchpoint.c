@@ -46,6 +46,7 @@ bool check_watchpoint(WP **point){
   // }
   // WP  *cur=last;
     WP *cur=head;
+    int n=0;
   while (cur){
     if (cur->expression){
       //bool *success=NULL;
@@ -60,6 +61,8 @@ bool check_watchpoint(WP **point){
       return true;}
     }
     cur = cur->next;
+    n++;
+    printf("n:%d\n",n);
   }
   return false;
 }
