@@ -48,10 +48,10 @@ bool check_watchpoint(WP **point){
     WP  *cur=last;
     while (cur){
     if (cur->expression){
-      //bool *success=NULL;
+      bool *success=NULL;
       uint32_t cur_value;
       
-      //cur_value=expr(cur->expression,success);
+      cur_value=expr(cur->expression,success);
       cur_value=1;
       //printf("cur_expression: %s",cur->expression);
       printf("cur_value:%d\n",cur_value);
