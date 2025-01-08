@@ -40,13 +40,12 @@ bool check_watchpoint(WP **point){
   //用函数内部的静态变量保存上一次返回的位置
   //point是指针的指针，用来指示引发中断的变量
   //假设观察点的变量都是无符号整数
-   static WP* last=NULL;
-  static uint32_t last_value=34643;//代指一个未初始化的数值
+    static WP* last=NULL;
+    static uint32_t last_value=34643;//代指一个未初始化的数值
    if(last==NULL){
      last=head;
    }
     WP  *cur=last;
-    int n=0;
     while (cur){
     if (cur->expression){
       //bool *success=NULL;
@@ -54,7 +53,7 @@ bool check_watchpoint(WP **point){
       
       //cur_value=expr(cur->expression,success);
       cur_value=1;
-      printf("cur_expression: %s",cur->expression);
+      //printf("cur_expression: %s",cur->expression);
       printf("cur_value:%d\n",cur_value);
       //如果观察点的变量发生变化，则引发中断
       if(cur_value!=last_value){
@@ -66,8 +65,6 @@ bool check_watchpoint(WP **point){
       return true;}
     }
     cur = cur->next;
-    n++;
-    printf("n:%d\n",n);
   }
   return false;
 }
