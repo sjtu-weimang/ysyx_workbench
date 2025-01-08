@@ -58,6 +58,7 @@ bool check_watchpoint(WP **point){
       last_value=cur_value;
       printf("cur_value:%d\n",cur_value);
       //IFDEF(CONFIG_DEBUG, Log("Break"));
+      printf("n:%d\n",n);
       return true;}
     }
     cur = cur->next;
