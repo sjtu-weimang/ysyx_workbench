@@ -39,12 +39,13 @@ static int number = 1;
 bool check_watchpoint(WP **point){
   //用函数内部的静态变量保存上一次返回的位置
   //假设观察点的变量都是无符号整数
-  static WP* last=NULL;
+  // static WP* last=NULL;
   static uint32_t last_value=34643;//代指一个未初始化的数值
-  if(last==NULL){
-    last=head;
-  }
-  WP  *cur=last;
+  // if(last==NULL){
+  //   last=head;
+  // }
+  // WP  *cur=last;
+    WP *cur=head;
   while (cur){
     if (cur->expression){
       bool *success=NULL;
@@ -52,6 +53,7 @@ bool check_watchpoint(WP **point){
       cur_value=expr(cur->expression,success);
       if(cur_value!=last_value){
       last_value=cur_value;
+      printf("cur_value:%d\n",cur_value);
       IFDEF(CONFIG_DEBUG, Log("Break"));
       return true;}
     }
