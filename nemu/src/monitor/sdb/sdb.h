@@ -25,12 +25,12 @@ void wp_display();
 typedef struct watchpoint {
     int NO;
     struct watchpoint* next;
-    char condation[32];
+    char expression[32];
 }WP;
 
 bool check_watchpoint(WP **point);
 
-WP* new_wp(const char *condation, bool *success);
+WP* new_wp(const char *expression, bool *success);
 
 void delete_watchpoint(int no);
 

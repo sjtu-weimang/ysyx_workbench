@@ -39,7 +39,7 @@ static int number = 1;
 bool check_watchpoint(WP **point){
   WP *cur = head;
   while (cur){
-    if (cur->condation){
+    if (cur->expression){
       *point = cur;
       IFDEF(CONFIG_DEBUG, Log("Break"));
       return true;
@@ -50,7 +50,7 @@ bool check_watchpoint(WP **point){
 }
 
 //从free_链表中返回一个空闲的监视点结构
-WP* new_wp(const char *condation, bool *success){
+WP* new_wp(const char *expression, bool *success){
   //所有可用的监视点都被分配
   if (free_->next == NULL){
     assert(0);
@@ -60,7 +60,7 @@ WP* new_wp(const char *condation, bool *success){
   result->NO = number++;
   free_->next = result->next;
   result->next = NULL;
-  strcpy(result->condation, condation);
+  strcpy(result->expression, expression);
   
   //如果head为空，head指向res，否则将res插到队头
   if (head == NULL){
@@ -106,10 +106,10 @@ int free_wp(int NO){
 
 //遍历链表
 void wp_display(){
-  printf("NO.\tCondation\n");
+  printf("NO.\texpression\n");
   WP* cur = head;
   while (cur){
-    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->condation);
+    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->expression);
     cur = cur->next;
   }
 }

@@ -100,7 +100,7 @@ static int cmd_w(char* args){
       printf("Some things wrong happend.\n");
     }else{
       printf("create a WatchPoint(No.%d):%s\n",point->NO,point
-      ->condation);
+      ->expression);
     }
     return 0;
   }
