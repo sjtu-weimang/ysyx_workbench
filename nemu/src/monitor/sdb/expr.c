@@ -302,11 +302,12 @@ u_int32_t eval(int p, int q, bool *success, int *position) {
       } else if (tokens[i].type == ')'){
         level--;
       } else if (level == -1 && prio(tokens[i].type) >= 0){//说明层次不在括号里且是运算符
-        if (op == -1 || prio(tokens[i].type) <= prio(tokens[op].type)){// 寻找主运算符
+        if (op == -1 || prio(tokens[i].type) <= prio(tokens[op].type)){// 寻找主运算符，即第一个优先级最低的运算符
           op = i;
         }
       }
     }
+    //找不到主运算符
     if (op == -1){
       *success = false;
       *position = 0;
