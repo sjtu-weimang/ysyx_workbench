@@ -121,7 +121,7 @@ static int cmd_info(char *args) {
 static int cmd_d(char * args){
   if (args==NULL){
     printf("指令缺少参数N.\n");
-    return -1;
+    return 0;
   }
   int N=atoi(args);
   free_wp(N);
