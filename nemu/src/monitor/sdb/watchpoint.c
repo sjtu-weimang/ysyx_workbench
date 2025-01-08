@@ -37,7 +37,12 @@ void init_wp_pool() {
 static int number = 1;
 
 bool check_watchpoint(WP **point){
-  WP *cur = head;
+  //用函数内部的静态变量保存上一次返回的位置
+  static WP* last=NULL;
+  if(last==NULL){
+    last=head;
+  }
+  WP  *cur=last;
   while (cur){
     if (cur->expression){
       *point = cur;
@@ -50,7 +55,7 @@ bool check_watchpoint(WP **point){
 }
 
 //从free_链表中返回一个空闲的监视点结构
-WP* new_wp(const char *expression, bool *success){
+WP* new_wp(const char *condation, bool *success){
   //所有可用的监视点都被分配
   if (free_->next == NULL){
     assert(0);
@@ -60,7 +65,7 @@ WP* new_wp(const char *expression, bool *success){
   result->NO = number++;
   free_->next = result->next;
   result->next = NULL;
-  strcpy(result->expression, expression);
+  strcpy(result->expression, condation);
   
   //如果head为空，head指向res，否则将res插到队头
   if (head == NULL){
@@ -106,7 +111,7 @@ int free_wp(int NO){
 
 //遍历链表
 void wp_display(){
-  printf("NO.\texpression\n");
+  printf("NO.\tCondation\n");
   WP* cur = head;
   while (cur){
     printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->expression);
