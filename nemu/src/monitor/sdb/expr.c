@@ -165,7 +165,7 @@ word_t expr(const char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  printf("start parsing .....\n");
   *success = true;
   int position = 0;
   int ans = eval(0, nr_token - 1, success, &position);
