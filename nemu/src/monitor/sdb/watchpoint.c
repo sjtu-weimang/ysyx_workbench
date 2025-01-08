@@ -50,6 +50,7 @@ bool check_watchpoint(WP **point){
     if (cur->expression){
       bool *success=NULL;
       uint32_t cur_value;
+      printf("cur_expression:%s\n",cur->expression);
       cur_value=expr(cur->expression,success);
       if(cur_value!=last_value){
       last_value=cur_value;
