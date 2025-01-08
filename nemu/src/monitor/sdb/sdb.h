@@ -32,7 +32,7 @@ bool check_watchpoint(WP **point);
 
 WP* new_wp(const char *condation, bool *success);
 
-int free_wp(int NO);
+void delete_watchpoint(int no);
 
 void watchpoint_display();
 
