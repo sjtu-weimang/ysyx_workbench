@@ -74,7 +74,13 @@ static int cmd_x(char *args) {
   arg = strtok(NULL, " ");
   //sscanf(arg, "%x", &addr);
   addr=expr(arg,&success);
-  if(!success)return 0;
+  if(!success){
+    printf("expression in invalid.\n");
+    return 0;}
+  if(addr<0x8000000 || addr>0xffffffff){
+    printf("invalid address.\n");
+    return 0;
+  }
   for(int i = 0; i < n; i++){
     printf("0x%08x: ", addr);
     for (int j = 0; j < 4; j++) {
