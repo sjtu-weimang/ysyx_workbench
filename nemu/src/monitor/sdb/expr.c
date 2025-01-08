@@ -238,7 +238,7 @@ int prio(char type){
 }
   //由于规定了表达式中为无符号数，负数会溢出
 u_int32_t eval(int p, int q, bool *success, int *position) {
-  printf("p=%d,q=%d\n",p,q);
+  //printf("p=%d,q=%d\n",p,q);
   if (p > q) {
     *success = false;
     return 0;
