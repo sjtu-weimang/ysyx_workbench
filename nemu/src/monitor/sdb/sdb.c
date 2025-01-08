@@ -44,10 +44,9 @@ static char* rl_gets() {
 
 //单步执行的命令
 static int cmd_siN(char *args){
-  char *arg = strtok(NULL, " ");
   int n = 1;
-  if (arg != NULL) {
-    sscanf(arg, "%d", &n);
+  if (args != NULL) {
+    sscanf(args, "%d", &n);
   }
   printf("n = %d\n", n);
   cpu_exec(n);

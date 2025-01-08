@@ -110,3 +110,8 @@ void wp_display(){
     cur = cur->next;
   }
 }
+
+//删除观察点
+void delete_watchpoint(int no){
+  free_wp(no);
+}

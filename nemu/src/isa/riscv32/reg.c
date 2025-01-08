@@ -14,7 +14,7 @@ const char *regs[] = {
 void isa_reg_display() {
   int length = ARRLEN(regs);
   int i = 0;
-  printf("=========寄存器信息=========\n");
+  printf("==============寄存器信息===============\n");
   for (i = 0; i < length; i+= REGISTERS_PER_LINE){
     for (int j = i; j < MIN(length, i + REGISTERS_PER_LINE); ++j){
       printf("\e[1;36m%3s:\e[0m %#12x | ", regs[j], cpu.gpr[j]);
