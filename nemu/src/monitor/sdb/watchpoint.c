@@ -38,27 +38,27 @@ static int number = 1;
 
 bool check_watchpoint(WP **point){
   //用函数内部的静态变量保存上一次返回的位置
+  //point是指针的指针，用来指示引发中断的变量
   //假设观察点的变量都是无符号整数
-  // static WP* last=NULL;
+   static WP* last=NULL;
   static uint32_t last_value=34643;//代指一个未初始化的数值
-  // if(last==NULL){
-  //   last=head;
-  // }
-  // WP  *cur=last;
-    WP *cur=head;
+   if(last==NULL){
+     last=head;
+   }
+    WP  *cur=last;
     int n=0;
-  while (cur){
+    while (cur){
     if (cur->expression){
-      //bool *success=NULL;
+      bool *success=NULL;
       uint32_t cur_value;
-      printf("cur_expression:%s\n",cur->expression);
-      //cur_value=expr('cur->expression',success);
-      cur_value=5;
+      
+      cur_value=expr(cur->expression,success);
+      //如果观察点的变量发生变化，则引发中断
       if(cur_value!=last_value){
+      printf("last value at %s is %d, current value is %d\n",cur->expression,last_value,cur_value);
       last_value=cur_value;
-      printf("cur_value:%d\n",cur_value);
-      //IFDEF(CONFIG_DEBUG, Log("Break"));
-      printf("n:%d\n",n);
+      *point = cur;
+      IFDEF(CONFIG_DEBUG, Log("Break"));
       return true;}
     }
     cur = cur->next;
