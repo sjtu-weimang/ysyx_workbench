@@ -53,11 +53,13 @@ bool check_watchpoint(WP **point){
       uint32_t cur_value;
       
       cur_value=expr(cur->expression,success);
+      printf("cur_value:%d\n",cur_value);
       //如果观察点的变量发生变化，则引发中断
       if(cur_value!=last_value){
       printf("last value at %s is %d, current value is %d\n",cur->expression,last_value,cur_value);
       last_value=cur_value;
       *point = cur;
+      
       IFDEF(CONFIG_DEBUG, Log("Break"));
       return true;}
     }
