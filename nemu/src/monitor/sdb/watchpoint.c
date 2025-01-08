@@ -49,10 +49,11 @@ bool check_watchpoint(WP **point){
     int n=0;
     while (cur){
     if (cur->expression){
-      bool *success=NULL;
+      //bool *success=NULL;
       uint32_t cur_value;
       
-      cur_value=expr(cur->expression,success);
+      //cur_value=expr(cur->expression,success);
+      cur_value=1;
       printf("cur_value:%d\n",cur_value);
       //如果观察点的变量发生变化，则引发中断
       if(cur_value!=last_value){
