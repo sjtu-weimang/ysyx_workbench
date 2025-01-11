@@ -37,32 +37,15 @@ void init_wp_pool() {
 static int number = 1;
 
 bool check_watchpoint(WP **point){
-  //用函数内部的静态变量保存上一次返回的位置
-  //point是指针的指针，用来指示引发中断的变量
-  //假设观察点的变量都是无符号整数
-    static WP* last=NULL;
-    bool success=true;
-    static uint32_t last_value=0x80000000;//代指一个未初始化的数值
-   if(last==NULL){
-     last=head;
-   }
-    WP  *cur=last;
-    while (cur){
-    if (cur->expression){
-
-      uint32_t cur_value;
-      
-      cur_value=expr(cur->expression,&success);
-      //printf("cur_expression: %s",cur->expression);
-      printf("cur_value:%d\n",cur_value);
-      //如果观察点的变量发生变化，则引发中断
-      if(cur_value!=last_value){
-      printf("last value at %s is %d, current value is %d\n",cur->expression,last_value,cur_value);
-      last_value=cur_value;
+  WP *cur = head;
+  bool success = true;
+  while (cur){
+    if (expr(cur->expression,&success) && expr(cur->expression,&success)!=cur->value){
       *point = cur;
-      
-      IFDEF(CONFIG_DEBUG, Log("Break"));
-      return true;}
+      //IFDEF(CONFIG_DEBUG, Log("Break"));
+      printf("%s changed, original value is %u,current value is %u",cur->expression,cur->value,expr(cur->expression,&success));
+      cur->value=expr(cur->expression,&success);
+      return true;
     }
     cur = cur->next;
   }
@@ -81,6 +64,7 @@ WP* new_wp(const char *condation, bool *success){
   free_->next = result->next;
   result->next = NULL;
   strcpy(result->expression, condation);
+  result->value=expr(result->expression,success);
   
   //如果head为空，head指向res，否则将res插到队头
   if (head == NULL){

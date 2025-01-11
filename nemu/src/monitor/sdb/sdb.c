@@ -102,12 +102,13 @@ static int cmd_x(char *args) {
 static int cmd_w(char* args){
     bool success=true;
     WP* point =new_wp(args,&success);
+
     if(!success){
       printf("Some things wrong happend.\n");
     }else{
       printf("create a WatchPoint(No.%d):%s\n",point->NO,point
       ->expression);
-      printf("%s current value is %d\n",point->expression,expr(point->expression,&success));
+      printf("%s current value is %u\n",point->expression,expr(point->expression,&success));
     }
     return 0;
   }

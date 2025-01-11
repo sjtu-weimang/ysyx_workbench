@@ -26,6 +26,7 @@ typedef struct watchpoint {
     int NO;
     struct watchpoint* next;
     char expression[32];
+    uint32_t value;
 }WP;
 
 bool check_watchpoint(WP **point);
