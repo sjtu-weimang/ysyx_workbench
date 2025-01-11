@@ -193,6 +193,12 @@ config DIFFTEST_REF_NAME
   default "none"
 endmenu
 
+config WATCHPOINT
+  bool "Enable watchpoint"
+  default n
+  help
+    Enable watchpoint feature to monitor memory access.
+    
 if MODE_SYSTEM
 source "src/memory/Kconfig"
 source "src/device/Kconfig"

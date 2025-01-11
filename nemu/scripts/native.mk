@@ -53,6 +53,7 @@ count:
 	@echo "Count functions in .c and .h files ...."
 	@find . \( -name "*.c" -o -name "*.h" \) -exec cat {} + | grep -c '.*'
 
-conutNoun:
-	@echo "Count functions in .c and .h files ... No Have space"
-	@find . \( -name "*.c" -o -name "*.h"\) -exec cat {} + | grep -cE '^.+$$'
+countNoun:
+	@echo "Counting functions in .c and .h files...No Have Space"
+	@find . \( -name "*.c" -o -name "*.h" \) -exec cat {} + | grep -cE '^.+$$'
+
