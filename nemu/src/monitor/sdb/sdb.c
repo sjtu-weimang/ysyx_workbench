@@ -70,6 +70,10 @@ static int cmd_x(char *args) {
   int n=-1;
   bool success=true;
   vaddr_t addr=0x80000000;
+  if(*arg<'0'||*arg>'9'){
+    printf("n need to be a number between 0 and 9.");
+    return 0;
+  }
   sscanf(arg, "%d", &n); //把表达式转化为整数常量
   arg = strtok(NULL, " ");
   //sscanf(arg, "%x", &addr);
