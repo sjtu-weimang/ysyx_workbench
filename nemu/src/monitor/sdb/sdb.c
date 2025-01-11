@@ -57,8 +57,8 @@ static int cmd_p(char *args) {
   bool success = true;
   word_t result = expr(args, &success);
   if (success) {
-    while (getchar() != '\n');
-    fflush(stdout);
+    //while (getchar() != '\n');
+    //fflush(stdout);
     printf("%s=%u\n",args,result);
     //printf("%u\n",result);
   } else {
