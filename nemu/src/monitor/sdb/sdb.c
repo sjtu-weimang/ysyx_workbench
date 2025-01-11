@@ -57,7 +57,8 @@ static int cmd_p(char *args) {
   bool success = true;
   word_t result = expr(args, &success);
   if (success) {
-    printf("%s= \e[1;36m%u\e[0m\n",args,result);
+    printf("%s=\n",args);
+    printf("%u\n",result);
   } else {
     printf("Invalid expression\n");
   }
