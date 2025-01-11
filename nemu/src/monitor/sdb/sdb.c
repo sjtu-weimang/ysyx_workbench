@@ -76,8 +76,8 @@ static int cmd_x(char *args) {
   }
   sscanf(arg, "%d", &n); //把表达式转化为整数常量
   arg = strtok(NULL, " ");
-  //sscanf(arg, "%x", &addr);
-  addr=expr(arg,&success);
+  sscanf(arg, "%x", &addr);
+  //addr=expr(arg,&success);
   //printf("%0x\n"addr);
   if(!success){
     printf("expression is invalid.\n");
