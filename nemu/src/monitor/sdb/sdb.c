@@ -54,11 +54,10 @@ static int cmd_siN(char *args){
 }
 //表达式求值的命令
 static int cmd_p(char *args) {
-  char *arg = strtok(NULL, " ");
   bool success = true;
-  word_t result = expr(arg, &success);
+  word_t result = expr(args, &success);
   if (success) {
-    printf("%s= %u\e[0m\n",args,result);
+    printf("%s= \e[1;36m%u\e[0m\n",args,result);
   } else {
     printf("Invalid expression\n");
   }
