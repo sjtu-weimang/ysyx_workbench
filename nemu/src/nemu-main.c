@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   int counter=0;
   char buffer[65535];
   char *expression;
-  FILE *fp=fopen("output.txt","r");
+  FILE *fp=fopen("./src/output.txt","r");
   assert(fp!=NULL);
 
   char* input=fgets(buffer,ARRLEN(buffer),fp);
