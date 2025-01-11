@@ -59,8 +59,8 @@ static int cmd_p(char *args) {
   if (success) {
     while (getchar() != '\n');
     fflush(stdout);
-    printf("%s=\n",args);
-    printf("%u\n",result);
+    printf("%s=%u\n",args,result);
+    //printf("%u\n",result);
   } else {
     printf("Invalid expression\n");
   }
