@@ -48,9 +48,9 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
     printf("stopped at WatchPoint(NO.%d:%s)\n",point->NO,point->expression);
     puts(_this->logbuf);
     nemu_state.state=NEMU_STOP;
-    if(cpu.pc==0x8000000c){
-      nemu_state.state=NEMU_QUIT;
-    }
+    // if(cpu.pc==0x8000000c){
+    //   nemu_state.state=NEMU_QUIT;
+    // }
   }
   #endif
 }
@@ -129,7 +129,9 @@ void cpu_exec(uint64_t n) {
   g_timer += timer_end - timer_start;
 
   switch (nemu_state.state) {
-    case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
+    case NEMU_RUNNING:
+    case NEMU_STOP:
+     nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
       Log("nemu: %s at pc = " FMT_WORD,
