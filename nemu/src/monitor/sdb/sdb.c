@@ -78,6 +78,7 @@ static int cmd_x(char *args) {
   arg = strtok(NULL, " ");
   //sscanf(arg, "%x", &addr);
   addr=expr(arg,&success);
+  printf("%0x\n",addr);
   if(!success){
     printf("expression is invalid.\n");
     return 0;}
