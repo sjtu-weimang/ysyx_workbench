@@ -56,9 +56,9 @@ static int cmd_siN(char *args){
 static int cmd_p(char *args) {
   bool success = true;
   word_t result = expr(args, &success);
-  char buffer[2];
   if (success) {
-    sprintf(buffer, "\n");
+    while (getchar() != '\n');
+    fflush(stdout);
     printf("%s=\n",args);
     printf("%u\n",result);
   } else {
