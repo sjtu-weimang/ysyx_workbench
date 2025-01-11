@@ -107,6 +107,7 @@ static int cmd_w(char* args){
     }else{
       printf("create a WatchPoint(No.%d):%s\n",point->NO,point
       ->expression);
+      printf("%s current value is %d\n",point->expression,expr(point->expression,&success));
     }
     return 0;
   }
