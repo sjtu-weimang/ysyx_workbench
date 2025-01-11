@@ -58,7 +58,7 @@ static int cmd_p(char *args) {
   bool success = true;
   word_t result = expr(arg, &success);
   if (success) {
-    printf("%u",result);
+    printf("%u\n",result);
   } else {
     printf("Invalid expression\n");
   }
