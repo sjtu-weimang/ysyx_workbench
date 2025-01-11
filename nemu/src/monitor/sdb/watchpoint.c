@@ -43,7 +43,7 @@ bool check_watchpoint(WP **point){
     if (expr(cur->expression,&success) && expr(cur->expression,&success)!=cur->value){
       *point = cur;
       //IFDEF(CONFIG_DEBUG, Log("Break"));
-      printf("%s changed, original value is %u,current value is %u",cur->expression,cur->value,expr(cur->expression,&success));
+      printf("%s changed, original value is %u,current value is %u\n",cur->expression,cur->value,expr(cur->expression,&success));
       cur->value=expr(cur->expression,&success);
       return true;
     }
