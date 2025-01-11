@@ -39,15 +39,19 @@ static int number = 1;
 bool check_watchpoint(WP **point){
   WP *cur = head;
   bool success = true;
+  bool flag=false;
   while (cur){
     if (expr(cur->expression,&success) && expr(cur->expression,&success)!=cur->value){
       *point = cur;
       //IFDEF(CONFIG_DEBUG, Log("Break"));
       printf("%s changed, original value is %u,current value is %u\n",cur->expression,cur->value,expr(cur->expression,&success));
       cur->value=expr(cur->expression,&success);
-      return true;
+      flag=true;
     }
     cur = cur->next;
+  }
+  if(flag){
+    return true;
   }
   return false;
 }
