@@ -11,6 +11,7 @@ const char *regs[] = {
 #define REGISTERS_PER_LINE 4
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 
+/// @brief 打印寄存器的状态
 void isa_reg_display() {
   int length = ARRLEN(regs);
   int i = 0;
@@ -23,6 +24,10 @@ void isa_reg_display() {
   }
 }
 
+/// @brief 将收到的字符串转为寄存器的值，expr的辅助函数，成功匹配返回寄存器的值，不成功返回-1.
+/// @param s 
+/// @param success 
+/// @return 
 word_t isa_reg_str2val(const char *s, bool *success) {
   *success = true;
   if (strcmp(s, regs[0]) == 0){
