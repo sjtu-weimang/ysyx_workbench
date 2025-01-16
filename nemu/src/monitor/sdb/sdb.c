@@ -104,6 +104,7 @@ static int cmd_w(char* args){
     WP* point =new_wp(args,&success);
 
     if(!success){
+      free(point);
       printf("Some things wrong happend.\n");
     }else{
       printf("create a WatchPoint(No.%d):%s\n",point->NO,point
