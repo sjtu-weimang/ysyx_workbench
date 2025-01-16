@@ -57,7 +57,10 @@ bool check_watchpoint(WP **point){
 }
 
 //从free_链表中返回一个空闲的监视点结构
-WP* new_wp(const char *condation, bool *success){
+WP* new_wp(const char *expression, bool *success){
+  if(!expr((char*)expression,success)){
+    return NULL;
+  }
   //所有可用的监视点都被分配
   if (free_->next == NULL){
     assert(0);
@@ -67,7 +70,7 @@ WP* new_wp(const char *condation, bool *success){
   result->NO = number++;
   free_->next = result->next;
   result->next = NULL;
-  strcpy(result->expression, condation);
+  strcpy(result->expression, expression);
   result->value=expr(result->expression,success);
   
   //如果head为空，head指向res，否则将res插到队头
