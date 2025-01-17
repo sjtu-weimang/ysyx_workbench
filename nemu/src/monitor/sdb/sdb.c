@@ -101,7 +101,6 @@ static int cmd_x(char *args) {
 //设置监视点的命令
 static int cmd_w(char* args){
     bool success=true;
-    printf("%s\n",args);
     WP* point =new_wp(args,&success);
 
     if(!success){
