@@ -18,7 +18,7 @@
 
 #include <common.h>
 
-word_t expr(char *e, bool *success);
+word_t expr(const char *e, bool *success);
 word_t vaddr_read(vaddr_t addr, int len);
 void wp_display();
 
@@ -31,7 +31,7 @@ typedef struct watchpoint {
 
 bool check_watchpoint(WP **point);
 
-WP* new_wp( char *expression, bool *success);
+WP* new_wp(const char *expression, bool *success);
 
 void delete_watchpoint(int no);
 
