@@ -83,15 +83,15 @@ static bool make_token(const char *e) {
     for (i = 0; i < NR_REGEX; i ++) {
       //rm_so 匹配串的起始位置，rm_eo 匹配串的结束位置
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        //const char *substr_start = e + position;
+        const char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
         
         if (substr_len > 32){
           assert(0);
         }
         //打印匹配信息
-        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-        //  i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+         i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
         
