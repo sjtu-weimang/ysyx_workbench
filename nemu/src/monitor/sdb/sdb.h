@@ -17,6 +17,7 @@
 #define __SDB_H__
 
 #include <common.h>
+#define word_t uint32_t
 
 word_t expr(const char *e, bool *success);
 word_t vaddr_read(vaddr_t addr, int len);
