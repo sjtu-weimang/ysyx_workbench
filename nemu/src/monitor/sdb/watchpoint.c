@@ -58,7 +58,7 @@ bool check_watchpoint(WP **point){
 
 //从free_链表中返回一个空闲的监视点结构
 WP* new_wp( char *expression, bool *success){
-  printf("%d\n",*expression);
+  printf("%s\n",expression);
   if(!expr(expression,success)){
     printf("invalid watchpoint.\n");
     return NULL;
