@@ -43,6 +43,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
   //扫描所有的watchpoint。
   #ifdef CONFIG_ITRACE
+  #ifdef CONFIG_WATCHPOINT
   WP* point =NULL;
   if(check_watchpoint(&point)){
     printf("stopped at WatchPoint(NO.%d:%s)\n",point->NO,point->expression);
@@ -52,6 +53,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       nemu_state.state=NEMU_QUIT;
     }
   }
+  #endif
   #endif
 }
 
