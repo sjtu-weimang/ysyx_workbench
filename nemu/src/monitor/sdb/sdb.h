@@ -31,7 +31,7 @@ typedef struct watchpoint {
 
 bool check_watchpoint(WP **point);
 
-WP* new_wp(const char *expression, bool *success);
+WP* new_wp( char *expression, bool *success);
 
 void delete_watchpoint(int no);
 
