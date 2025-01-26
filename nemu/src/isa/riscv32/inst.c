@@ -23,13 +23,13 @@
 #define Mw vaddr_write  //向内存中写入
 
 enum {
-  TYPE_I, //立即数操作
+  TYPE_I, //短立即数操作和访存load
   TYPE_U, //高位立即数
   TYPE_S, //存储指令
-  TYPE_B, //分支指令
-  TYPE_R, 
+  TYPE_B, //条件跳转指令
+  TYPE_R, //寄存器操作
   TYPE_N, // none
-  TYPE_J, //jump
+  TYPE_J, //无条件跳转
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -44,9 +44,9 @@ enum {
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
-  int rs1 = BITS(i, 19, 15);//rs1为19到15为寄存器的编号
-  int rs2 = BITS(i, 24, 20);//rs2为24到20位寄存器的编号
-  *rd     = BITS(i, 11, 7);//rd为11到7位寄存器的编号
+  int rs1 = BITS(i, 19, 15);//rs1为19到15为寄存器的编号，源操作数1
+  int rs2 = BITS(i, 24, 20);//rs2为24到20位寄存器的编号，源操作数2
+  *rd     = BITS(i, 11, 7);//rd为11到7位寄存器的编号，目的操作数
   switch (type) {
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
