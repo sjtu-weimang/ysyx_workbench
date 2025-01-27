@@ -1,0 +1,2182 @@
+语法
+
+    0 $accept: input $end
+
+    1 input: mainmenu_stmt stmt_list
+    2      | stmt_list
+
+    3 mainmenu_stmt: T_MAINMENU T_WORD_QUOTE T_EOL
+
+    4 stmt_list: %empty
+    5          | stmt_list assignment_stmt
+    6          | stmt_list choice_stmt
+    7          | stmt_list comment_stmt
+    8          | stmt_list config_stmt
+    9          | stmt_list if_stmt
+   10          | stmt_list menu_stmt
+   11          | stmt_list menuconfig_stmt
+   12          | stmt_list source_stmt
+   13          | stmt_list T_WORD error T_EOL
+   14          | stmt_list error T_EOL
+
+   15 stmt_list_in_choice: %empty
+   16                    | stmt_list_in_choice comment_stmt
+   17                    | stmt_list_in_choice config_stmt
+   18                    | stmt_list_in_choice if_stmt_in_choice
+   19                    | stmt_list_in_choice error T_EOL
+
+   20 config_entry_start: T_CONFIG nonconst_symbol T_EOL
+
+   21 config_stmt: config_entry_start config_option_list
+
+   22 menuconfig_entry_start: T_MENUCONFIG nonconst_symbol T_EOL
+
+   23 menuconfig_stmt: menuconfig_entry_start config_option_list
+
+   24 config_option_list: %empty
+   25                   | config_option_list config_option
+   26                   | config_option_list depends
+   27                   | config_option_list help
+
+   28 config_option: type prompt_stmt_opt T_EOL
+   29              | T_PROMPT T_WORD_QUOTE if_expr T_EOL
+   30              | default expr if_expr T_EOL
+   31              | T_SELECT nonconst_symbol if_expr T_EOL
+   32              | T_IMPLY nonconst_symbol if_expr T_EOL
+   33              | T_RANGE symbol symbol if_expr T_EOL
+   34              | T_OPTION T_MODULES T_EOL
+   35              | T_OPTION T_DEFCONFIG_LIST T_EOL
+   36              | T_OPTION T_ALLNOCONFIG_Y T_EOL
+
+   37 choice: T_CHOICE word_opt T_EOL
+
+   38 choice_entry: choice choice_option_list
+
+   39 choice_end: end
+
+   40 choice_stmt: choice_entry stmt_list_in_choice choice_end
+
+   41 choice_option_list: %empty
+   42                   | choice_option_list choice_option
+   43                   | choice_option_list depends
+   44                   | choice_option_list help
+
+   45 choice_option: T_PROMPT T_WORD_QUOTE if_expr T_EOL
+   46              | logic_type prompt_stmt_opt T_EOL
+   47              | T_OPTIONAL T_EOL
+   48              | T_DEFAULT nonconst_symbol if_expr T_EOL
+
+   49 type: logic_type
+   50     | T_INT
+   51     | T_HEX
+   52     | T_STRING
+
+   53 logic_type: T_BOOL
+   54           | T_TRISTATE
+
+   55 default: T_DEFAULT
+   56        | T_DEF_BOOL
+   57        | T_DEF_TRISTATE
+
+   58 if_entry: T_IF expr T_EOL
+
+   59 if_end: end
+
+   60 if_stmt: if_entry stmt_list if_end
+
+   61 if_stmt_in_choice: if_entry stmt_list_in_choice if_end
+
+   62 menu: T_MENU T_WORD_QUOTE T_EOL
+
+   63 menu_entry: menu menu_option_list
+
+   64 menu_end: end
+
+   65 menu_stmt: menu_entry stmt_list menu_end
+
+   66 menu_option_list: %empty
+   67                 | menu_option_list visible
+   68                 | menu_option_list depends
+
+   69 source_stmt: T_SOURCE T_WORD_QUOTE T_EOL
+
+   70 comment: T_COMMENT T_WORD_QUOTE T_EOL
+
+   71 comment_stmt: comment comment_option_list
+
+   72 comment_option_list: %empty
+   73                    | comment_option_list depends
+
+   74 help_start: T_HELP T_EOL
+
+   75 help: help_start T_HELPTEXT
+
+   76 depends: T_DEPENDS T_ON expr T_EOL
+
+   77 visible: T_VISIBLE if_expr T_EOL
+
+   78 prompt_stmt_opt: %empty
+   79                | T_WORD_QUOTE if_expr
+
+   80 end: T_ENDMENU T_EOL
+   81    | T_ENDCHOICE T_EOL
+   82    | T_ENDIF T_EOL
+
+   83 if_expr: %empty
+   84        | T_IF expr
+
+   85 expr: symbol
+   86     | symbol T_LESS symbol
+   87     | symbol T_LESS_EQUAL symbol
+   88     | symbol T_GREATER symbol
+   89     | symbol T_GREATER_EQUAL symbol
+   90     | symbol T_EQUAL symbol
+   91     | symbol T_UNEQUAL symbol
+   92     | T_OPEN_PAREN expr T_CLOSE_PAREN
+   93     | T_NOT expr
+   94     | expr T_OR expr
+   95     | expr T_AND expr
+
+   96 nonconst_symbol: T_WORD
+
+   97 symbol: nonconst_symbol
+   98       | T_WORD_QUOTE
+
+   99 word_opt: %empty
+  100         | T_WORD
+
+  101 assignment_stmt: T_WORD assign_op assign_val T_EOL
+
+  102 assign_op: T_EQUAL
+  103          | T_COLON_EQUAL
+  104          | T_PLUS_EQUAL
+
+  105 assign_val: %empty
+  106           | T_ASSIGN_VAL
+
+
+终结语词，附有它们出现处的规则
+
+    $end (0) 0
+    error (256) 13 14 19
+    T_HELPTEXT <string> (258) 75
+    T_WORD <string> (259) 13 96 100 101
+    T_WORD_QUOTE <string> (260) 3 29 45 62 69 70 79 98
+    T_ALLNOCONFIG_Y (261) 36
+    T_BOOL (262) 53
+    T_CHOICE (263) 37
+    T_CLOSE_PAREN (264) 92
+    T_COLON_EQUAL (265) 103
+    T_COMMENT (266) 70
+    T_CONFIG (267) 20
+    T_DEFAULT (268) 48 55
+    T_DEFCONFIG_LIST (269) 35
+    T_DEF_BOOL (270) 56
+    T_DEF_TRISTATE (271) 57
+    T_DEPENDS (272) 76
+    T_ENDCHOICE (273) 81
+    T_ENDIF (274) 82
+    T_ENDMENU (275) 80
+    T_HELP (276) 74
+    T_HEX (277) 51
+    T_IF (278) 58 84
+    T_IMPLY (279) 32
+    T_INT (280) 50
+    T_MAINMENU (281) 3
+    T_MENU (282) 62
+    T_MENUCONFIG (283) 22
+    T_MODULES (284) 34
+    T_ON (285) 76
+    T_OPEN_PAREN (286) 92
+    T_OPTION (287) 34 35 36
+    T_OPTIONAL (288) 47
+    T_PLUS_EQUAL (289) 104
+    T_PROMPT (290) 29 45
+    T_RANGE (291) 33
+    T_SELECT (292) 31
+    T_SOURCE (293) 69
+    T_STRING (294) 52
+    T_TRISTATE (295) 54
+    T_VISIBLE (296) 77
+    T_EOL (297) 3 13 14 19 20 22 28 29 30 31 32 33 34 35 36 37 45 46 47 48 58 62 69 70 74 76 77 80 81 82 101
+    T_ASSIGN_VAL <string> (298) 106
+    T_OR (299) 94
+    T_AND (300) 95
+    T_EQUAL (301) 90 102
+    T_UNEQUAL (302) 91
+    T_LESS (303) 86
+    T_LESS_EQUAL (304) 87
+    T_GREATER (305) 88
+    T_GREATER_EQUAL (306) 89
+    T_NOT (307) 93
+
+
+非终结语词，附有它们出现处的规则
+
+    $accept (53)
+        on left: 0
+    input (54)
+        on left: 1 2
+        on right: 0
+    mainmenu_stmt (55)
+        on left: 3
+        on right: 1
+    stmt_list (56)
+        on left: 4 5 6 7 8 9 10 11 12 13 14
+        on right: 1 2 5 6 7 8 9 10 11 12 13 14 60 65
+    stmt_list_in_choice (57)
+        on left: 15 16 17 18 19
+        on right: 16 17 18 19 40 61
+    config_entry_start (58)
+        on left: 20
+        on right: 21
+    config_stmt (59)
+        on left: 21
+        on right: 8 17
+    menuconfig_entry_start (60)
+        on left: 22
+        on right: 23
+    menuconfig_stmt (61)
+        on left: 23
+        on right: 11
+    config_option_list (62)
+        on left: 24 25 26 27
+        on right: 21 23 25 26 27
+    config_option (63)
+        on left: 28 29 30 31 32 33 34 35 36
+        on right: 25
+    choice (64)
+        on left: 37
+        on right: 38
+    choice_entry <menu> (65)
+        on left: 38
+        on right: 40
+    choice_end (66)
+        on left: 39
+        on right: 40
+    choice_stmt (67)
+        on left: 40
+        on right: 6
+    choice_option_list (68)
+        on left: 41 42 43 44
+        on right: 38 42 43 44
+    choice_option (69)
+        on left: 45 46 47 48
+        on right: 42
+    type <type> (70)
+        on left: 49 50 51 52
+        on right: 28
+    logic_type <type> (71)
+        on left: 53 54
+        on right: 46 49
+    default <type> (72)
+        on left: 55 56 57
+        on right: 30
+    if_entry <menu> (73)
+        on left: 58
+        on right: 60 61
+    if_end (74)
+        on left: 59
+        on right: 60 61
+    if_stmt (75)
+        on left: 60
+        on right: 9
+    if_stmt_in_choice (76)
+        on left: 61
+        on right: 18
+    menu (77)
+        on left: 62
+        on right: 63
+    menu_entry <menu> (78)
+        on left: 63
+        on right: 65
+    menu_end (79)
+        on left: 64
+        on right: 65
+    menu_stmt (80)
+        on left: 65
+        on right: 10
+    menu_option_list (81)
+        on left: 66 67 68
+        on right: 63 67 68
+    source_stmt (82)
+        on left: 69
+        on right: 12
+    comment (83)
+        on left: 70
+        on right: 71
+    comment_stmt (84)
+        on left: 71
+        on right: 7 16
+    comment_option_list (85)
+        on left: 72 73
+        on right: 71 73
+    help_start (86)
+        on left: 74
+        on right: 75
+    help (87)
+        on left: 75
+        on right: 27 44
+    depends (88)
+        on left: 76
+        on right: 26 43 68 73
+    visible (89)
+        on left: 77
+        on right: 67
+    prompt_stmt_opt (90)
+        on left: 78 79
+        on right: 28 46
+    end <string> (91)
+        on left: 80 81 82
+        on right: 39 59 64
+    if_expr <expr> (92)
+        on left: 83 84
+        on right: 29 30 31 32 33 45 48 77 79
+    expr <expr> (93)
+        on left: 85 86 87 88 89 90 91 92 93 94 95
+        on right: 30 58 76 84 92 93 94 95
+    nonconst_symbol <symbol> (94)
+        on left: 96
+        on right: 20 22 31 32 48 97
+    symbol <symbol> (95)
+        on left: 97 98
+        on right: 33 85 86 87 88 89 90 91
+    word_opt <string> (96)
+        on left: 99 100
+        on right: 37
+    assignment_stmt (97)
+        on left: 101
+        on right: 5
+    assign_op <flavor> (98)
+        on left: 102 103 104
+        on right: 101
+    assign_val <string> (99)
+        on left: 105 106
+        on right: 101
+
+
+状态 0
+
+    0 $accept: . input $end
+
+    T_MAINMENU  偏移，并进入状态 1
+
+    $default  使用规则 4 以归约 (stmt_list)
+
+    input          转到状态 2
+    mainmenu_stmt  转到状态 3
+    stmt_list      转到状态 4
+
+
+状态 1
+
+    3 mainmenu_stmt: T_MAINMENU . T_WORD_QUOTE T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 5
+
+
+状态 2
+
+    0 $accept: input . $end
+
+    $end  偏移，并进入状态 6
+
+
+状态 3
+
+    1 input: mainmenu_stmt . stmt_list
+
+    $default  使用规则 4 以归约 (stmt_list)
+
+    stmt_list  转到状态 7
+
+
+状态 4
+
+    2 input: stmt_list .
+    5 stmt_list: stmt_list . assignment_stmt
+    6          | stmt_list . choice_stmt
+    7          | stmt_list . comment_stmt
+    8          | stmt_list . config_stmt
+    9          | stmt_list . if_stmt
+   10          | stmt_list . menu_stmt
+   11          | stmt_list . menuconfig_stmt
+   12          | stmt_list . source_stmt
+   13          | stmt_list . T_WORD error T_EOL
+   14          | stmt_list . error T_EOL
+
+    error         偏移，并进入状态 8
+    T_WORD        偏移，并进入状态 9
+    T_CHOICE      偏移，并进入状态 10
+    T_COMMENT     偏移，并进入状态 11
+    T_CONFIG      偏移，并进入状态 12
+    T_IF          偏移，并进入状态 13
+    T_MENU        偏移，并进入状态 14
+    T_MENUCONFIG  偏移，并进入状态 15
+    T_SOURCE      偏移，并进入状态 16
+
+    $end  使用规则 2 以归约 (input)
+
+    config_entry_start      转到状态 17
+    config_stmt             转到状态 18
+    menuconfig_entry_start  转到状态 19
+    menuconfig_stmt         转到状态 20
+    choice                  转到状态 21
+    choice_entry            转到状态 22
+    choice_stmt             转到状态 23
+    if_entry                转到状态 24
+    if_stmt                 转到状态 25
+    menu                    转到状态 26
+    menu_entry              转到状态 27
+    menu_stmt               转到状态 28
+    source_stmt             转到状态 29
+    comment                 转到状态 30
+    comment_stmt            转到状态 31
+    assignment_stmt         转到状态 32
+
+
+状态 5
+
+    3 mainmenu_stmt: T_MAINMENU T_WORD_QUOTE . T_EOL
+
+    T_EOL  偏移，并进入状态 33
+
+
+状态 6
+
+    0 $accept: input $end .
+
+    $default  接受
+
+
+状态 7
+
+    1 input: mainmenu_stmt stmt_list .
+    5 stmt_list: stmt_list . assignment_stmt
+    6          | stmt_list . choice_stmt
+    7          | stmt_list . comment_stmt
+    8          | stmt_list . config_stmt
+    9          | stmt_list . if_stmt
+   10          | stmt_list . menu_stmt
+   11          | stmt_list . menuconfig_stmt
+   12          | stmt_list . source_stmt
+   13          | stmt_list . T_WORD error T_EOL
+   14          | stmt_list . error T_EOL
+
+    error         偏移，并进入状态 8
+    T_WORD        偏移，并进入状态 9
+    T_CHOICE      偏移，并进入状态 10
+    T_COMMENT     偏移，并进入状态 11
+    T_CONFIG      偏移，并进入状态 12
+    T_IF          偏移，并进入状态 13
+    T_MENU        偏移，并进入状态 14
+    T_MENUCONFIG  偏移，并进入状态 15
+    T_SOURCE      偏移，并进入状态 16
+
+    $end  使用规则 1 以归约 (input)
+
+    config_entry_start      转到状态 17
+    config_stmt             转到状态 18
+    menuconfig_entry_start  转到状态 19
+    menuconfig_stmt         转到状态 20
+    choice                  转到状态 21
+    choice_entry            转到状态 22
+    choice_stmt             转到状态 23
+    if_entry                转到状态 24
+    if_stmt                 转到状态 25
+    menu                    转到状态 26
+    menu_entry              转到状态 27
+    menu_stmt               转到状态 28
+    source_stmt             转到状态 29
+    comment                 转到状态 30
+    comment_stmt            转到状态 31
+    assignment_stmt         转到状态 32
+
+
+状态 8
+
+   14 stmt_list: stmt_list error . T_EOL
+
+    T_EOL  偏移，并进入状态 34
+
+
+状态 9
+
+   13 stmt_list: stmt_list T_WORD . error T_EOL
+  101 assignment_stmt: T_WORD . assign_op assign_val T_EOL
+
+    error          偏移，并进入状态 35
+    T_COLON_EQUAL  偏移，并进入状态 36
+    T_PLUS_EQUAL   偏移，并进入状态 37
+    T_EQUAL        偏移，并进入状态 38
+
+    assign_op  转到状态 39
+
+
+状态 10
+
+   37 choice: T_CHOICE . word_opt T_EOL
+
+    T_WORD  偏移，并进入状态 40
+
+    $default  使用规则 99 以归约 (word_opt)
+
+    word_opt  转到状态 41
+
+
+状态 11
+
+   70 comment: T_COMMENT . T_WORD_QUOTE T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 42
+
+
+状态 12
+
+   20 config_entry_start: T_CONFIG . nonconst_symbol T_EOL
+
+    T_WORD  偏移，并进入状态 43
+
+    nonconst_symbol  转到状态 44
+
+
+状态 13
+
+   58 if_entry: T_IF . expr T_EOL
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 48
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 14
+
+   62 menu: T_MENU . T_WORD_QUOTE T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 51
+
+
+状态 15
+
+   22 menuconfig_entry_start: T_MENUCONFIG . nonconst_symbol T_EOL
+
+    T_WORD  偏移，并进入状态 43
+
+    nonconst_symbol  转到状态 52
+
+
+状态 16
+
+   69 source_stmt: T_SOURCE . T_WORD_QUOTE T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 53
+
+
+状态 17
+
+   21 config_stmt: config_entry_start . config_option_list
+
+    $default  使用规则 24 以归约 (config_option_list)
+
+    config_option_list  转到状态 54
+
+
+状态 18
+
+    8 stmt_list: stmt_list config_stmt .
+
+    $default  使用规则 8 以归约 (stmt_list)
+
+
+状态 19
+
+   23 menuconfig_stmt: menuconfig_entry_start . config_option_list
+
+    $default  使用规则 24 以归约 (config_option_list)
+
+    config_option_list  转到状态 55
+
+
+状态 20
+
+   11 stmt_list: stmt_list menuconfig_stmt .
+
+    $default  使用规则 11 以归约 (stmt_list)
+
+
+状态 21
+
+   38 choice_entry: choice . choice_option_list
+
+    $default  使用规则 41 以归约 (choice_option_list)
+
+    choice_option_list  转到状态 56
+
+
+状态 22
+
+   40 choice_stmt: choice_entry . stmt_list_in_choice choice_end
+
+    $default  使用规则 15 以归约 (stmt_list_in_choice)
+
+    stmt_list_in_choice  转到状态 57
+
+
+状态 23
+
+    6 stmt_list: stmt_list choice_stmt .
+
+    $default  使用规则 6 以归约 (stmt_list)
+
+
+状态 24
+
+   60 if_stmt: if_entry . stmt_list if_end
+
+    $default  使用规则 4 以归约 (stmt_list)
+
+    stmt_list  转到状态 58
+
+
+状态 25
+
+    9 stmt_list: stmt_list if_stmt .
+
+    $default  使用规则 9 以归约 (stmt_list)
+
+
+状态 26
+
+   63 menu_entry: menu . menu_option_list
+
+    $default  使用规则 66 以归约 (menu_option_list)
+
+    menu_option_list  转到状态 59
+
+
+状态 27
+
+   65 menu_stmt: menu_entry . stmt_list menu_end
+
+    $default  使用规则 4 以归约 (stmt_list)
+
+    stmt_list  转到状态 60
+
+
+状态 28
+
+   10 stmt_list: stmt_list menu_stmt .
+
+    $default  使用规则 10 以归约 (stmt_list)
+
+
+状态 29
+
+   12 stmt_list: stmt_list source_stmt .
+
+    $default  使用规则 12 以归约 (stmt_list)
+
+
+状态 30
+
+   71 comment_stmt: comment . comment_option_list
+
+    $default  使用规则 72 以归约 (comment_option_list)
+
+    comment_option_list  转到状态 61
+
+
+状态 31
+
+    7 stmt_list: stmt_list comment_stmt .
+
+    $default  使用规则 7 以归约 (stmt_list)
+
+
+状态 32
+
+    5 stmt_list: stmt_list assignment_stmt .
+
+    $default  使用规则 5 以归约 (stmt_list)
+
+
+状态 33
+
+    3 mainmenu_stmt: T_MAINMENU T_WORD_QUOTE T_EOL .
+
+    $default  使用规则 3 以归约 (mainmenu_stmt)
+
+
+状态 34
+
+   14 stmt_list: stmt_list error T_EOL .
+
+    $default  使用规则 14 以归约 (stmt_list)
+
+
+状态 35
+
+   13 stmt_list: stmt_list T_WORD error . T_EOL
+
+    T_EOL  偏移，并进入状态 62
+
+
+状态 36
+
+  103 assign_op: T_COLON_EQUAL .
+
+    $default  使用规则 103 以归约 (assign_op)
+
+
+状态 37
+
+  104 assign_op: T_PLUS_EQUAL .
+
+    $default  使用规则 104 以归约 (assign_op)
+
+
+状态 38
+
+  102 assign_op: T_EQUAL .
+
+    $default  使用规则 102 以归约 (assign_op)
+
+
+状态 39
+
+  101 assignment_stmt: T_WORD assign_op . assign_val T_EOL
+
+    T_ASSIGN_VAL  偏移，并进入状态 63
+
+    $default  使用规则 105 以归约 (assign_val)
+
+    assign_val  转到状态 64
+
+
+状态 40
+
+  100 word_opt: T_WORD .
+
+    $default  使用规则 100 以归约 (word_opt)
+
+
+状态 41
+
+   37 choice: T_CHOICE word_opt . T_EOL
+
+    T_EOL  偏移，并进入状态 65
+
+
+状态 42
+
+   70 comment: T_COMMENT T_WORD_QUOTE . T_EOL
+
+    T_EOL  偏移，并进入状态 66
+
+
+状态 43
+
+   96 nonconst_symbol: T_WORD .
+
+    $default  使用规则 96 以归约 (nonconst_symbol)
+
+
+状态 44
+
+   20 config_entry_start: T_CONFIG nonconst_symbol . T_EOL
+
+    T_EOL  偏移，并进入状态 67
+
+
+状态 45
+
+   98 symbol: T_WORD_QUOTE .
+
+    $default  使用规则 98 以归约 (symbol)
+
+
+状态 46
+
+   92 expr: T_OPEN_PAREN . expr T_CLOSE_PAREN
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 68
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 47
+
+   93 expr: T_NOT . expr
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 69
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 48
+
+   58 if_entry: T_IF expr . T_EOL
+   94 expr: expr . T_OR expr
+   95     | expr . T_AND expr
+
+    T_EOL  偏移，并进入状态 70
+    T_OR   偏移，并进入状态 71
+    T_AND  偏移，并进入状态 72
+
+
+状态 49
+
+   97 symbol: nonconst_symbol .
+
+    $default  使用规则 97 以归约 (symbol)
+
+
+状态 50
+
+   85 expr: symbol .
+   86     | symbol . T_LESS symbol
+   87     | symbol . T_LESS_EQUAL symbol
+   88     | symbol . T_GREATER symbol
+   89     | symbol . T_GREATER_EQUAL symbol
+   90     | symbol . T_EQUAL symbol
+   91     | symbol . T_UNEQUAL symbol
+
+    T_EQUAL          偏移，并进入状态 73
+    T_UNEQUAL        偏移，并进入状态 74
+    T_LESS           偏移，并进入状态 75
+    T_LESS_EQUAL     偏移，并进入状态 76
+    T_GREATER        偏移，并进入状态 77
+    T_GREATER_EQUAL  偏移，并进入状态 78
+
+    $default  使用规则 85 以归约 (expr)
+
+
+状态 51
+
+   62 menu: T_MENU T_WORD_QUOTE . T_EOL
+
+    T_EOL  偏移，并进入状态 79
+
+
+状态 52
+
+   22 menuconfig_entry_start: T_MENUCONFIG nonconst_symbol . T_EOL
+
+    T_EOL  偏移，并进入状态 80
+
+
+状态 53
+
+   69 source_stmt: T_SOURCE T_WORD_QUOTE . T_EOL
+
+    T_EOL  偏移，并进入状态 81
+
+
+状态 54
+
+   21 config_stmt: config_entry_start config_option_list .
+   25 config_option_list: config_option_list . config_option
+   26                   | config_option_list . depends
+   27                   | config_option_list . help
+
+    T_BOOL          偏移，并进入状态 82
+    T_DEFAULT       偏移，并进入状态 83
+    T_DEF_BOOL      偏移，并进入状态 84
+    T_DEF_TRISTATE  偏移，并进入状态 85
+    T_DEPENDS       偏移，并进入状态 86
+    T_HELP          偏移，并进入状态 87
+    T_HEX           偏移，并进入状态 88
+    T_IMPLY         偏移，并进入状态 89
+    T_INT           偏移，并进入状态 90
+    T_OPTION        偏移，并进入状态 91
+    T_PROMPT        偏移，并进入状态 92
+    T_RANGE         偏移，并进入状态 93
+    T_SELECT        偏移，并进入状态 94
+    T_STRING        偏移，并进入状态 95
+    T_TRISTATE      偏移，并进入状态 96
+
+    $default  使用规则 21 以归约 (config_stmt)
+
+    config_option  转到状态 97
+    type           转到状态 98
+    logic_type     转到状态 99
+    default        转到状态 100
+    help_start     转到状态 101
+    help           转到状态 102
+    depends        转到状态 103
+
+
+状态 55
+
+   23 menuconfig_stmt: menuconfig_entry_start config_option_list .
+   25 config_option_list: config_option_list . config_option
+   26                   | config_option_list . depends
+   27                   | config_option_list . help
+
+    T_BOOL          偏移，并进入状态 82
+    T_DEFAULT       偏移，并进入状态 83
+    T_DEF_BOOL      偏移，并进入状态 84
+    T_DEF_TRISTATE  偏移，并进入状态 85
+    T_DEPENDS       偏移，并进入状态 86
+    T_HELP          偏移，并进入状态 87
+    T_HEX           偏移，并进入状态 88
+    T_IMPLY         偏移，并进入状态 89
+    T_INT           偏移，并进入状态 90
+    T_OPTION        偏移，并进入状态 91
+    T_PROMPT        偏移，并进入状态 92
+    T_RANGE         偏移，并进入状态 93
+    T_SELECT        偏移，并进入状态 94
+    T_STRING        偏移，并进入状态 95
+    T_TRISTATE      偏移，并进入状态 96
+
+    $default  使用规则 23 以归约 (menuconfig_stmt)
+
+    config_option  转到状态 97
+    type           转到状态 98
+    logic_type     转到状态 99
+    default        转到状态 100
+    help_start     转到状态 101
+    help           转到状态 102
+    depends        转到状态 103
+
+
+状态 56
+
+   38 choice_entry: choice choice_option_list .
+   42 choice_option_list: choice_option_list . choice_option
+   43                   | choice_option_list . depends
+   44                   | choice_option_list . help
+
+    T_BOOL      偏移，并进入状态 82
+    T_DEFAULT   偏移，并进入状态 104
+    T_DEPENDS   偏移，并进入状态 86
+    T_HELP      偏移，并进入状态 87
+    T_OPTIONAL  偏移，并进入状态 105
+    T_PROMPT    偏移，并进入状态 106
+    T_TRISTATE  偏移，并进入状态 96
+
+    $default  使用规则 38 以归约 (choice_entry)
+
+    choice_option  转到状态 107
+    logic_type     转到状态 108
+    help_start     转到状态 101
+    help           转到状态 109
+    depends        转到状态 110
+
+
+状态 57
+
+   16 stmt_list_in_choice: stmt_list_in_choice . comment_stmt
+   17                    | stmt_list_in_choice . config_stmt
+   18                    | stmt_list_in_choice . if_stmt_in_choice
+   19                    | stmt_list_in_choice . error T_EOL
+   40 choice_stmt: choice_entry stmt_list_in_choice . choice_end
+
+    error        偏移，并进入状态 111
+    T_COMMENT    偏移，并进入状态 11
+    T_CONFIG     偏移，并进入状态 12
+    T_ENDCHOICE  偏移，并进入状态 112
+    T_ENDIF      偏移，并进入状态 113
+    T_ENDMENU    偏移，并进入状态 114
+    T_IF         偏移，并进入状态 13
+
+    config_entry_start  转到状态 17
+    config_stmt         转到状态 115
+    choice_end          转到状态 116
+    if_entry            转到状态 117
+    if_stmt_in_choice   转到状态 118
+    comment             转到状态 30
+    comment_stmt        转到状态 119
+    end                 转到状态 120
+
+
+状态 58
+
+    5 stmt_list: stmt_list . assignment_stmt
+    6          | stmt_list . choice_stmt
+    7          | stmt_list . comment_stmt
+    8          | stmt_list . config_stmt
+    9          | stmt_list . if_stmt
+   10          | stmt_list . menu_stmt
+   11          | stmt_list . menuconfig_stmt
+   12          | stmt_list . source_stmt
+   13          | stmt_list . T_WORD error T_EOL
+   14          | stmt_list . error T_EOL
+   60 if_stmt: if_entry stmt_list . if_end
+
+    error         偏移，并进入状态 8
+    T_WORD        偏移，并进入状态 9
+    T_CHOICE      偏移，并进入状态 10
+    T_COMMENT     偏移，并进入状态 11
+    T_CONFIG      偏移，并进入状态 12
+    T_ENDCHOICE   偏移，并进入状态 112
+    T_ENDIF       偏移，并进入状态 113
+    T_ENDMENU     偏移，并进入状态 114
+    T_IF          偏移，并进入状态 13
+    T_MENU        偏移，并进入状态 14
+    T_MENUCONFIG  偏移，并进入状态 15
+    T_SOURCE      偏移，并进入状态 16
+
+    config_entry_start      转到状态 17
+    config_stmt             转到状态 18
+    menuconfig_entry_start  转到状态 19
+    menuconfig_stmt         转到状态 20
+    choice                  转到状态 21
+    choice_entry            转到状态 22
+    choice_stmt             转到状态 23
+    if_entry                转到状态 24
+    if_end                  转到状态 121
+    if_stmt                 转到状态 25
+    menu                    转到状态 26
+    menu_entry              转到状态 27
+    menu_stmt               转到状态 28
+    source_stmt             转到状态 29
+    comment                 转到状态 30
+    comment_stmt            转到状态 31
+    end                     转到状态 122
+    assignment_stmt         转到状态 32
+
+
+状态 59
+
+   63 menu_entry: menu menu_option_list .
+   67 menu_option_list: menu_option_list . visible
+   68                 | menu_option_list . depends
+
+    T_DEPENDS  偏移，并进入状态 86
+    T_VISIBLE  偏移，并进入状态 123
+
+    $default  使用规则 63 以归约 (menu_entry)
+
+    depends  转到状态 124
+    visible  转到状态 125
+
+
+状态 60
+
+    5 stmt_list: stmt_list . assignment_stmt
+    6          | stmt_list . choice_stmt
+    7          | stmt_list . comment_stmt
+    8          | stmt_list . config_stmt
+    9          | stmt_list . if_stmt
+   10          | stmt_list . menu_stmt
+   11          | stmt_list . menuconfig_stmt
+   12          | stmt_list . source_stmt
+   13          | stmt_list . T_WORD error T_EOL
+   14          | stmt_list . error T_EOL
+   65 menu_stmt: menu_entry stmt_list . menu_end
+
+    error         偏移，并进入状态 8
+    T_WORD        偏移，并进入状态 9
+    T_CHOICE      偏移，并进入状态 10
+    T_COMMENT     偏移，并进入状态 11
+    T_CONFIG      偏移，并进入状态 12
+    T_ENDCHOICE   偏移，并进入状态 112
+    T_ENDIF       偏移，并进入状态 113
+    T_ENDMENU     偏移，并进入状态 114
+    T_IF          偏移，并进入状态 13
+    T_MENU        偏移，并进入状态 14
+    T_MENUCONFIG  偏移，并进入状态 15
+    T_SOURCE      偏移，并进入状态 16
+
+    config_entry_start      转到状态 17
+    config_stmt             转到状态 18
+    menuconfig_entry_start  转到状态 19
+    menuconfig_stmt         转到状态 20
+    choice                  转到状态 21
+    choice_entry            转到状态 22
+    choice_stmt             转到状态 23
+    if_entry                转到状态 24
+    if_stmt                 转到状态 25
+    menu                    转到状态 26
+    menu_entry              转到状态 27
+    menu_end                转到状态 126
+    menu_stmt               转到状态 28
+    source_stmt             转到状态 29
+    comment                 转到状态 30
+    comment_stmt            转到状态 31
+    end                     转到状态 127
+    assignment_stmt         转到状态 32
+
+
+状态 61
+
+   71 comment_stmt: comment comment_option_list .
+   73 comment_option_list: comment_option_list . depends
+
+    T_DEPENDS  偏移，并进入状态 86
+
+    $default  使用规则 71 以归约 (comment_stmt)
+
+    depends  转到状态 128
+
+
+状态 62
+
+   13 stmt_list: stmt_list T_WORD error T_EOL .
+
+    $default  使用规则 13 以归约 (stmt_list)
+
+
+状态 63
+
+  106 assign_val: T_ASSIGN_VAL .
+
+    $default  使用规则 106 以归约 (assign_val)
+
+
+状态 64
+
+  101 assignment_stmt: T_WORD assign_op assign_val . T_EOL
+
+    T_EOL  偏移，并进入状态 129
+
+
+状态 65
+
+   37 choice: T_CHOICE word_opt T_EOL .
+
+    $default  使用规则 37 以归约 (choice)
+
+
+状态 66
+
+   70 comment: T_COMMENT T_WORD_QUOTE T_EOL .
+
+    $default  使用规则 70 以归约 (comment)
+
+
+状态 67
+
+   20 config_entry_start: T_CONFIG nonconst_symbol T_EOL .
+
+    $default  使用规则 20 以归约 (config_entry_start)
+
+
+状态 68
+
+   92 expr: T_OPEN_PAREN expr . T_CLOSE_PAREN
+   94     | expr . T_OR expr
+   95     | expr . T_AND expr
+
+    T_CLOSE_PAREN  偏移，并进入状态 130
+    T_OR           偏移，并进入状态 71
+    T_AND          偏移，并进入状态 72
+
+
+状态 69
+
+   93 expr: T_NOT expr .
+   94     | expr . T_OR expr
+   95     | expr . T_AND expr
+
+    $default  使用规则 93 以归约 (expr)
+
+
+状态 70
+
+   58 if_entry: T_IF expr T_EOL .
+
+    $default  使用规则 58 以归约 (if_entry)
+
+
+状态 71
+
+   94 expr: expr T_OR . expr
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 131
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 72
+
+   95 expr: expr T_AND . expr
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 132
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 73
+
+   90 expr: symbol T_EQUAL . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 133
+
+
+状态 74
+
+   91 expr: symbol T_UNEQUAL . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 134
+
+
+状态 75
+
+   86 expr: symbol T_LESS . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 135
+
+
+状态 76
+
+   87 expr: symbol T_LESS_EQUAL . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 136
+
+
+状态 77
+
+   88 expr: symbol T_GREATER . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 137
+
+
+状态 78
+
+   89 expr: symbol T_GREATER_EQUAL . symbol
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 138
+
+
+状态 79
+
+   62 menu: T_MENU T_WORD_QUOTE T_EOL .
+
+    $default  使用规则 62 以归约 (menu)
+
+
+状态 80
+
+   22 menuconfig_entry_start: T_MENUCONFIG nonconst_symbol T_EOL .
+
+    $default  使用规则 22 以归约 (menuconfig_entry_start)
+
+
+状态 81
+
+   69 source_stmt: T_SOURCE T_WORD_QUOTE T_EOL .
+
+    $default  使用规则 69 以归约 (source_stmt)
+
+
+状态 82
+
+   53 logic_type: T_BOOL .
+
+    $default  使用规则 53 以归约 (logic_type)
+
+
+状态 83
+
+   55 default: T_DEFAULT .
+
+    $default  使用规则 55 以归约 (default)
+
+
+状态 84
+
+   56 default: T_DEF_BOOL .
+
+    $default  使用规则 56 以归约 (default)
+
+
+状态 85
+
+   57 default: T_DEF_TRISTATE .
+
+    $default  使用规则 57 以归约 (default)
+
+
+状态 86
+
+   76 depends: T_DEPENDS . T_ON expr T_EOL
+
+    T_ON  偏移，并进入状态 139
+
+
+状态 87
+
+   74 help_start: T_HELP . T_EOL
+
+    T_EOL  偏移，并进入状态 140
+
+
+状态 88
+
+   51 type: T_HEX .
+
+    $default  使用规则 51 以归约 (type)
+
+
+状态 89
+
+   32 config_option: T_IMPLY . nonconst_symbol if_expr T_EOL
+
+    T_WORD  偏移，并进入状态 43
+
+    nonconst_symbol  转到状态 141
+
+
+状态 90
+
+   50 type: T_INT .
+
+    $default  使用规则 50 以归约 (type)
+
+
+状态 91
+
+   34 config_option: T_OPTION . T_MODULES T_EOL
+   35              | T_OPTION . T_DEFCONFIG_LIST T_EOL
+   36              | T_OPTION . T_ALLNOCONFIG_Y T_EOL
+
+    T_ALLNOCONFIG_Y   偏移，并进入状态 142
+    T_DEFCONFIG_LIST  偏移，并进入状态 143
+    T_MODULES         偏移，并进入状态 144
+
+
+状态 92
+
+   29 config_option: T_PROMPT . T_WORD_QUOTE if_expr T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 145
+
+
+状态 93
+
+   33 config_option: T_RANGE . symbol symbol if_expr T_EOL
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 146
+
+
+状态 94
+
+   31 config_option: T_SELECT . nonconst_symbol if_expr T_EOL
+
+    T_WORD  偏移，并进入状态 43
+
+    nonconst_symbol  转到状态 147
+
+
+状态 95
+
+   52 type: T_STRING .
+
+    $default  使用规则 52 以归约 (type)
+
+
+状态 96
+
+   54 logic_type: T_TRISTATE .
+
+    $default  使用规则 54 以归约 (logic_type)
+
+
+状态 97
+
+   25 config_option_list: config_option_list config_option .
+
+    $default  使用规则 25 以归约 (config_option_list)
+
+
+状态 98
+
+   28 config_option: type . prompt_stmt_opt T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 148
+
+    $default  使用规则 78 以归约 (prompt_stmt_opt)
+
+    prompt_stmt_opt  转到状态 149
+
+
+状态 99
+
+   49 type: logic_type .
+
+    $default  使用规则 49 以归约 (type)
+
+
+状态 100
+
+   30 config_option: default . expr if_expr T_EOL
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 150
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 101
+
+   75 help: help_start . T_HELPTEXT
+
+    T_HELPTEXT  偏移，并进入状态 151
+
+
+状态 102
+
+   27 config_option_list: config_option_list help .
+
+    $default  使用规则 27 以归约 (config_option_list)
+
+
+状态 103
+
+   26 config_option_list: config_option_list depends .
+
+    $default  使用规则 26 以归约 (config_option_list)
+
+
+状态 104
+
+   48 choice_option: T_DEFAULT . nonconst_symbol if_expr T_EOL
+
+    T_WORD  偏移，并进入状态 43
+
+    nonconst_symbol  转到状态 152
+
+
+状态 105
+
+   47 choice_option: T_OPTIONAL . T_EOL
+
+    T_EOL  偏移，并进入状态 153
+
+
+状态 106
+
+   45 choice_option: T_PROMPT . T_WORD_QUOTE if_expr T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 154
+
+
+状态 107
+
+   42 choice_option_list: choice_option_list choice_option .
+
+    $default  使用规则 42 以归约 (choice_option_list)
+
+
+状态 108
+
+   46 choice_option: logic_type . prompt_stmt_opt T_EOL
+
+    T_WORD_QUOTE  偏移，并进入状态 148
+
+    $default  使用规则 78 以归约 (prompt_stmt_opt)
+
+    prompt_stmt_opt  转到状态 155
+
+
+状态 109
+
+   44 choice_option_list: choice_option_list help .
+
+    $default  使用规则 44 以归约 (choice_option_list)
+
+
+状态 110
+
+   43 choice_option_list: choice_option_list depends .
+
+    $default  使用规则 43 以归约 (choice_option_list)
+
+
+状态 111
+
+   19 stmt_list_in_choice: stmt_list_in_choice error . T_EOL
+
+    T_EOL  偏移，并进入状态 156
+
+
+状态 112
+
+   81 end: T_ENDCHOICE . T_EOL
+
+    T_EOL  偏移，并进入状态 157
+
+
+状态 113
+
+   82 end: T_ENDIF . T_EOL
+
+    T_EOL  偏移，并进入状态 158
+
+
+状态 114
+
+   80 end: T_ENDMENU . T_EOL
+
+    T_EOL  偏移，并进入状态 159
+
+
+状态 115
+
+   17 stmt_list_in_choice: stmt_list_in_choice config_stmt .
+
+    $default  使用规则 17 以归约 (stmt_list_in_choice)
+
+
+状态 116
+
+   40 choice_stmt: choice_entry stmt_list_in_choice choice_end .
+
+    $default  使用规则 40 以归约 (choice_stmt)
+
+
+状态 117
+
+   61 if_stmt_in_choice: if_entry . stmt_list_in_choice if_end
+
+    $default  使用规则 15 以归约 (stmt_list_in_choice)
+
+    stmt_list_in_choice  转到状态 160
+
+
+状态 118
+
+   18 stmt_list_in_choice: stmt_list_in_choice if_stmt_in_choice .
+
+    $default  使用规则 18 以归约 (stmt_list_in_choice)
+
+
+状态 119
+
+   16 stmt_list_in_choice: stmt_list_in_choice comment_stmt .
+
+    $default  使用规则 16 以归约 (stmt_list_in_choice)
+
+
+状态 120
+
+   39 choice_end: end .
+
+    $default  使用规则 39 以归约 (choice_end)
+
+
+状态 121
+
+   60 if_stmt: if_entry stmt_list if_end .
+
+    $default  使用规则 60 以归约 (if_stmt)
+
+
+状态 122
+
+   59 if_end: end .
+
+    $default  使用规则 59 以归约 (if_end)
+
+
+状态 123
+
+   77 visible: T_VISIBLE . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 162
+
+
+状态 124
+
+   68 menu_option_list: menu_option_list depends .
+
+    $default  使用规则 68 以归约 (menu_option_list)
+
+
+状态 125
+
+   67 menu_option_list: menu_option_list visible .
+
+    $default  使用规则 67 以归约 (menu_option_list)
+
+
+状态 126
+
+   65 menu_stmt: menu_entry stmt_list menu_end .
+
+    $default  使用规则 65 以归约 (menu_stmt)
+
+
+状态 127
+
+   64 menu_end: end .
+
+    $default  使用规则 64 以归约 (menu_end)
+
+
+状态 128
+
+   73 comment_option_list: comment_option_list depends .
+
+    $default  使用规则 73 以归约 (comment_option_list)
+
+
+状态 129
+
+  101 assignment_stmt: T_WORD assign_op assign_val T_EOL .
+
+    $default  使用规则 101 以归约 (assignment_stmt)
+
+
+状态 130
+
+   92 expr: T_OPEN_PAREN expr T_CLOSE_PAREN .
+
+    $default  使用规则 92 以归约 (expr)
+
+
+状态 131
+
+   94 expr: expr . T_OR expr
+   94     | expr T_OR expr .
+   95     | expr . T_AND expr
+
+    T_AND  偏移，并进入状态 72
+
+    $default  使用规则 94 以归约 (expr)
+
+
+状态 132
+
+   94 expr: expr . T_OR expr
+   95     | expr . T_AND expr
+   95     | expr T_AND expr .
+
+    $default  使用规则 95 以归约 (expr)
+
+
+状态 133
+
+   90 expr: symbol T_EQUAL symbol .
+
+    $default  使用规则 90 以归约 (expr)
+
+
+状态 134
+
+   91 expr: symbol T_UNEQUAL symbol .
+
+    $default  使用规则 91 以归约 (expr)
+
+
+状态 135
+
+   86 expr: symbol T_LESS symbol .
+
+    $default  使用规则 86 以归约 (expr)
+
+
+状态 136
+
+   87 expr: symbol T_LESS_EQUAL symbol .
+
+    $default  使用规则 87 以归约 (expr)
+
+
+状态 137
+
+   88 expr: symbol T_GREATER symbol .
+
+    $default  使用规则 88 以归约 (expr)
+
+
+状态 138
+
+   89 expr: symbol T_GREATER_EQUAL symbol .
+
+    $default  使用规则 89 以归约 (expr)
+
+
+状态 139
+
+   76 depends: T_DEPENDS T_ON . expr T_EOL
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 163
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 140
+
+   74 help_start: T_HELP T_EOL .
+
+    $default  使用规则 74 以归约 (help_start)
+
+
+状态 141
+
+   32 config_option: T_IMPLY nonconst_symbol . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 164
+
+
+状态 142
+
+   36 config_option: T_OPTION T_ALLNOCONFIG_Y . T_EOL
+
+    T_EOL  偏移，并进入状态 165
+
+
+状态 143
+
+   35 config_option: T_OPTION T_DEFCONFIG_LIST . T_EOL
+
+    T_EOL  偏移，并进入状态 166
+
+
+状态 144
+
+   34 config_option: T_OPTION T_MODULES . T_EOL
+
+    T_EOL  偏移，并进入状态 167
+
+
+状态 145
+
+   29 config_option: T_PROMPT T_WORD_QUOTE . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 168
+
+
+状态 146
+
+   33 config_option: T_RANGE symbol . symbol if_expr T_EOL
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 169
+
+
+状态 147
+
+   31 config_option: T_SELECT nonconst_symbol . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 170
+
+
+状态 148
+
+   79 prompt_stmt_opt: T_WORD_QUOTE . if_expr
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 171
+
+
+状态 149
+
+   28 config_option: type prompt_stmt_opt . T_EOL
+
+    T_EOL  偏移，并进入状态 172
+
+
+状态 150
+
+   30 config_option: default expr . if_expr T_EOL
+   94 expr: expr . T_OR expr
+   95     | expr . T_AND expr
+
+    T_IF   偏移，并进入状态 161
+    T_OR   偏移，并进入状态 71
+    T_AND  偏移，并进入状态 72
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 173
+
+
+状态 151
+
+   75 help: help_start T_HELPTEXT .
+
+    $default  使用规则 75 以归约 (help)
+
+
+状态 152
+
+   48 choice_option: T_DEFAULT nonconst_symbol . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 174
+
+
+状态 153
+
+   47 choice_option: T_OPTIONAL T_EOL .
+
+    $default  使用规则 47 以归约 (choice_option)
+
+
+状态 154
+
+   45 choice_option: T_PROMPT T_WORD_QUOTE . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 175
+
+
+状态 155
+
+   46 choice_option: logic_type prompt_stmt_opt . T_EOL
+
+    T_EOL  偏移，并进入状态 176
+
+
+状态 156
+
+   19 stmt_list_in_choice: stmt_list_in_choice error T_EOL .
+
+    $default  使用规则 19 以归约 (stmt_list_in_choice)
+
+
+状态 157
+
+   81 end: T_ENDCHOICE T_EOL .
+
+    $default  使用规则 81 以归约 (end)
+
+
+状态 158
+
+   82 end: T_ENDIF T_EOL .
+
+    $default  使用规则 82 以归约 (end)
+
+
+状态 159
+
+   80 end: T_ENDMENU T_EOL .
+
+    $default  使用规则 80 以归约 (end)
+
+
+状态 160
+
+   16 stmt_list_in_choice: stmt_list_in_choice . comment_stmt
+   17                    | stmt_list_in_choice . config_stmt
+   18                    | stmt_list_in_choice . if_stmt_in_choice
+   19                    | stmt_list_in_choice . error T_EOL
+   61 if_stmt_in_choice: if_entry stmt_list_in_choice . if_end
+
+    error        偏移，并进入状态 111
+    T_COMMENT    偏移，并进入状态 11
+    T_CONFIG     偏移，并进入状态 12
+    T_ENDCHOICE  偏移，并进入状态 112
+    T_ENDIF      偏移，并进入状态 113
+    T_ENDMENU    偏移，并进入状态 114
+    T_IF         偏移，并进入状态 13
+
+    config_entry_start  转到状态 17
+    config_stmt         转到状态 115
+    if_entry            转到状态 117
+    if_end              转到状态 177
+    if_stmt_in_choice   转到状态 118
+    comment             转到状态 30
+    comment_stmt        转到状态 119
+    end                 转到状态 122
+
+
+状态 161
+
+   84 if_expr: T_IF . expr
+
+    T_WORD        偏移，并进入状态 43
+    T_WORD_QUOTE  偏移，并进入状态 45
+    T_OPEN_PAREN  偏移，并进入状态 46
+    T_NOT         偏移，并进入状态 47
+
+    expr             转到状态 178
+    nonconst_symbol  转到状态 49
+    symbol           转到状态 50
+
+
+状态 162
+
+   77 visible: T_VISIBLE if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 179
+
+
+状态 163
+
+   76 depends: T_DEPENDS T_ON expr . T_EOL
+   94 expr: expr . T_OR expr
+   95     | expr . T_AND expr
+
+    T_EOL  偏移，并进入状态 180
+    T_OR   偏移，并进入状态 71
+    T_AND  偏移，并进入状态 72
+
+
+状态 164
+
+   32 config_option: T_IMPLY nonconst_symbol if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 181
+
+
+状态 165
+
+   36 config_option: T_OPTION T_ALLNOCONFIG_Y T_EOL .
+
+    $default  使用规则 36 以归约 (config_option)
+
+
+状态 166
+
+   35 config_option: T_OPTION T_DEFCONFIG_LIST T_EOL .
+
+    $default  使用规则 35 以归约 (config_option)
+
+
+状态 167
+
+   34 config_option: T_OPTION T_MODULES T_EOL .
+
+    $default  使用规则 34 以归约 (config_option)
+
+
+状态 168
+
+   29 config_option: T_PROMPT T_WORD_QUOTE if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 182
+
+
+状态 169
+
+   33 config_option: T_RANGE symbol symbol . if_expr T_EOL
+
+    T_IF  偏移，并进入状态 161
+
+    $default  使用规则 83 以归约 (if_expr)
+
+    if_expr  转到状态 183
+
+
+状态 170
+
+   31 config_option: T_SELECT nonconst_symbol if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 184
+
+
+状态 171
+
+   79 prompt_stmt_opt: T_WORD_QUOTE if_expr .
+
+    $default  使用规则 79 以归约 (prompt_stmt_opt)
+
+
+状态 172
+
+   28 config_option: type prompt_stmt_opt T_EOL .
+
+    $default  使用规则 28 以归约 (config_option)
+
+
+状态 173
+
+   30 config_option: default expr if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 185
+
+
+状态 174
+
+   48 choice_option: T_DEFAULT nonconst_symbol if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 186
+
+
+状态 175
+
+   45 choice_option: T_PROMPT T_WORD_QUOTE if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 187
+
+
+状态 176
+
+   46 choice_option: logic_type prompt_stmt_opt T_EOL .
+
+    $default  使用规则 46 以归约 (choice_option)
+
+
+状态 177
+
+   61 if_stmt_in_choice: if_entry stmt_list_in_choice if_end .
+
+    $default  使用规则 61 以归约 (if_stmt_in_choice)
+
+
+状态 178
+
+   84 if_expr: T_IF expr .
+   94 expr: expr . T_OR expr
+   95     | expr . T_AND expr
+
+    T_OR   偏移，并进入状态 71
+    T_AND  偏移，并进入状态 72
+
+    $default  使用规则 84 以归约 (if_expr)
+
+
+状态 179
+
+   77 visible: T_VISIBLE if_expr T_EOL .
+
+    $default  使用规则 77 以归约 (visible)
+
+
+状态 180
+
+   76 depends: T_DEPENDS T_ON expr T_EOL .
+
+    $default  使用规则 76 以归约 (depends)
+
+
+状态 181
+
+   32 config_option: T_IMPLY nonconst_symbol if_expr T_EOL .
+
+    $default  使用规则 32 以归约 (config_option)
+
+
+状态 182
+
+   29 config_option: T_PROMPT T_WORD_QUOTE if_expr T_EOL .
+
+    $default  使用规则 29 以归约 (config_option)
+
+
+状态 183
+
+   33 config_option: T_RANGE symbol symbol if_expr . T_EOL
+
+    T_EOL  偏移，并进入状态 188
+
+
+状态 184
+
+   31 config_option: T_SELECT nonconst_symbol if_expr T_EOL .
+
+    $default  使用规则 31 以归约 (config_option)
+
+
+状态 185
+
+   30 config_option: default expr if_expr T_EOL .
+
+    $default  使用规则 30 以归约 (config_option)
+
+
+状态 186
+
+   48 choice_option: T_DEFAULT nonconst_symbol if_expr T_EOL .
+
+    $default  使用规则 48 以归约 (choice_option)
+
+
+状态 187
+
+   45 choice_option: T_PROMPT T_WORD_QUOTE if_expr T_EOL .
+
+    $default  使用规则 45 以归约 (choice_option)
+
+
+状态 188
+
+   33 config_option: T_RANGE symbol symbol if_expr T_EOL .
+
+    $default  使用规则 33 以归约 (config_option)

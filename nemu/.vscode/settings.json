@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "cpu.h": "c",
+        "isa.h": "c",
+        "readline.h": "c",
+        "sdb.h": "c",
+        "common.h": "c",
+        "reg.h": "c",
+        "regex.h": "c",
+        "paddr.h": "c",
+        "capstone.h": "c",
+        "typeinfo": "cpp"
+    },
+    "makefile.configureOnOpen": true
+}
