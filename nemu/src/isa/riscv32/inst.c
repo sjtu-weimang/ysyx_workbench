@@ -134,6 +134,6 @@ static int decode_exec(Decode *s) {
 
 int isa_exec_once(Decode *s) {
   s->isa.inst = inst_fetch(&s->snpc, 4);
-  //IFDEF(CONIFG_ITRACE,trace_inst(s->pc,s->isa.inst.val));
+  // IFDEF(CONIFG_ITRACE,trace_inst(s->pc,s->isa.inst.val));
   return decode_exec(s);
 }
