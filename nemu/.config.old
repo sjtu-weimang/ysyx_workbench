@@ -52,6 +52,8 @@ CONFIG_DIFFTEST_REF_PATH="none"
 CONFIG_DIFFTEST_REF_NAME="none"
 # end of Testing and Debugging
 
+CONFIG_WATCHPOINT=y
+
 #
 # Memory Configuration
 #
