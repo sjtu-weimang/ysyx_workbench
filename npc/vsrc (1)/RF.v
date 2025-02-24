@@ -11,11 +11,14 @@ module register_file (
 );
     reg [31:0] regs [0:15];    // 16个32位寄存器
     
-    // 初始化x0为0（硬连线）
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) regs[0] <= 32'b0;
-    end
     
+    // 初始化寄存器（x0始终为0）
+    integer i;
+    initial begin
+        for (i = 0; i < 32; i = i + 1)
+            registers[i] = 32'b0;
+    end
+
     // 读操作（组合逻辑）
     assign rs1_data = (rs1_addr == 0) ? 32'b0 : regs[rs1_addr];
     assign rs2_data = (rs2_addr == 0) ? 32'b0 : regs[rs2_addr];
