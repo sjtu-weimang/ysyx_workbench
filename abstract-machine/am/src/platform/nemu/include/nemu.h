@@ -24,6 +24,10 @@
 # define DEVICE_BASE 0xa0000000
 #endif
 
+// static inline uint32_t inl(uintptr_t addr) {
+//   return *(volatile uint32_t *)addr;
+// }
+
 #define MMIO_BASE 0xa0000000
 
 #define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
