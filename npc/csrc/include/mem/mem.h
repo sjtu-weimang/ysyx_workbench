@@ -33,7 +33,7 @@ struct mem_input_t {
   bool r_ready;
 
   bool b_ready;
-}
+};
 
 class mem_t {
  public:

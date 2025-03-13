@@ -19,6 +19,12 @@ static void read_elf_header(int fd, Elf64_Ehdr *eh) {
   return;
 }
 
+static void read_section(int fd, Elf64_Shdr sh, void *dst) {
+  assert(dst != NULL);
+  assert(lseek(fd, (off_t)sh.sh_offset, SEEK_SET) == (off_t)sh.sh_offset);
+  assert(read(fd, dst, sh.sh_size) == sh.sh_size);
+}
+
 static void read_section_headers(int fd, Elf64_Ehdr eh, Elf64_Shdr *sh_tbl) {
   assert(lseek(fd, eh.e_shoff, SEEK_SET) == eh.e_shoff);
   for (int i = 0; i < eh.e_shnum; i++) {
@@ -62,7 +68,7 @@ static void read_symbols(int fd, Elf64_Ehdr eh, Elf64_Shdr sh_tbl[]) {
   }
 }
 
-static parse_elf(int fd) {
+void parse_elf(int fd) {
   Elf64_Ehdr eh;
   read_elf_header(fd, &eh);
 

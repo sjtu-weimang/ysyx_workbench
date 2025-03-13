@@ -37,7 +37,7 @@ void parse_elf_files(const char **elf_files, int elf_file_count) {
 }
 
 static void insert_tail_rec(paddr_t pc, int depth) {
-  TailRecNode *node = (TailRecNode *)maloc(sizeof(TailRecNode));
+  TailRecNode *node = (TailRecNode *)malloc(sizeof(TailRecNode));
   node->pc = pc;
   node->depth = depth;
   node->next = tail_rec_head->next;

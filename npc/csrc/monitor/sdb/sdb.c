@@ -12,7 +12,7 @@ word_t expr(char *e, bool *success);
 // watchpoint
 void init_wp_pool();
 void wp_iterate();
-void wp_watch(char *word_t);
+void wp_watch(char *, word_t);
 void wp_remove(int);
 
 static int cmd_help(char *);
@@ -23,7 +23,7 @@ static int cmd_info(char *);
 static int cmd_x(char *);
 static int cmd_p(char *);
 static int cmd_w(char *);
-static int cmd_d(char *);
+// static int cmd_d(char *);
 
 static int is_batch_mode = false;
 
@@ -31,22 +31,22 @@ static struct {
   const char *name;
   const char *description;
   int (*handler)(char *);
-} cmd_table[] =
-    {{"help", "Display information about all supported commands", cmd_help},
-     {"c", "Continue the execution of the program", cmd_c},
-     {"q", "Exit NEMU", cmd_q},
-     {"si", "Usage: si [N]. Continue the execution in N steps, default 1",
-      cmd_si},
-     {"info",
-      "Usage: info (r [reg] | w). Display the info of registers & watchpoints",
-      cmd_info},
-     {"x", "Usage: x N ADDR. Scan the memory in ADDR by N 4bytes", cmd_x},
-     {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p},
-     {"w",
-      "Usage: w EXPR. Watch for the variation of the result of EXPR, pause at "
-      "variation point",
-      cmd_w},
-     {"d", "Usage: d N. Delete watchpoint of wp.NO=N", cmd_d}}
+} cmd_table[] = {
+    {"help", "Display information about all supported commands", cmd_help},
+    {"c", "Continue the execution of the program", cmd_c},
+    {"q", "Exit NEMU", cmd_q},
+    {"si", "Usage: si [N]. Continue the execution in N steps, default 1",
+     cmd_si},
+    {"info",
+     "Usage: info (r [reg] | w). Display the info of registers & watchpoints",
+     cmd_info},
+    {"x", "Usage: x N ADDR. Scan the memory in ADDR by N 4bytes", cmd_x},
+    {"p", "Usage: p EXPR. Calculate the expression, e.g. p $eax + 1", cmd_p},
+    {"w",
+     "Usage: w EXPR. Watch for the variation of the result of EXPR, pause at "
+     "variation point",
+     cmd_w}};
+//{"d", "Usage: d N. Delete watchpoint of wp.NO=N", cmd_d}};
 
 static int
 cmd_help(char *args) {
@@ -78,7 +78,7 @@ static int cmd_si(char *args) {
   if (arg == NULL) {
     n = 1;
   } else {
-    n = strol(arg, NULL, 10);
+    n = strtol(arg, NULL, 10);
   }
   cpu_exec(n);
   return 0;
@@ -105,12 +105,12 @@ static int cmd_c(char *args) {
 }
 
 static int cmd_q(char *args) {
-  nemu_state.state = NEMU_QUIT;
+  npc_state.state = NPC_QUIT;
   return -1;
 }
 
 static int cmd_info(char *) {
-  char *arg = strok(NULL, " ");
+  char *arg = strtok(NULL, " ");
   if (arg == NULL) {
     printf("Usage: info r (register) or info w (watchpoints)\n");
   } else {
@@ -161,7 +161,7 @@ static int cmd_p(char *args) {
   if (!success) {
     puts("invalid expression");
   } else {
-    printf("dec=%llu hex=" FMT_WORD "\n", res, res);
+    printf("dec=%u hex=" FMT_WORD "\n", res, res);
   }
   return 0;
 }
@@ -208,7 +208,7 @@ void sdb_mainloop() {
     return;
   }
 
-  for (char *str, (str = rl_get()) != NULL;) {
+  for (char *str; (str = rl_gets()) != NULL;) {
     char *str_end = str + strlen(str);
 
     char *cmd = strtok(str, " ");
@@ -222,11 +222,11 @@ void sdb_mainloop() {
 
     int i;
     for (i = 0; i < NR_CMD; i++) {
-      if (strcmp(args, cmd_table[i]) == 0) {
+      if (strcmp(cmd, cmd_table[i].name) == 0) {
         int ret = cmd_table[i].handler(args) < 0;
         if (ret != 0) {
           if (strcmp(args, "q") == 0) {
-            npc_state = NPC_QUIT;
+            npc_state.state = NPC_QUIT;
           }
           return;
         }
@@ -237,9 +237,9 @@ void sdb_mainloop() {
       printf("Unknown command '%s'\n", cmd);
     }
   }
+}
 
-  void init_sdb() {
-    init_regex();
-    init_wp_pool();
-  }
+void init_sdb() {
+  init_regex();
+  init_wp_pool();
 }

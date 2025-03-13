@@ -1,6 +1,9 @@
 #include <common.h>
 #include <tracer/inst_tracer.h>
 
+int p_cur = 0;
+bool full = false;
+
 void trace(paddr_t pc, uint32_t inst, bool print) {
   if (print) {
     char buf[128];

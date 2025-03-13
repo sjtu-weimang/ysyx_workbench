@@ -32,37 +32,46 @@ static void show_usage(char* name){
 }
 
 static void parse_args(int argc,char *argv[]){
-  const option table[]={
-    {"batch", no_argument,        0,'b'},
-    {"help" , no_argument,        0,'h'},
-    {"log"  , required_argument, 0, 'l'},
-    {"elf"  , required_argument, 0, 'e'},
-    {"diff" , required_argument, 0, 'd'},
-  }
-int o;
+  const option table[] = {
+      {"batch", no_argument, 0, 'b'},      {"help", no_argument, 0, 'h'},
+      {"log", required_argument, 0, 'l'},  {"elf", required_argument, 0, 'e'},
+      {"diff", required_argument, 0, 'd'},
+  };
 
-while((o=getopt_long(argc,argv,"-hbl:e:d:",table,NULL))!=-1){
-  switch (o)
-  {
-  case 'b':sdb_set_batch_mode();break;
-  case 'l':log_file=optarg;break;
-  case 'e':elf_file[elf_file_count++]==optarg;break;
-  case 'd':diff_so_file=optarg;break;
-  case 1: img_file=optarg;break;
-  default:
-    show_usage(argv[0]);break;
+  int o;
+  while ((o = getopt_long(argc, argv, "-hbl:e:d:", table, NULL)) != -1) {
+    switch (o) {
+    case 'b':
+      sdb_set_batch_mode();
+      break;
+    case 'l':
+      log_file = optarg;
+      break;
+    case 'e':
+      elf_files[elf_file_count++] == optarg;
+      break;
+    case 'd':
+      diff_so_file = optarg;
+      break;
+    case 1:
+      img_file = optarg;
+      break;
+    default:
+      show_usage(argv[0]);
+      break;
+    }
   }
-}
 
   if(img_file==NULL){
-    show_usage(argv[0];)
+    show_usage(argv[0]);
   }
 }
 
 void init_monitor(int argc,char* argv[]){
   //verilator
   Verilated::commandArgs(argc,argv);
-  Verilated::traceEverOn(true);
+
+  // Verilated::traceEverOn(true);
 
   parse_args(argc,argv);
 
@@ -72,13 +81,13 @@ void init_monitor(int argc,char* argv[]){
 
   init_log(log_file);
 
-  long img_size=load_img(img_file);
+  int img_size = load_img(img_file);
 
   IFDEF(CONFIG_DIFFTEST,init_difftest(diff_so_file,img_size));
 
-  //device
-  init_device();
+  // device
+  // init_device();
 
-  //img elf
-  parse_elf_files(elf_files,elf_file_count);
+  // img elf
+  // parse_elf_files(elf_files,elf_file_count);
 }

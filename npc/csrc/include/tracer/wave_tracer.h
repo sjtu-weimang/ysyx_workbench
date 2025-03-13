@@ -1,13 +1,15 @@
-#include <VTop.h>
-#include <cmmon.h>
-#include <verilated_vcd.c.h>
+#ifndef WAVETRACE
+#include <Vtop.h>
+#include <common.h>
+#include <verilated_vcd_c.h>
 
-const MAX_WAVE_CNT = CONFIG_MAX_WAVETRACE_CLK;
-VerilatedVcdC *vcd;
-VTop *dut;
+const int MAX_WAVE_CNT = CONFIG_MAX_WAVETRACE_CLK;
 
-void open(VTop *dut);
+extern VerilatedVcdC *vcd;
+
+void open(Vtop *dut);
 
 void dump_single();
 
 void close();
+#endif

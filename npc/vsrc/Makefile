@@ -3,8 +3,8 @@ VERILATOR = verilator
 VERILATOR_FLAGS = -Wall --cc --exe --build 
 
 # 目标文件
-VERILOG_SOURCES = top.v cpu.v inst_rom_dpic.v data_ram_dpic.v dpi_c.v ebreak.v
-TESTBENCH = cpu_test.c paddr.c
+VERILOG_SOURCES = top.v cpu.v inst_rom_dpic.v data_ram_dpic.v dpi_c.v ebreak.v 
+TESTBENCH = inter_test.c paddr.c
 TOP_MODULE = Vtop
 
 # 默认目标

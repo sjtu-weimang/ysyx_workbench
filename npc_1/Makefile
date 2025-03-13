@@ -32,7 +32,7 @@ $(BIN): $(VSRCS) $(CSRCS)
 	$(addprefix -LDFLAGS , $(LDFLAGS)) \
 	$^ \
 	
-.PHONY: all clean
+.PHONY: all clean run
 
 IMG ?= $(abspath ./img.bin)
 ARGS ?= --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
@@ -42,3 +42,5 @@ all: $(BIN)
 clean:
 	rm -rf $(BUILD_DIR)
 
+run: all
+	./build/top

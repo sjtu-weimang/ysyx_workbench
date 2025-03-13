@@ -1,4 +1,9 @@
-#define set_gpr(i) cpu.gpr[i] = dut.rootp->Top__DOT__core__DOT__regFile__DOT__rf_ ## i 
+#include <Vtop.h>
+#include <Vtop___024root.h>
+
+Vtop dut;
+
+#define set_gpr(i) cpu.gpr[i] = dut.rootp->top__DOT__rf__DOT__regF[i];
 set_gpr(0);
 set_gpr(1);
 set_gpr(2);
