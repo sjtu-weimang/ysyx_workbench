@@ -126,6 +126,7 @@ void cpu_exec(uint64_t n) {
 
   uint64_t timer_start = get_time();
 
+  printf("n is %ld", n);
   execute(n);
 
   uint64_t timer_end = get_time();
