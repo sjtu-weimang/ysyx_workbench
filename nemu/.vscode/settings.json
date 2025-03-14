@@ -9,7 +9,8 @@
         "regex.h": "c",
         "paddr.h": "c",
         "capstone.h": "c",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "difftest-def.h": "c"
     },
     "makefile.configureOnOpen": true
 }
