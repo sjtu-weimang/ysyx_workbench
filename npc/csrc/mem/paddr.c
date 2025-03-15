@@ -1,5 +1,4 @@
 #include <cpu/cpu.h>
-#include <cpu/difftest.h>
 #include <mem/host.h>
 #include <mem/paddr.h>
 #include <sys/time.h>
@@ -22,7 +21,7 @@ void trace_mwrite(paddr_t addr, word_t data, uint8_t mask) {
 
 // for DPI-C
 void paddr_read(paddr_t addr, word_t *data) {
-  IFDEF(CONFIG_MTRACE, trace_mread(addr));
+  // IFDEF(CONFIG_MTRACE, trace_mread(addr));
   if (likely(in_pmem(addr))) {
     *data = host_read(guest_to_host(addr), 8);
     return;
@@ -79,15 +78,15 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     return;
   }
   // device_write(addr, len, data);
-  return;
 }
 
 static const uint32_t img[] = {
-    0x00000297, // auipc t0,0
-    0x0002b823, // sd  zero,16(t0)
-    0x0102b503, // ld  a0,16(t0)
-    0x00100073, // ebreak (used as nemu_trap)
-    0xdeadbeef, // some data
+    0x00500093, // addi x1,x0,5
+    0x00300113, // addi x2,x0,3,
+    0x002081b3, // add  x3,x1,x2
+    0x00302023, // sw   x3,0(x0)
+    0x00002203, // ld   x4 0(x0)
+    0x00100073, // ebreak
 };
 
 long load_img(char *img_file) {

@@ -48,8 +48,7 @@ static struct {
      cmd_w}};
 //{"d", "Usage: d N. Delete watchpoint of wp.NO=N", cmd_d}};
 
-static int
-cmd_help(char *args) {
+static int cmd_help(char *args) {
   char *arg = strtok(NULL, " ");
   int i;
 
@@ -201,6 +200,8 @@ void sdb_set_batch_mode() { is_batch_mode = true; }
 
 void sdb_mainloop() {
 
+  printf("sdb is running....\n");
+
   cpu_reset(2);
 
   if (is_batch_mode) {
@@ -225,7 +226,7 @@ void sdb_mainloop() {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         int ret = cmd_table[i].handler(args) < 0;
         if (ret != 0) {
-          if (strcmp(args, "q") == 0) {
+          if (strcmp(cmd, "q") == 0) {
             npc_state.state = NPC_QUIT;
           }
           return;

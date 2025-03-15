@@ -11,7 +11,7 @@
 #define PMEM_RIGHT ((paddr_t)CONFIG_MBASE + CONFIG_MSIZE - 1)
 #define RESET_VECTOR (PMEM_LEFT + CONFIG_PC_RESET_OFFSET)
 
-uint8_t* guest_to_host(paddr_t paddr);
+uint8_t *guest_to_host(paddr_t paddr);
 paddr_t host_to_guest(uint8_t *haddr);
 
 static inline bool in_pmem(paddr_t addr) {
@@ -20,10 +20,11 @@ static inline bool in_pmem(paddr_t addr) {
 
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);
+
 // void paddr_read(paddr_t addr, uint64_t* data);
 // void paddr_write(paddr_t addr, uint64_t data, uint8_t mask);
 
-long load_img(char* img_path);
+long load_img(char *img_path);
 
 #define PAGE_SHIFT 12
 #define PAGE_SIZE (1ul << PAGE_SHIFT)

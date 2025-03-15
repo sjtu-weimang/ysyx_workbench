@@ -91,7 +91,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
-    printf("excute an instruction, n is %lu\n", n);
+    // printf("excute an instruction, n is %lu\n", n);
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
@@ -127,7 +127,6 @@ void cpu_exec(uint64_t n) {
 
   uint64_t timer_start = get_time();
 
-  printf("n is %ld", n);
   execute(n);
 
   uint64_t timer_end = get_time();
