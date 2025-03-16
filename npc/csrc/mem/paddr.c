@@ -1,4 +1,5 @@
 #include <cpu/cpu.h>
+#include <device/io.h>
 #include <mem/host.h>
 #include <mem/paddr.h>
 #include <sys/time.h>
@@ -21,17 +22,20 @@ void trace_mwrite(paddr_t addr, word_t data, uint8_t mask) {
 
 // for DPI-C
 void paddr_read(paddr_t addr, word_t *data) {
+
+  addr = addr & ~0x3u;
   // IFDEF(CONFIG_MTRACE, trace_mread(addr));
   if (likely(in_pmem(addr))) {
     *data = host_read(guest_to_host(addr), 8);
     return;
   }
-  //*data = device_read(addr, 8); // WARN: no len specified in DPI-C interface
+  *data = device_read(addr, 8); // WARN: no len specified in DPI-C interface
   return;
 }
 
 // for DPI-C
 void paddr_write(paddr_t addr, word_t data, uint8_t mask) {
+  addr = addr & ~0x3u;
   int len;
   switch (mask) {
   case 0x01:
@@ -55,7 +59,7 @@ void paddr_write(paddr_t addr, word_t data, uint8_t mask) {
     host_write(guest_to_host(addr), len, data);
     return;
   }
-  // device_write(addr, len, data);
+  device_write(addr, len, data);
   return;
 }
 
@@ -66,7 +70,7 @@ word_t paddr_read(paddr_t addr, int len) {
   if (likely(in_pmem(addr))) {
     return host_read(guest_to_host(addr), len);
   }
-  // device_read(addr, len);
+  device_read(addr, len);
   return 0;
 }
 
@@ -77,7 +81,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     host_write(guest_to_host(addr), len, data);
     return;
   }
-  // device_write(addr, len, data);
+  device_write(addr, len, data);
 }
 
 static const uint32_t img[] = {
