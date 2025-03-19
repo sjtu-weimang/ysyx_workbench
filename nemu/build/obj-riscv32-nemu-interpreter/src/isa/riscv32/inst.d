@@ -3,6 +3,7 @@ cmd_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/r
 source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o := src/isa/riscv32/inst.c
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o := \
+    $(wildcard include/config/etrace.h) \
     $(wildcard include/config/itrace.h) \
   src/isa/riscv32/local-include/reg.h \
     $(wildcard include/config/rt/check.h) \

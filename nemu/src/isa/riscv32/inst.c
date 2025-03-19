@@ -22,6 +22,28 @@
 #define Mr vaddr_read   //从内存中读出
 #define Mw vaddr_write  //向内存中写入
 
+static vaddr_t *csr_register(word_t imm) {
+  switch (imm) {
+  case 0x341:
+    return &(cpu.mepc);
+  case 0x342:
+    return &(cpu.mcause);
+  case 0x300:
+    return &(cpu.mstatus);
+  case 0x305:
+    return &(cpu.mtvec);
+  default:
+    panic("Unkown csr");
+  }
+}
+#define CSR(i) *csr_register(i)
+#define ECALL                                                                  \
+  {                                                                            \
+    word_t no = 0xb;                                                           \
+    IFDEF(CONFIG_ETRACE, trace_exception(no, s->pc));                          \
+    s->dnpc = (isa_raise_intr(no, s->pc));                                     \
+  }
+
 enum {
   TYPE_I, //短立即数操作和访存load
   TYPE_U, //高位立即数
@@ -215,6 +237,11 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,
           NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I, R(rd) = CSR(imm);
+          CSR(imm) = src1);
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);
+          CSR(imm) |= src1);
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL);
   INSTPAT_END();
   R(0) = 0; // reset $zero to 0
     return 0;
