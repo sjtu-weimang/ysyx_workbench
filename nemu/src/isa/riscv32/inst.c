@@ -36,11 +36,20 @@ static vaddr_t *csr_register(word_t imm) {
     panic("Unkown csr");
   }
 }
+
+#define MRET                                                                   \
+  {                                                                            \
+    s->dnpc = cpu.mepc;                                                        \
+    cpu.mstatus &= ~(1 << #);                                                  \
+    cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4);                            \
+    cpu.mstatus |= (1 << 7);                                                   \
+    cpu.mstatus &= ~((1 << 11) + (1 << 12));                                   \
+  }
+
 #define CSR(i) *csr_register(i)
 #define ECALL                                                                  \
   {                                                                            \
     word_t no = 0xb;                                                           \
-    IFDEF(CONFIG_ETRACE, trace_exception(no, s->pc));                          \
     s->dnpc = (isa_raise_intr(no, s->pc));                                     \
   }
 
