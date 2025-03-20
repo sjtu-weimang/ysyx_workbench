@@ -3,6 +3,9 @@ cmd_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/r
 source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o := src/isa/riscv32/inst.c
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o := \
+    $(wildcard include/config/etrace.h) \
+    $(wildcard include/config/ftrace.h) \
+    $(wildcard include/config/itrace.h) \
   src/isa/riscv32/local-include/reg.h \
     $(wildcard include/config/rt/check.h) \
     $(wildcard include/config/rve.h) \
@@ -16,13 +19,19 @@ deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/
   /home/zhang/ysyx-workbench/nemu/include/utils.h \
     $(wildcard include/config/target/native/elf.h) \
   /home/zhang/ysyx-workbench/nemu/include/cpu/cpu.h \
-  /home/zhang/ysyx-workbench/nemu/include/cpu/ifetch.h \
-  /home/zhang/ysyx-workbench/nemu/include/memory/vaddr.h \
   /home/zhang/ysyx-workbench/nemu/include/cpu/decode.h \
-    $(wildcard include/config/itrace.h) \
   /home/zhang/ysyx-workbench/nemu/include/isa.h \
   /home/zhang/ysyx-workbench/nemu/src/isa/riscv32/include/isa-def.h \
     $(wildcard include/config/rv64.h) \
+  /home/zhang/ysyx-workbench/nemu/include/cpu/difftest.h \
+    $(wildcard include/config/difftest.h) \
+  /home/zhang/ysyx-workbench/nemu/include/difftest-def.h \
+    $(wildcard include/config/isa/x86.h) \
+    $(wildcard include/config/isa/mips32.h) \
+    $(wildcard include/config/isa/riscv.h) \
+    $(wildcard include/config/isa/loongarch32r.h) \
+  /home/zhang/ysyx-workbench/nemu/include/cpu/ifetch.h \
+  /home/zhang/ysyx-workbench/nemu/include/memory/vaddr.h \
 
 /home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o: $(deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/isa/riscv32/inst.o)
 

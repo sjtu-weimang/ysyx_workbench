@@ -1,26 +1,23 @@
 /***************************************************************************************
-* Copyright (c) 2014-2024 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
+ * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+ *
+ * NEMU is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan
+ *PSL v2. You may obtain a copy of Mulan PSL v2 at:
+ *          http://license.coscl.org.cn/MulanPSL2
+ *
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+ *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *
+ * See the Mulan PSL v2 for more details.
+ ***************************************************************************************/
 
 #include "local-include/reg.h"
 #include <cpu/cpu.h>
-#include <cpu/ifetch.h>
 #include <cpu/decode.h>
-
-#define R(i) gpr(i)     //访问通用寄存器
-#define Mr vaddr_read   //从内存中读出
-#define Mw vaddr_write  //向内存中写入
+#include <cpu/difftest.h>
+#include <cpu/ifetch.h>
 
 static vaddr_t *csr_register(word_t imm) {
   switch (imm) {
@@ -33,91 +30,139 @@ static vaddr_t *csr_register(word_t imm) {
   case 0x305:
     return &(cpu.mtvec);
   default:
-    panic("Unkown csr");
+    panic("Unknown csr");
   }
 }
 
 #define MRET                                                                   \
   {                                                                            \
     s->dnpc = cpu.mepc;                                                        \
-    cpu.mstatus &= ~(1 << #);                                                  \
+    cpu.mstatus &= ~(1 << 3);                                                  \
     cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4);                            \
     cpu.mstatus |= (1 << 7);                                                   \
     cpu.mstatus &= ~((1 << 11) + (1 << 12));                                   \
   }
-
-#define CSR(i) *csr_register(i)
+void trace_exception(word_t NO, vaddr_t epc);
 #define ECALL                                                                  \
   {                                                                            \
     word_t no = 0xb;                                                           \
+    IFDEF(CONFIG_ETRACE, trace_exception(no, s->pc));                          \
     s->dnpc = (isa_raise_intr(no, s->pc));                                     \
   }
+#define CSR(i) *csr_register(i)
+#define R(i) gpr(i)
+#define Mr vaddr_read
+#define Mw vaddr_write
 
 enum {
-  TYPE_I, //短立即数操作和访存load
-  TYPE_U, //高位立即数
-  TYPE_S, //存储指令
-  TYPE_B, //条件跳转指令
-  TYPE_R, //寄存器操作
+  TYPE_I,
+  TYPE_U,
+  TYPE_S,
+  TYPE_J,
+  TYPE_B,
+  TYPE_R,
   TYPE_N, // none
-  TYPE_J, //无条件跳转
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
-#define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)//取I型指令前12位的立即数
-#define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)//取U型指令前20位的立即数
-#define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)//拼接imm[4:0]和imm[11:5]
-#define immJ() do { *imm = SEXT(BITS(i, 31, 31), 1) << 19 | ((SEXT(BITS(i, 19, 12), 8) << 56) >> 56) << 11 | ((SEXT(BITS(i, 20, 20), 1) << 63) >> 63) << 10 | (((SEXT(BITS(i, 30, 21), 10) << 54) >> 54) << 22) >> 22; *imm = *imm << 1; } while (0)
-// J型立即数的格式 imm = (imm[20] << 20) | (imm[10:1] << 1) | (imm[11] << 11) | (imm[19:12] << 12)
-#define immB() do { *imm = SEXT(BITS(i, 31, 31), 1) << 11 | ((SEXT(BITS(i, 7, 7), 1) << 63) >> 63) << 10 | ((SEXT(BITS(i, 30, 25), 6) << 58) >> 58) << 4 | ((SEXT(BITS(i, 11, 8), 4) << 60) >> 60); *imm = *imm << 1; } while (0)
-// B型立即数的格式 imm = (imm[12] << 12) | (imm[10:5] << 5) | (imm[4:1] << 1) | (imm[11] << 11)
+#define immI()                                                                 \
+  do {                                                                         \
+    *imm = SEXT(BITS(i, 31, 20), 12);                                          \
+  } while (0)
+#define immU()                                                                 \
+  do {                                                                         \
+    *imm = SEXT(BITS(i, 31, 12), 20) << 12;                                    \
+  } while (0)
+#define immS()                                                                 \
+  do {                                                                         \
+    *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7);                   \
+  } while (0)
+#define immJ()                                                                 \
+  do {                                                                         \
+    *imm = SEXT(((BITS(i, 31, 31) << 19) | (BITS(i, 30, 21)) |                 \
+                 (BITS(i, 20, 20) << 10) | (BITS(i, 19, 12) << 11))            \
+                    << 1,                                                      \
+                21);                                                           \
+  } while (0)
+#define immB()                                                                 \
+  do {                                                                         \
+    *imm = SEXT(((BITS(i, 31, 31) << 11) | (BITS(i, 30, 25) << 4) |            \
+                 (BITS(i, 11, 8)) | (BITS(i, 7, 7) << 10))                     \
+                    << 1,                                                      \
+                13);                                                           \
+  } while (0)
 
-static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
+static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2,
+                           word_t *imm, int type) {
   uint32_t i = s->isa.inst;
-  int rs1 = BITS(i, 19, 15);//rs1为19到15为寄存器的编号，源操作数1
-  int rs2 = BITS(i, 24, 20);//rs2为24到20位寄存器的编号，源操作数2
-  *rd     = BITS(i, 11, 7);//rd为11到7位寄存器的编号，目的操作数
+  int rd = BITS(i, 11, 7);
+  int rs1 = BITS(i, 19, 15);
+  int rs2 = BITS(i, 24, 20);
+  *dest = rd;
   switch (type) {
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J:                   immJ(); break;
     case TYPE_B: src1R(); src2R(); immB(); break;
-    case TYPE_R: src1R(); src2R();         break;
-    case TYPE_N: break;
-    default: panic("unsupported type = %d", type);
+    case TYPE_R:
+      src1R();
+      src2R();
+      break;
   }
 }
 
+void trace_func_call(paddr_t pc, paddr_t target, bool is_tail);
+void trace_func_ret(paddr_t pc);
+
 static int decode_exec(Decode *s) {
-  //int rd=0;
-  //word_t src1=0,src2=0,imm=0;
+  int dest = 0;
+  word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
 #define INSTPAT_INST(s) ((s)->isa.inst)
-#define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
-  int rd = 0; \
-  word_t src1 = 0, src2 = 0, imm = 0; \
-  decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
-  __VA_ARGS__ ; \
-}
+#define INSTPAT_MATCH(s, name, type, ... /* execute body */)                   \
+  {                                                                            \
+    decode_operand(s, &dest, &src1, &src2, &imm, concat(TYPE_, type));         \
+    __VA_ARGS__;                                                               \
+  }
+
+#define MAYBE_FUNC_JAL(s)                                                      \
+  IFDEF(CONFIG_FTRACE, {                                                       \
+    if (dest == 1) {                                                           \
+      trace_func_call(s->pc, s->dnpc, false);                                  \
+    } else if (dest == 0) {                                                    \
+      trace_func_call(s->pc, s->dnpc, true);                                   \
+    }                                                                          \
+  })
+#define MAYBE_FUNC_JALR(s)                                                     \
+  IFDEF(CONFIG_FTRACE, {                                                       \
+    if (s->isa.inst.val == 0x00008067) {                                       \
+      trace_func_ret(s->pc);                                                   \
+    } else if (dest == 1) {                                                    \
+      trace_func_call(s->pc, s->dnpc, false);                                  \
+    } else if (dest == 0 && imm == 0) {                                        \
+      trace_func_call(s->pc, s->dnpc, true);                                   \
+    }                                                                          \
+  })
 
   INSTPAT_START();
+  /*          rs2   rs1       rd              */
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and, R,
-          R(rd) = src1 & src2);
+          R(dest) = src1 & src2);
   INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi, I,
-          R(rd) = src1 & imm);
+          R(dest) = src1 & imm);
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc, U,
-          R(rd) = s->pc + imm);
+          R(dest) = s->pc + imm);
   INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add, R,
-          R(rd) = src1 + src2);
+          R(dest) = src1 + src2);
   INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw, R,
-          R(rd) = SEXT(src1 + src2, 32));
+          R(dest) = SEXT(src1 + src2, 32));
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi, I,
-          R(rd) = src1 + imm);
+          R(dest) = src1 + imm);
   INSTPAT("??????? ????? ????? 000 ????? 00110 11", addiw, I,
-          R(rd) = SEXT(src1 + imm, 32));
+          R(dest) = SEXT(src1 + imm, 32));
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq, B,
           if (src1 == src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne, B,
@@ -130,45 +175,61 @@ static int decode_exec(Decode *s) {
           if (src1 >= src2) s->dnpc = s->pc + imm);
   INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge, B,
           if ((sword_t)src1 >= (sword_t)src2) s->dnpc = s->pc + imm);
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I,
+          R(dest) = CSR(imm);
+          CSR(imm) = src1);
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I,
+          R(dest) = CSR(imm);
+          CSR(imm) |= src1);
+  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div, R,
+          R(dest) = (sword_t)src1 / (sword_t)src2);
   INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw, R,
-          R(rd) = SEXT(src1, 32) / SEXT(src2, 32));
-
-  INSTPAT("? ?????????? ? ???????? ????? 11011 11", jal, J, R(rd) = s->pc + 4;
-          s->dnpc = s->pc + imm;);
+          R(dest) = (sword_t)SEXT(src1, 32) / (sword_t)SEXT(src2, 32));
+  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu, R,
+          R(dest) = src1 / src2);
+  INSTPAT("0000001 ????? ????? 101 ????? 01110 11", divuw, R,
+          R(dest) = SEXT(BITS(src1, 31, 0) / BITS(src2, 31, 0), 32));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL);
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal, J,
+          s->dnpc = s->pc + imm;
+          MAYBE_FUNC_JAL(s); R(dest) = s->pc + 4);
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr, I,
           s->dnpc = (src1 + imm) & ~(word_t)1;
-          R(rd) = s->pc + 4);
-  INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui, U, R(rd) = imm);
+          MAYBE_FUNC_JALR(s); R(dest) = s->pc + 4);
+  INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui, U, R(dest) = imm);
   INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb, I,
-          R(rd) = SEXT(Mr(src1 + imm, 1), 8));
+          R(dest) = SEXT(Mr(src1 + imm, 1), 8));
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", lh, I,
-          R(rd) = SEXT(Mr(src1 + imm, 2), 16));
+          R(dest) = SEXT(Mr(src1 + imm, 2), 16));
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw, I,
-          R(rd) = SEXT(Mr(src1 + imm, 4), 32));
+          R(dest) = SEXT(Mr(src1 + imm, 4), 32));
   INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld, I,
-          R(rd) = Mr(src1 + imm, 8));
+          R(dest) = Mr(src1 + imm, 8));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu, I,
-          R(rd) = Mr(src1 + imm, 1));
+          R(dest) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu, I,
-          R(rd) = Mr(src1 + imm, 2));
+          R(dest) = Mr(src1 + imm, 2));
   INSTPAT("??????? ????? ????? 110 ????? 00000 11", lwu, I,
-          R(rd) = Mr(src1 + imm, 4));
+          R(dest) = Mr(src1 + imm, 4));
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul, R,
-          R(rd) = src1 * src2);
+          R(dest) = src1 * src2);
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw, R,
-          R(rd) = SEXT(src1 * src2, 32));
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh, R, int32_t a = src1;
-          int32_t b = src2; int64_t tmp = (int64_t)a * (int64_t)b;
-          R(rd) = BITS(tmp, 63, 32));
-  // uint_32 -> int_64 will courence sign location 1 will change to a big
-  // unnative numer.rather than a native number.
-  INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu, R,
-          R(rd) = (unsigned)src1 % (unsigned)src2;);
+          R(dest) = SEXT(src1 * src2, 32));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, MRET);
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori, I,
-          R(rd) = src1 ^ imm);
-  INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or, R, R(rd) = src1 | src2);
+          R(dest) = src1 ^ imm);
+  INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or, R,
+          R(dest) = src1 | src2);
+  INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori, I,
+          R(dest) = src1 | imm);
+  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem, R,
+          R(dest) = (sword_t)src1 % (sword_t)src2);
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw, R,
-          R(rd) = SEXT(src1, 32) % SEXT(src2, 32));
+          R(dest) = (sword_t)SEXT(src1, 32) % (sword_t)SEXT(src2, 32));
+  INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu, R,
+          R(dest) = src1 % src2);
+  INSTPAT("0000001 ????? ????? 111 ????? 01110 11", remuw, R,
+          R(dest) = SEXT(BITS(src1, 31, 0) % BITS(src2, 31, 0), 32));
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb, S,
           Mw(src1 + imm, 1, src2));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh, S,
@@ -177,72 +238,61 @@ static int decode_exec(Decode *s) {
           Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd, S,
           Mw(src1 + imm, 8, src2));
-  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu, I,
-          R(rd) = src1 < imm);
-  INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu, R,
-          R(rd) = src1 < src2);
   INSTPAT("??????? ????? ????? 010 ????? 00100 11", slti, I,
-          R(rd) = (int32_t)src1 < (int32_t)imm ? 1 : 0);
+          R(dest) = (sword_t)src1 < (sword_t)SEXT(imm, 12));
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu, I,
+          R(dest) = src1 < imm);
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu, R,
+          R(dest) = src1 < src2);
+  // warn: "right shift a negative number"'s behavior(arithmetic or logical)
+  // depends on the compiler
   INSTPAT("000000? ????? ????? 101 ????? 00110 11", srliw, I,
-          R(rd) = BITS(src1, 31, 0) >> BITS(imm, 4, 0));
+          R(dest) = BITS(src1, 31, 0) >> BITS(imm, 4, 0));
+  INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll, R,
+          R(dest) = src1 << src2);
   INSTPAT("000000? ????? ????? 001 ????? 00100 11", slli, I,
-          R(rd) = src1 << BITS(imm, 5, 0));
+          R(dest) = src1 << BITS(imm, 5, 0));
   INSTPAT("000000? ????? ????? 001 ????? 00110 11", slliw, I,
-          R(rd) = SEXT(src1 << BITS(imm, 4, 0), 32));
+          R(dest) = SEXT(src1 << BITS(imm, 4, 0), 32));
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw, R,
-          R(rd) = SEXT(src1 << BITS(src2, 4, 0), 32));
+          R(dest) = SEXT(src1 << BITS(src2, 4, 0), 32));
+  INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl, R,
+          R(dest) = src1 >> src2);
   INSTPAT("000000? ????? ????? 101 ????? 00100 11", srli, I,
-          R(rd) = src1 >> BITS(imm, 5, 0));
+          R(dest) = src1 >> BITS(imm, 5, 0));
   INSTPAT("0000000 ????? ????? 101 ????? 01110 11", srlw, R,
-          R(rd) = SEXT(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
+          R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
   INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw, R,
-          printf("hello,world!\n");
-          R(rd) = (sword_t)SEXT(src1, 32) >> BITS(src2, 4, 0););
-  INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra, R,
-          R(rd) = SEXT(src1, 32) >> BITS(src2, 4, 0));
+          R(dest) = (sword_t)SEXT(src1, 32) >> BITS(src2, 4, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai, I,
-          R(rd) = (sword_t)src1 >> BITS(imm, 5, 0));
+          R(dest) = (sword_t)src1 >> BITS(imm, 5, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00110 11", sraiw, I,
-          R(rd) = (sword_t)SEXT(src1, 32) >> BITS(imm, 4, 0));
+          R(dest) = (sword_t)SEXT(src1, 32) >> BITS(imm, 4, 0));
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt, R,
-          R(rd) = (sword_t)src1 < (sword_t)src2);
+          R(dest) = (sword_t)src1 < (sword_t)src2);
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub, R,
-          R(rd) = src1 - src2);
+          R(dest) = src1 - src2);
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw, R,
-          R(rd) = SEXT(src1 - src2, 32));
+          R(dest) = SEXT(src1 - src2, 32));
   INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor, R,
-          R(rd) = src1 ^ src2);
-  INSTPAT("??????? ????? ????? 110 ????? 01100 11", rem, R,
-          R(rd) = src1 % src2);
-  INSTPAT("??????? ????? ????? 100 ????? 01100 11", div, R,
-          R(rd) = src1 / src2);
-  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu, R,
-          R(rd) = (unsigned)src1 / (unsigned)src2);
-  INSTPAT("??????? ????? ????? 001 ????? 01100 11", sll, R,
-          R(rd) = src1 << src2);
-  INSTPAT("??????? ????? ????? 101 ????? 01100 11", srl, R,
-          R(rd) = src1 >> src2); // unsigned?
-  // test
-  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu, R,
-          uint64_t tmp = (uint64_t)src1 * (uint64_t)src2;
-          R(rd) = BITS(tmp, 63, 32));
-  INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori, I, R(rd) = src1 | imm);
-  INSTPAT("0000 0000 0000 0000 1000 0000 0110 0111", ret, U, s->dnpc = R(1));
+          R(dest) = src1 ^ src2);
+  // INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(/*src1 +
+  // imm*/0x8fffffff, 1, src2));
+
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N,
           NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrw, I, R(rd) = CSR(imm);
-          CSR(imm) = src1);
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrs, I, R(rd) = CSR(imm);
-          CSR(imm) |= src1);
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, I, ECALL);
   INSTPAT_END();
+
   R(0) = 0; // reset $zero to 0
-    return 0;
+
+  return 0;
 }
+
+void trace_inst(word_t pc, uint32_t inst);
 
 int isa_exec_once(Decode *s) {
   s->isa.inst = inst_fetch(&s->snpc, 4);
-  // IFDEF(CONIFG_ITRACE,trace_inst(s->pc,s->isa.inst.val));
+  IFDEF(CONFIG_ITRACE, trace_inst(s->pc, s->isa.inst.val));
   return decode_exec(s);
 }
