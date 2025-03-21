@@ -79,6 +79,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         }
         break;
       case 'd':
+      case 'l':
         num = va_arg(ap, int);
         if (num == 0) {
           out[j] = '0';
@@ -143,6 +144,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           j++;
         }
         break;
+
       default:
         out[j++] = '%';
         out[j++] = fmt[i];
