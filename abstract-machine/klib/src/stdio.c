@@ -144,7 +144,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         }
         break;
       default:
-        assert(0);
+        out[j++] = '%';
+        out[j++] = fmt[i];
       }
       state = 0;
       break;
