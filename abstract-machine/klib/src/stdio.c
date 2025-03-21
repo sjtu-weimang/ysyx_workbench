@@ -144,7 +144,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         }
         break;
       default:
-        // printf("%s\n", state);
+        printf("%s\n", state);
         assert(0);
       }
       state = 0;
