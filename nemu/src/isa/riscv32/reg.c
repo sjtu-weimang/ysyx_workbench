@@ -1,21 +1,21 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
+ * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+ *
+ * NEMU is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan
+ *PSL v2. You may obtain a copy of Mulan PSL v2 at:
+ *          http://license.coscl.org.cn/MulanPSL2
+ *
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+ *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *
+ * See the Mulan PSL v2 for more details.
+ ***************************************************************************************/
 
-#include <isa.h>
 #include "local-include/reg.h"
 #include "debug.h"
+#include <isa.h>
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -25,29 +25,19 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-    puts("Registers:");
-    for (int i = 0; i < 32; i++) {
-        printf("%3s: 0x%08x %12d\n", regs[i], cpu.gpr[i], cpu.gpr[i]);
-    }
+  puts("Registers:");
+  for (int i = 0; i < 32; i++) {
+    printf("%3s: 0x%08x %12d\n", regs[i], cpu.gpr[i], cpu.gpr[i]);
+  }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  for(int i = 0; i < 32; i++) {
-    if(strcmp(regs[i], s) == 0) {
+  for (int i = 0; i < 32; i++) {
+    if (strcmp(regs[i], s) == 0) {
       *success = true;
       return cpu.gpr[i];
     }
   }
   *success = false;
   return 0;
-}
-
-word_t* csr_decode(word_t imm) {
-  switch (imm) {
-    case 0x300: return &cpu.csr.mstatus;
-    case 0x341: return &cpu.csr.mepc;
-    case 0x342: return &cpu.csr.mcause;
-    case 0x305: return &cpu.csr.mtvec;
-    default: panic("Unsupported CSR: 0x%x", imm);
-  }
 }
