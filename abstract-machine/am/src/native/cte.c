@@ -92,6 +92,7 @@ static void iret(ucontext_t *uc) {
 }
 
 static void sig_handler(int sig, siginfo_t *info, void *ucontext) {
+  printf("sig handler: %d\n", sig);
   thiscpu->ev = (Event) {0};
   thiscpu->ev.event = EVENT_ERROR;
   switch (sig) {
@@ -99,6 +100,7 @@ static void sig_handler(int sig, siginfo_t *info, void *ucontext) {
     case SIGUSR2: thiscpu->ev.event = EVENT_YIELD; break;
     case SIGVTALRM: thiscpu->ev.event = EVENT_IRQ_TIMER; break;
     case SIGSEGV:
+      printf("info->si_code: %x\n", info->si_code);
       if (info->si_code == SEGV_ACCERR) {
         switch ((uintptr_t)info->si_addr) {
           case 0x100000: thiscpu->ev.event = EVENT_SYSCALL; break;
@@ -183,6 +185,7 @@ Context* kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
+  printf("raise signal!\n");
   raise(SIGUSR2);
 }
 
