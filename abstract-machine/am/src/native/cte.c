@@ -18,7 +18,7 @@ void __am_panic_on_return() { panic("should not reach here\n"); }
 static void irq_handle(Context *c) {
   c->vm_head = thiscpu->vm_head;
   c->ksp = thiscpu->ksp;
-  printf("event is %s", thiscpu->ev.event);
+  // printf("event is %x\n", thiscpu->ev);
   if (thiscpu->ev.event == EVENT_ERROR) {
     printf("Unhandle signal '%s' at pc = %p, badaddr = %p, cause = 0x%x\n",
       thiscpu->ev.msg, AM_REG_PC(&c->uc), thiscpu->ev.ref, thiscpu->ev.cause);
@@ -185,7 +185,7 @@ Context* kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
-  printf("raise signal!\n");
+  // printf("raise signal!\n");
   raise(SIGUSR2);
 }
 
