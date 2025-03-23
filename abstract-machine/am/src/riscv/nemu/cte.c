@@ -7,17 +7,29 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    switch (c->mcause) {
-    case 11:
+    if (c->GPR1 == -1) {
       ev.event = EVENT_YIELD;
-      c->mepc += 4;
+    } else if (c->GPR1 >= 0 && c->GPR1 <= 19) {
+      ev.event = EVENT_SYSCALL;
+    } else if (c->mcause == 0x80000007) {
+      ev.event = EVENT_IRQ_TIMER;
+    } else {
+      ev.event = EVENT_ERROR;
+    }
+    c = user_handler(ev, c);
+
+    // switch (c->mcause) {
+    //   default: ev.event = EVENT_ERROR; break;
+    // }
+
+    switch (ev.event) {
+    case EVENT_PAGEFAULT:
+    case EVENT_ERROR:
       break;
     default:
-      ev.event = EVENT_ERROR;
-      break;
+      c->mepc += 4;
     }
 
-    c = user_handler(ev, c);
     assert(c != NULL);
   }
 
@@ -37,17 +49,18 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  Context *ctx = kstack.end - sizeof(Context);
-  ctx->mepc = (uintptr_t)entry;
-  ctx->mstatus = 0x1800;
-  ctx->mcause = 11;
-  ctx->gpr[10 /*a0*/] = (uintptr_t)arg;
-  ctx->gpr[2 /*sp*/] = (uintptr_t)(kstack.end - sizeof(Context));
-  return ctx;
+  Context *kctx = (Context *)(kstack.end - sizeof(Context));
+
+  memset(kctx, 0, sizeof(kctx));
+  kctx->mepc = (uintptr_t)entry;
+  kctx->mstatus = 0x1800;
+  kctx->GPRx = (uintptr_t)arg;
+  return kctx;
 }
 
 void yield() {
 #ifdef __riscv_e
+
   asm volatile("li a5, -1; ecall");
 #else
   asm volatile("li a7, -1; ecall");
@@ -58,4 +71,5 @@ bool ienabled() {
   return false;
 }
 
-void iset(bool enable) {}
+void iset(bool enable) {
+}
