@@ -18,7 +18,7 @@ void __am_panic_on_return() { panic("should not reach here\n"); }
 static void irq_handle(Context *c) {
   c->vm_head = thiscpu->vm_head;
   c->ksp = thiscpu->ksp;
-
+  printf("event is %s", thiscpu->ev.event);
   if (thiscpu->ev.event == EVENT_ERROR) {
     printf("Unhandle signal '%s' at pc = %p, badaddr = %p, cause = 0x%x\n",
       thiscpu->ev.msg, AM_REG_PC(&c->uc), thiscpu->ev.ref, thiscpu->ev.cause);
@@ -92,7 +92,7 @@ static void iret(ucontext_t *uc) {
 }
 
 static void sig_handler(int sig, siginfo_t *info, void *ucontext) {
-  printf("sig handler: %d\n", sig);
+  // printf("sig handler: %d\n", sig);
   thiscpu->ev = (Event) {0};
   thiscpu->ev.event = EVENT_ERROR;
   switch (sig) {
@@ -100,7 +100,7 @@ static void sig_handler(int sig, siginfo_t *info, void *ucontext) {
     case SIGUSR2: thiscpu->ev.event = EVENT_YIELD; break;
     case SIGVTALRM: thiscpu->ev.event = EVENT_IRQ_TIMER; break;
     case SIGSEGV:
-      printf("info->si_code: %x\n", info->si_code);
+      // printf("info->si_code: %x\n", info->si_code);
       if (info->si_code == SEGV_ACCERR) {
         switch ((uintptr_t)info->si_addr) {
           case 0x100000: thiscpu->ev.event = EVENT_SYSCALL; break;
