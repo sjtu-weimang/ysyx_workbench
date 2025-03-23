@@ -40,8 +40,6 @@ f(30) f(31)
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
-
-  save_context:
   addi sp, sp, -CONTEXT_SIZE
 
   MAP(REGS, PUSH)
@@ -61,7 +59,6 @@ __am_asm_trap:
 
   mv a0, sp
   jal __am_irq_handle
-  mv sp, a0
 
   LOAD t1, OFFSET_STATUS(sp)
   LOAD t2, OFFSET_EPC(sp)
