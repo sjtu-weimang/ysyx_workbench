@@ -213,6 +213,8 @@ static int decode_exec(Decode *s) {
           R(dest) = Mr(src1 + imm, 4));
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul, R,
           R(dest) = src1 * src2);
+  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu, R,
+          R(dest) = (((uint64_t)src1 * (uint64_t)src2)) >> 32);
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw, R,
           R(dest) = SEXT(src1 * src2, 32));
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, MRET);
