@@ -47,11 +47,12 @@ __attribute__((noreturn)) static void out_of_bound(paddr_t addr) {
       addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
 
-void init_mem() {
+void init_mem(const uint8_t *mrom_ref, int mrom_size) {
 #if   defined(CONFIG_PMEM_MALLOC)
   pmem = malloc(CONFIG_MSIZE);
   assert(pmem);
 #endif
+  memcpy(mrom, mrom_ref, mrom_size);
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
