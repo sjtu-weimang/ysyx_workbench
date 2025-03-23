@@ -11,6 +11,8 @@ Context* __am_irq_handle(Context *c) {
       ev.event = EVENT_YIELD;
     } else if (c->GPR1 >= 0 && c->GPR1 <= 19) {
       ev.event = EVENT_SYSCALL;
+    } else if (c->mcause == 0x80000007) {
+      ev.event = EVENT_IRQ_TIMER;
     } else {
       ev.event = EVENT_ERROR;
     }
