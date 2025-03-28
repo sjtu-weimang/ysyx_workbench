@@ -294,7 +294,7 @@ static word_t calc1(int op, word_t val, bool *ok) {
   case TK_POS:
     return val;
   case TK_DEREF:
-    return paddr_read(val, 8);
+    return pmem_read(val, 8);
   default:
     *ok = false;
   }

@@ -1,6 +1,6 @@
 #include <cpu/cpu.h>
 
-#define set_gpr(i) cpu.gpr[i] = dut.rootp->top__DOT__rf__DOT__regF[i];
+#define set_gpr(i) cpu.gpr[i] = dut.io_test_regs_##i;
 set_gpr(0);
 set_gpr(1);
 set_gpr(2);
