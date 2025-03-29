@@ -144,7 +144,7 @@ static int cmd_x(char *) {
     printf(ANSI_FMT(FMT_PADDR ": ", ANSI_FG_CYAN), addr);
 
     for (j = 0; i < n && j < 4; i++, j++) {
-      word_t w = pmem_read(addr, 4);
+      word_t w = paddr_read(addr, 4);
       addr += 4;
       printf(FMT_WORD " ", w);
     }

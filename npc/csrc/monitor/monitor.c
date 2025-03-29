@@ -64,6 +64,7 @@ static void parse_args(int argc, char *argv[]) {
   }
 
   if (img_file == NULL) {
+    printf("No img file!\n");
     show_usage(argv[0]);
   }
 }
@@ -87,7 +88,7 @@ void init_monitor(int argc, char *argv[]) {
   IFDEF(CONFIG_DIFFTEST, init_difftest(diff_so_file, img_size));
 
   // device
-  init_device();
+  // init_device();
 
   // img elf
   // parse_elf_files(elf_files,elf_file_count);

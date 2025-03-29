@@ -19,11 +19,11 @@ static inline bool in_pmem(paddr_t addr) {
   return addr - CONFIG_MBASE < CONFIG_MSIZE;
 }
 
-int pmem_read(int addr, int len);
-void pmem_write(int addr, int len, int data);
+int pmem_read(int raddr);
+void pmem_write(int waddr, int wdata, uint8_t wmask);
 
-// void paddr_read(paddr_t addr, uint64_t* data);
-// void paddr_write(paddr_t addr, uint64_t data, uint8_t mask);
+word_t paddr_read(paddr_t addr, int len);
+void paddr_write(paddr_t addr, int len, word_t data);
 
 long load_img(char *img_path);
 

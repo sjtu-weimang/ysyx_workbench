@@ -19,74 +19,48 @@ void trace_mwrite(paddr_t addr, word_t data, uint8_t mask) {
   printf("mtrace: write at " FMT_PADDR ", data=" FMT_WORD ", mask=%x\n", addr,
          data, mask);
 }
-
 // for DPI-C
 int pmem_read(int raddr) {
-  word_t ret = 0;
-  bool mmio = false;
-  // raddr = raddr & ~0x3u;
-  if (raddr == RTC_ADDR) {
-    mmio = true;
-    ret = (uint32_t)time_tmp;
-#ifdef CONFIG_DTRACE
-    dtrace_read("RTC", raddr, ret);
-#endif
-  } else if (raddr == RTC_ADDR + 4) {
-    mmio = true;
-    time_tmp = get_time();
-    ret = time_tmp >> 32;
-#ifdef CONFIG_DTRACE
-    dtrace_read("RTC", raddr, ret);
-#endif
+  int data = 0;
+  IFDEF(CONFIG_MTRACE, trace_mread(raddr));
+  if (likely(in_pmem(raddr))) {
+    data = host_read(guest_to_host(raddr), 8);
+    return data;
   }
-  if (mmio) {
-#ifdef CONFIG_DIFFTEST
-    difftest_skip_ref();
-#endif
-    return ret;
-  }
-  word_t data = paddr_read(raddr, 4);
-  // Log("pmem_read: raddr=0x%x, data=0x%x\n", raddr, data);
-#ifdef CONFIG_TRACE
-  if (*imem_en_ref) {
-    trace_exec(raddr, data);
-  }
-#endif
+  data = device_read(raddr, 8); // WARN: no len specified in DPI-C interface
   return data;
 }
+
 void pmem_write(int waddr, int wdata, char wmask) {
-  // waddr = waddr & ~0x3u;
-  bool mmio = false;
-  if (waddr == SERIAL_PORT) {
-#ifdef CONFIG_DTRACE
-    dtrace_write("serial", waddr, wdata);
-#endif
-    putchar(wdata);
-    mmio = true;
-    // fflush(stdout);
-    // return;
-  }
-  if (mmio) {
-#ifdef CONFIG_DIFFTEST
-    difftest_skip_ref();
-#endif
-    return;
-  }
-  int len = 0;
-  if (wmask == 0b1) {
+  int len;
+  int mask = wmask;
+  switch (mask) {
+  case 0x01:
     len = 1;
-  } else if (wmask == 0b11) {
+    break;
+  case 0x03:
     len = 2;
-  } else if (wmask == 0b1111) {
+    break;
+  case 0x0f:
     len = 4;
-  } else {
+    break;
+  case 0xff:
+    len = 8;
+    break;
+  case 0x00:
+    return;
+  default:
+    Panic("paddr_write wrong mask: %02x", wmask);
+  }
+  if (likely(in_pmem(waddr))) {
+    host_write(guest_to_host(waddr), len, wdata);
     return;
   }
-  paddr_write(waddr, len, wdata);
+  device_write(waddr, len, wdata);
 }
 
 // for C
-word_t pmem_read(paddr_t addr, int len) {
+word_t paddr_read(paddr_t addr, int len) {
   IFDEF(CONFIG_MTRACE, trace_mread(addr));
   word_t data;
   if (likely(in_pmem(addr))) {
@@ -97,7 +71,7 @@ word_t pmem_read(paddr_t addr, int len) {
 }
 
 // for C
-void pmem_write(paddr_t addr, int len, word_t data) {
+void paddr_write(paddr_t addr, int len, word_t data) {
   printf("paddr_write\n");
   if (likely(in_pmem(addr))) {
     host_write(guest_to_host(addr), len, data);
