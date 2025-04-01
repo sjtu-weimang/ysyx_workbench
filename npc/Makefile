@@ -1,5 +1,6 @@
 BUILD_DIR = ./build
 VSRC_DIR = ./vsrc
+IMG = ./dummy-riscv32e-npc.bin
 export PATH := $(PATH):$(abspath ./utils)
 
 $(shell mkdir -p $(BUILD_DIR))
@@ -46,10 +47,10 @@ $(BIN): $(VSRCS) $(CSRCS)
 IMG ?= $(abspath ./img.bin)
 ARGS ?= --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
 
-all: $(BIN)
+all: $(BIN) 
 
 clean:
 	rm -rf $(BUILD_DIR)
 
 run: all
-	./build/top
+	./build/top $(IMG)
