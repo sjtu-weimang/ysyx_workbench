@@ -1,21 +1,5 @@
-/***************************************************************************************
- * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
- *
- * NEMU is licensed under Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan
- *PSL v2. You may obtain a copy of Mulan PSL v2 at:
- *          http://license.coscl.org.cn/MulanPSL2
- *
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
- *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
- *
- * See the Mulan PSL v2 for more details.
- ***************************************************************************************/
-
-#include "local-include/reg.h"
-#include "debug.h"
 #include <isa.h>
+#include "local-include/reg.h"
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -24,20 +8,40 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+#define REGISTERS_PER_LINE 4
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+
+/// @brief 打印寄存器的状态
 void isa_reg_display() {
-  puts("Registers:");
-  for (int i = 0; i < 32; i++) {
-    printf("%3s: 0x%08x %12d\n", regs[i], cpu.gpr[i], cpu.gpr[i]);
+  int length = ARRLEN(regs);
+  int i = 0;
+  printf("===============================REGISTER INFORMATION================================\n");
+  for (i = 0; i < length; i+= REGISTERS_PER_LINE){
+    for (int j = i; j < MIN(length, i + REGISTERS_PER_LINE); ++j){
+      printf("%3s: %#12x | ", regs[j], cpu.gpr[j]);
+    }
+    printf("\n");
   }
 }
 
+/// @brief 将收到的字符串转为寄存器的值，expr的辅助函数，成功匹配返回寄存器的值，不成功返回-1.
+/// @param s 
+/// @param success 
+/// @return 
 word_t isa_reg_str2val(const char *s, bool *success) {
-  for (int i = 0; i < 32; i++) {
-    if (strcmp(regs[i], s) == 0) {
+  *success = true;
+  if (strcmp(s, regs[0]) == 0){
+    return cpu.gpr[0];
+  }
+
+  for (int i = 1; i < ARRLEN(regs); ++i){
+    if (strcmp(regs[i], s+1) == 0){//跳过$
       *success = true;
+      //printf("%s\n",regs[i]);
       return cpu.gpr[i];
     }
   }
+
   *success = false;
-  return 0;
+  return -1;
 }

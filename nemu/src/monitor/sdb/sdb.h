@@ -1,5 +1,5 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+* Copyright (c) 2014-2024 Zihao Yu, Nanjing University
 *
 * NEMU is licensed under Mulan PSL v2.
 * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -17,7 +17,25 @@
 #define __SDB_H__
 
 #include <common.h>
+#define word_t uint32_t
 
-word_t expr(char *e, bool *success);
+word_t expr(const char *e, bool *success);
+word_t vaddr_read(vaddr_t addr, int len);
+void wp_display();
+
+typedef struct watchpoint {
+    int NO;
+    struct watchpoint* next;
+    char expression[32];
+    uint32_t value;
+}WP;
+
+bool check_watchpoint(WP **point);
+
+WP* new_wp(const char *expression, bool *success);
+
+void delete_watchpoint(int no);
+
+void watchpoint_display();
 
 #endif

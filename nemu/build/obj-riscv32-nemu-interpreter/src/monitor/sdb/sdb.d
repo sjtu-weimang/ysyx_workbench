@@ -4,8 +4,6 @@ source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/mo
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/monitor/sdb/sdb.o := \
     $(wildcard include/config/device.h) \
-    $(wildcard include/config/itrace/cond.h) \
-    $(wildcard include/config/ftrace.h) \
   /home/zhang/ysyx-workbench/nemu/include/isa.h \
   /home/zhang/ysyx-workbench/nemu/src/isa/riscv32/include/isa-def.h \
     $(wildcard include/config/rve.h) \
@@ -18,13 +16,9 @@ deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/moni
   /home/zhang/ysyx-workbench/nemu/include/macro.h \
   /home/zhang/ysyx-workbench/nemu/include/debug.h \
   /home/zhang/ysyx-workbench/nemu/include/utils.h \
-    $(wildcard include/config/itrace.h) \
-    $(wildcard include/config/etrace.h) \
     $(wildcard include/config/target/native/elf.h) \
   /home/zhang/ysyx-workbench/nemu/include/cpu/cpu.h \
   src/monitor/sdb/sdb.h \
-  /home/zhang/ysyx-workbench/nemu/include/memory/vaddr.h \
-  src/monitor/sdb/watchpoint.h \
 
 /home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/monitor/sdb/sdb.o: $(deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/monitor/sdb/sdb.o)
 

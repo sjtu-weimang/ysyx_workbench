@@ -1,5 +1,5 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+* Copyright (c) 2014-2024 Zihao Yu, Nanjing University
 *
 * NEMU is licensed under Mulan PSL v2.
 * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -13,16 +13,11 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <stdlib.h>
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
-#include <memory/vaddr.h>
-#include "common.h"
-#include "utils.h"
-#include "watchpoint.h"
 
 static int is_batch_mode = false;
 
@@ -47,155 +42,115 @@ static char* rl_gets() {
   return line_read;
 }
 
+//单步执行的命令
+static int cmd_siN(char *args){
+  int n = 1;
+  if (args != NULL) {
+    sscanf(args, "%d", &n);
+  }
+  printf("n = %d\n", n);
+  cpu_exec(n);
+  return 0;
+}
+//表达式求值的命令
+static int cmd_p(char *args) {
+  bool success = true;
+  word_t result = expr(args, &success);
+  if (success) {
+    printf("%s=%u\n",args,result);
+    //printf("%u\n",result);
+  } else {
+    printf("Invalid expression\n");
+  }
+  return 0;
+}
+
+//扫描内存的命令
+static int cmd_x(char *args) {
+  char *arg = strtok(NULL, " ");
+  int n=-1;
+  bool success=true;
+  vaddr_t addr=0x80000000;
+  if(*arg<'0'||*arg>'9'){
+    printf("n need to be a number between 0 and 9.\n");
+    return 0;
+  }
+  sscanf(arg, "%d", &n); //把表达式转化为整数常量
+  arg = strtok(NULL, " ");
+  sscanf(arg, "%x", &addr);
+  //addr=expr(arg,&success);
+  //printf("%0x\n"addr);
+  if(!success){
+    printf("expression is invalid.\n");
+    return 0;}
+  if(addr<0x8000000 || addr>0xffffffff){
+    printf("invalid address.\n");
+    return 0;
+  }
+  for(int i = 0; i < n; i++){
+    printf("0x%08x: ", addr);
+    for (int j = 0; j < 4; j++) {
+      printf("0x%02x ", vaddr_read(addr, 1));
+      addr++;
+    }
+    printf("\n");
+  }
+  return 0;
+}
+
+//设置监视点的命令
+static int cmd_w(char* args){
+    bool success=true;
+    WP* point =new_wp(args,&success);
+
+    if(!success){
+      //free(point);
+      printf("Some things wrong happend.\n");
+    }else{
+      printf("create a WatchPoint(No.%d):%s\n",point->NO,point
+      ->expression);
+      printf("%s current value is %u\n",point->expression,expr(point->expression,&success));
+    }
+    return 0;
+  }
+
+//打印程序的状态命令
+static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg==NULL){
+    printf("info \n");
+  }
+  else if (strcmp(arg, "r") == 0) {
+    printf("the states of riscv32 registers displayed:\n");
+    isa_reg_display();
+  }else if (strcmp(arg, "w") == 0) {
+    wp_display();
+    //printf("wp_display to be implement\n");
+  }else {
+    printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
+
+//删除监视点的指令
+static int cmd_d(char * args){
+  if (args==NULL){
+    printf("d instruciton is missing parameter N.\n");
+    return 0;
+  }
+  int N=atoi(args);
+  delete_watchpoint(N);
+  return 0;
+}
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
 }
 
-
 static int cmd_q(char *args) {
-  nemu_state.state = NEMU_QUIT;
+  nemu_state.state=NEMU_QUIT;
   return -1;
 }
-
-static int cmd_si(char *args) {
-    int n=0;
-    if (args!=NULL) {
-        n=atoi(args);
-    }
-    if (n<=0) n=1;
-    printf("Execute %d steps\n", n);
-    cpu_exec(n);
-    return 0;
-}
-
-
-static int cmd_info(char *args) {
-    static const char info_help[] = "Format: info <r|w>";
-    if (args==NULL) {
-        puts(info_help);
-        return 0;
-    }
-    char *p=strtok(args, " ");
-    if (p==NULL || strlen(p)!=1) {
-        puts(info_help);
-        return 0;
-    }
-    if (*p=='r') {
-      isa_reg_display();
-    } else if (*p=='w') {
-      WP* now = get_wp_list();
-      while(now!=NULL) {
-        printf("ID: %d, EXPR: %s\n",now->NO,now->expr);
-        now=now->next;
-      }
-    } else {
-        puts(info_help);
-    }
-    return 0;
-}
-
-static int cmd_x(char *args) {
-    const char *x_help = "Format: x N EXPR";
-    if (args==NULL) {
-        puts(x_help);
-        return 0;
-    }
-    char *p_N=strtok(args, " ");
-    if (p_N==NULL) {
-        puts(x_help);
-        return 0;
-    }
-    int N=atoi(p_N);
-    if (N<=0) {
-        puts(x_help);
-        return 0;
-    }
-    char *p_EXPR=strtok(NULL, " ");
-    if (p_EXPR==NULL) {
-        puts(x_help);
-        return 0;
-    }
-    long long addr=atoll(p_EXPR);
-    if (addr<=0) {
-        puts(x_help);
-        return 0;
-    }
-    for(int i=0; i<N; i++) {
-        printf("0x%08llx: ", addr);
-        for(int j=0; j<4; j++) {
-            printf("%02x ", vaddr_read(addr, 1));
-            addr++;
-        }
-        printf("\n");
-    }
-    return 0;
-}
-
-static int cmd_d(char *args)
-{
-  if (args==NULL) {
-    puts("Format: d <ID>");
-    return 0;
-  }
-  int id=atoi(args);
-  if (id<=0 || id>NR_WP) {
-    puts("Format: d <ID>");
-    return 0;
-  }
-  WP* now = get_wp_list();
-  if (now->NO==id) {
-    free_wp(now,NULL);
-    return 0;
-  }
-  while(now!=NULL) {
-    WP* nxt = now->next;
-    if (nxt!=NULL && nxt->NO==id) {
-      free_wp(nxt,now);
-      return 0;
-    }
-  }
-  puts("WatchPoint not exists!");
-  return 0;
-}
-static int cmd_p(char *args)
-{
-  if (args==NULL) {
-    puts("Format: p EXPR");
-    return 0;
-  }
-  bool success=true;
-  word_t result=expr(args, &success);
-  if (success) {
-    printf("%llu\n", (unsigned long long)result);
-  } else {
-    puts("Invalid expression");
-  }
-  return 0; 
-}
-static int cmd_w(char *args)
-{
-  if (args==NULL) {
-    puts("Format: w <EXPR>");
-    return 0;
-  }
-  if (strlen(args)>=WP_MAX_EXPR) {
-    puts("expr too long!");
-    return 0;
-  }
-  bool success=true;
-  word_t result=expr(args, &success);
-  if (!success) {
-    puts("Invalid expression");
-    return 0;
-  }
-  WP* wp = new_wp();
-  wp->last_value=result;
-  strcpy(wp->expr,args);
-  printf("ID: %d\n",wp->NO);
-  return 0;
-}
-
 
 static int cmd_help(char *args);
 
@@ -207,15 +162,17 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Execute N steps", cmd_si},
-  { "info", "Show registers or watchpoint", cmd_info},
-  { "x", "Scan memory", cmd_x},
-  { "p", "Print expression", cmd_p},
-  { "w", "Set watchpoint", cmd_w},
-  { "d", "Delete watchpoint", cmd_d},
+  { "si", "Single step execution of the program", cmd_siN },
+  { "info", "Print program state", cmd_info },
+  { "p", "Expression evaluation", cmd_p },
+  { "x","Scann the memory address",cmd_x},
+  { "w","Set watch point",cmd_w},
+  {"d","Delete the watch point with code N",cmd_d}
+  /* TODO: Add more commands */
 
 };
 
+//获取命令的数量
 #define NR_CMD ARRLEN(cmd_table)
 
 static int cmd_help(char *args) {
@@ -283,21 +240,10 @@ void sdb_mainloop() {
   }
 }
 
-void init_sdb(const char* elf_file) {
+void init_sdb() {
   /* Compile the regular expressions. */
   init_regex();
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
-
-#ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) { 
-  instruction_ring_buffer_init();
-  }
-#endif
-
-#ifdef CONFIG_FTRACE
-  ftrace_init(elf_file);
-#endif
-
 }

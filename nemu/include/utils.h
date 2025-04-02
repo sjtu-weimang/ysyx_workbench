@@ -49,58 +49,29 @@ uint64_t get_time();
 #define ANSI_BG_GREEN   "\33[1;42m"
 #define ANSI_BG_YELLOW  "\33[1;43m"
 #define ANSI_BG_BLUE    "\33[1;44m"
-#define ANSI_BG_MAGENTA "\33[1;35m"
+#define ANSI_BG_MAGENTA "\33[1;45m"
 #define ANSI_BG_CYAN    "\33[1;46m"
 #define ANSI_BG_WHITE   "\33[1;47m"
 #define ANSI_NONE       "\33[0m"
 
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 
-#define INSTRUCTION_LOG_BUF_SIZE 4096
-
-typedef struct {
-  char *name;
-  uint32_t start_addr;
-  uint32_t end_addr;
-} SymbolFunc;
-
-extern char instruction_ring_buffer[INSTRUCTION_LOG_BUF_SIZE][128];
-extern int instruction_ring_buffer_head, instruction_ring_buffer_tail;
-extern SymbolFunc *symbol_funcs;
-extern int symbol_func_num;
-
-extern char *elf_file_content;
-
-#ifdef CONFIG_ITRACE
-void instruction_ring_buffer_init();
-void instruction_ring_buffer_write();
-#endif
-
-#ifdef CONFIG_FTRACE
-void ftrace_init(const char *elf_file);
-void ftrace_close();
-void ftrace_exec(uint32_t pc_before, uint32_t pc_after, int rd, bool is_jal);
-#endif
-
-#ifdef CONFIG_ETRACE
-void etrace_exec(uint32_t pc);
-#endif
-
-#define log_write(...)                                                         \
-  IFDEF(                                                                       \
-      CONFIG_TARGET_NATIVE_ELF, do {                                           \
-        extern FILE *log_fp;                                                   \
-        extern bool log_enable();                                              \
-        if (log_enable()) {                                                    \
-          fprintf(log_fp, __VA_ARGS__);                                        \
-          fflush(log_fp);                                                      \
-        }                                                                      \
-      } while (0))
+#define log_write(...) IFDEF(CONFIG_TARGET_NATIVE_ELF, \
+  do { \
+    extern FILE* log_fp; \
+    extern bool log_enable(); \
+    if (log_enable() && log_fp != NULL) { \
+      fprintf(log_fp, __VA_ARGS__); \
+      fflush(log_fp); \
+    } \
+  } while (0) \
+)
 
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \
     log_write(__VA_ARGS__); \
   } while (0)
+
 
 #endif

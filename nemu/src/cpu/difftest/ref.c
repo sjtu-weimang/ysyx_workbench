@@ -1,51 +1,65 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
+ * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+ *
+ * NEMU is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan
+ *PSL v2. You may obtain a copy of Mulan PSL v2 at:
+ *          http://license.coscl.org.cn/MulanPSL2
+ *
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+ *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *
+ * See the Mulan PSL v2 for more details.
+ ***************************************************************************************/
 
 #include <isa.h>
 #include <cpu/cpu.h>
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
-__EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  if (direction==DIFFTEST_TO_REF) {
-    memcpy(guest_to_host(addr), buf, n);
+#define NGPR 32
+
+struct diff_context_t {
+  word_t gpr[32];
+  word_t pc;
+};
+
+void difftest_regcpy(void *dut, bool direction)
+    __attribute__((visibility("default")));
+
+void difftest_exec(uint64_t n) __attribute__((visibility("default")));
+
+void difftest_init(int port) __attribute__((visibility("default")));
+
+void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
+  if (direction == DIFFTEST_TO_REF) {
+    for (size_t i = 0; i < n; i++) {
+      paddr_write(addr + i, 1, *((uint8_t *)buf + i));
+    }
   } else {
-    memcpy(buf, guest_to_host(addr), n);
+    assert(0);
   }
 }
 
-__EXPORT void difftest_regcpy(void *dut, bool direction) {
-  CPU_state *dut_r = (CPU_state *)dut;
-  if (direction==DIFFTEST_TO_REF) {
-    cpu = *dut_r;
+void difftest_regcpy(void *dut, bool direction) {
+  struct diff_context_t *ctx = (struct diff_context_t *)dut;
+  if (direction == DIFFTEST_TO_REF) {
+    for (int i = 0; i < NGPR; i++) {
+      cpu.gpr[i] = ctx->gpr[i];
+    }
   } else {
-    *dut_r = cpu;
+    for (int i = 0; i < NGPR; i++) {
+      ctx->gpr[i] = cpu.gpr[i];
+    }
   }
 }
 
-__EXPORT void difftest_exec(uint64_t n) {
-  cpu_exec(n);
-}
+void difftest_exec(uint64_t n) { cpu_exec(n); }
 
-__EXPORT void difftest_raise_intr(word_t NO) {
-  assert(0);
-}
+void difftest_raise_intr(word_t NO) { assert(0); }
 
-__EXPORT void difftest_init(int port, const uint8_t *mrom, int mrom_size) {
-  void init_mem(const uint8_t*, int);
-  init_mem(mrom, mrom_size);
+void difftest_init(int port) {
   /* Perform ISA dependent initialization. */
   init_isa();
 }

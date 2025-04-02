@@ -1,17 +1,17 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
-*
-* NEMU is licensed under Mulan PSL v2.
-* You can use this software according to the terms and conditions of the Mulan PSL v2.
-* You may obtain a copy of Mulan PSL v2 at:
-*          http://license.coscl.org.cn/MulanPSL2
-*
-* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-*
-* See the Mulan PSL v2 for more details.
-***************************************************************************************/
+ * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+ *
+ * NEMU is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan
+ *PSL v2. You may obtain a copy of Mulan PSL v2 at:
+ *          http://license.coscl.org.cn/MulanPSL2
+ *
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY
+ *KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+ *NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ *
+ * See the Mulan PSL v2 for more details.
+ ***************************************************************************************/
 
 #include <isa.h>
 #include <memory/host.h>
@@ -59,14 +59,18 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   invoke_callback(map->callback, offset, len, false); // prepare data to read
   word_t ret = host_read(map->space + offset, len);
 #ifdef CONFIG_DTRACE
-  log_write("dtrace: read device %s at " FMT_PADDR " with len %d, value = " FMT_WORD "\n", map->name, addr, len, ret);
+  log_write("dtrace: read device %s at " FMT_PADDR
+            " with len %d, value = " FMT_WORD "\n",
+            map->name, addr, len, ret);
 #endif
   return ret;
 }
 
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
 #ifdef CONFIG_DTRACE
-  log_write("dtrace: write device %s at " FMT_PADDR " with len %d, value = " FMT_WORD "\n", map->name, addr, len, data);
+  log_write("dtrace: write device %s at " FMT_PADDR
+            " with len %d, value = " FMT_WORD "\n",
+            map->name, addr, len, data);
 #endif
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);

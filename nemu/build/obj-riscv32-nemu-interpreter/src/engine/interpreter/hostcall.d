@@ -4,9 +4,6 @@ source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/en
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/engine/interpreter/hostcall.o := \
   /home/zhang/ysyx-workbench/nemu/include/utils.h \
-    $(wildcard include/config/itrace.h) \
-    $(wildcard include/config/ftrace.h) \
-    $(wildcard include/config/etrace.h) \
     $(wildcard include/config/target/native/elf.h) \
   /home/zhang/ysyx-workbench/nemu/include/common.h \
     $(wildcard include/config/target/am.h) \

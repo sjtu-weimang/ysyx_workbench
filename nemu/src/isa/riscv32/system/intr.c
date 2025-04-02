@@ -1,5 +1,5 @@
 /***************************************************************************************
-* Copyright (c) 2014-2022 Zihao Yu, Nanjing University
+* Copyright (c) 2014-2024 Zihao Yu, Nanjing University
 *
 * NEMU is licensed under Mulan PSL v2.
 * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -16,10 +16,13 @@
 #include <isa.h>
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-  cpu.csr.mcause = 11; // ecall from M-mode
-  cpu.csr.mepc = epc;
-  cpu.csr.mstatus = 0x1800;
-  return cpu.csr.mtvec;
+  /* TODO: Trigger an interrupt/exception with ``NO''.
+   * Then return the address of the interrupt/exception vector.
+   */
+  cpu.mcause = NO;
+  cpu.mepc = epc;
+
+  return cpu.mtvec;
 }
 
 word_t isa_query_intr() {
