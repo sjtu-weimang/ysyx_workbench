@@ -45,7 +45,7 @@ $(BIN): $(VSRCS) $(CSRCS)
 .PHONY: all clean run
 
 IMG ?= $(abspath ./img.bin)
-ARGS ?= --diff=$(NEMU_HOME)/build/riscv64-nemu-interpreter-so
+ARGS ?= --diff=$(NEMU_HOME)/build/riscv32-nemu-interpreter-so
 
 all: $(BIN) 
 
