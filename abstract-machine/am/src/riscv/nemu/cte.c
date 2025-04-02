@@ -22,6 +22,7 @@ Context* __am_irq_handle(Context *c) {
       ev.event = EVENT_ERROR;
       break;
     }
+    putch('u');
 
     c = user_handler(ev, c);
     assert(c != NULL);
