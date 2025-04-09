@@ -32,13 +32,3 @@ uint64_t get_time() {
 
 static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
-
-void init_vga() {
-  SDL_Window *window = NULL;
-  char title[128];
-  sprintf(title, "riscv32e-NPC");
-  SDL_Init(SDL_INIT_VIDEO);
-  SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-                              SDL_TEXTUREACCESS_STATIC, 400, 300);
-}
