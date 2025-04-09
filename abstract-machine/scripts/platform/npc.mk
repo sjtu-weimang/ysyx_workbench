@@ -14,7 +14,7 @@ LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 CFLAGS += -I/usr/include/SDL2
 LDFLAGS  += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS  += --gc-sections -e _start
-NPCFLAGS = +trace batch-on
+NPCFLAGS = +trace batch-on DIFFTEST_REF= ../nemu/build/obj-riscv32-nemu-interpreter-so
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
