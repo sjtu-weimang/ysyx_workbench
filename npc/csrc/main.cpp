@@ -31,10 +31,11 @@ void cpu_exec(int n) {
         npc_status = NPC_STATUS_QUIT;
         printf("At %d cycle, ebreak called. Exited.\n", cycle_cnt);
       } else {
-        npc_status = NPC_STATUS_FAILED;
+
         printf("At %d cycle, ebreak called with error code %d,ebreak_pc is "
                "%x,Exited.\n",
                cycle_cnt, int(ebreak_code), ebreak_pc);
+        npc_status = NPC_STATUS_FAILED;
       }
       break;
     }
