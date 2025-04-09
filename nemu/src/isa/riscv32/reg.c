@@ -16,6 +16,7 @@ void isa_reg_display() {
   int length = ARRLEN(regs);
   int i = 0;
   printf("===============================REGISTER INFORMATION================================\n");
+  printf("pc:%08x\n", cpu.pc);
   for (i = 0; i < length; i+= REGISTERS_PER_LINE){
     for (int j = i; j < MIN(length, i + REGISTERS_PER_LINE); ++j){
       printf("%3s: %#12x | ", regs[j], cpu.gpr[j]);
