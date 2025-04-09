@@ -90,6 +90,5 @@ extern int npc_status;
 void log_init();
 
 void log_close();
-void init_vga();
 uint64_t get_time_internal();
 uint64_t get_time();
