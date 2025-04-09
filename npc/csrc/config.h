@@ -1,12 +1,13 @@
 #pragma once
 
 #define CONFIG_MBASE 0x80000000L
+
+#define CONFIG_TRACE 1
+#ifdef CONFIG_TRACE
+// #   define CONFIG_DIFFTEST
 #define CONFIG_ITRACE 1
 #define CONFIG_DTRACE 1
 #define CONFIG_DIFFTEST 1
-// #define CONFIG_TRACE
-#ifdef CONFIG_TRACE
-// #   define CONFIG_DIFFTEST
 #define CONFIG_MTRACE
 #define CONFIG_FTRACE
 #define CONFIG_ITRACE
