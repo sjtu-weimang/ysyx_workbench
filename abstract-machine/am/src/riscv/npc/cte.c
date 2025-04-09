@@ -11,7 +11,6 @@ Context* __am_irq_handle(Context *c) {
     case 11:
       if (c->GPR1 == -1) {
         ev.event = EVENT_YIELD;
-        putch('u');
         c->mepc += 4;
       } else if (c->GPR1 >= 0 && c->GPR1 <= 19) {
         ev.event = EVENT_SYSCALL;
