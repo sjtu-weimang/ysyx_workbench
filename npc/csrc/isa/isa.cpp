@@ -52,7 +52,7 @@ void init_isa() {
 void isa_reg_display() {
   puts("Registers:");
   for (int i = 0; i < 32; i++) {
-    printf("%3s: 0x%08x %0x\n", regs[i], *reg_ref[i], (int)*reg_ref[i]);
+    printf("%3s: 0x%08x n", regs[i], *reg_ref[i]);
   }
 }
 
@@ -149,7 +149,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc, vaddr_t npc) {
              i, pc, ref_r->gpr[i], cpu.gpr[i]);
       result = false;
     }
-    printf("ref reg[%d]: %0x\n", i, ref_r->gpr[i]);
+    printf("ref reg[%d]: %08x", i, ref_r->gpr[i]);
   }
   return result;
 }
