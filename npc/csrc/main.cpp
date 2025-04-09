@@ -48,6 +48,8 @@ int main(int argc, char **argv) {
     return 1;
   } else {
     printf("arg1 is %s\n", argv[1]);
+    printf("arg2 is %s\n", argv[2]);
+    printf("arg3 is %s\n", argv[3]);
     printf("img files is %s\n", argv[2]);
   }
   Verilated::mkdir("logs");
