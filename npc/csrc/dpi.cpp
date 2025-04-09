@@ -38,6 +38,7 @@ int pmem_read(int raddr) {
 #endif
     return ret;
   }
+  raddr = raddr & ~0x3u;
   word_t data = paddr_read(raddr, 4);
   // Log("pmem_read: raddr=0x%x, data=0x%x\n", raddr, data);
 #ifdef CONFIG_TRACE
