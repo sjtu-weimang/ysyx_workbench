@@ -666,7 +666,7 @@ module RegisterFile(
   wire [31:0] _GEN_184 = io_csr_mret_enable ? 32'h80 : csr_0; // @[RegisterFile.scala 70:34 71:12 38:28]
   assign io_reg1_data = 5'h1f == io_reg1_addr ? registers_31 : _GEN_94; // @[RegisterFile.scala 46:{16,16}]
   assign io_reg2_data = 5'h1f == io_reg2_addr ? registers_31 : _GEN_126; // @[RegisterFile.scala 47:{16,16}]
-  assign io_csr_rdata = io_csr_rs_enable | io_csr_rw_enable ? _GEN_171 : 32'h0; // @[RegisterFile.scala 76:22]
+  assign io_csr_rdata = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 76:{16,16}]
   assign io_csr_ecall_ret = csr_3; // @[RegisterFile.scala 74:19]
   assign io_csr_mret_ret = csr_1; // @[RegisterFile.scala 75:19]
   assign io_test_reg_out_1 = registers_1; // @[RegisterFile.scala 78:19]
