@@ -55,9 +55,9 @@ void pmem_write(int waddr, int wdata, char wmask) {
 #ifdef CONFIG_DTRACE
     dtrace_write("serial", waddr, wdata);
 #endif
-    // putchar(wdata);
+    putchar(wdata);
     mmio = true;
-    fflush(stdout);
+    // fflush(stdout);
     // return;
   }
   if (mmio) {
