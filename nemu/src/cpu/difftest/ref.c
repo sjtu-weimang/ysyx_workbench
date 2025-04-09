@@ -47,10 +47,12 @@ void difftest_regcpy(void *dut, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
     for (int i = 0; i < NGPR; i++) {
       cpu.gpr[i] = ctx->gpr[i];
+      cpu.pc = ctx->pc;
     }
   } else {
     for (int i = 0; i < NGPR; i++) {
       ctx->gpr[i] = cpu.gpr[i];
+      ctx->pc = cpu.pc;
     }
   }
 }
