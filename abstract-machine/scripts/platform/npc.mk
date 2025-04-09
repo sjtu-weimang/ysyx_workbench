@@ -13,7 +13,6 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-LDFLAGS   += -lSDL2
 NPCFLAGS = +trace batch-on
 
 MAINARGS_MAX_LEN = 64

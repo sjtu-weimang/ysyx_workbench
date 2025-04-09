@@ -9,7 +9,7 @@ LLVM_CXXFLAGS := $(filter-out -D__STDC_FORMAT_MACROS, $(LLVM_CXXFLAGS))
 LLVM_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags --libs)
 LLVM_LDFLAGS += -lreadline
 run: sim
-	./obj_dir/VTopLevel +trace $(IMG) $(ELF) $DIFFTEST_REF
+	./obj_dir/VTopLevel +trace $(IMG) $(ELF) $(DIFFTEST_REF)
 gdb: sim
 	gdb --args ./obj_dir/VTopLevel +trace $(IMG) $(ELF) $(DIFFTEST_REF)
 
