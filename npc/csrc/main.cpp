@@ -27,7 +27,7 @@ void cpu_exec(int n) {
     top->clock = 1;
     top->eval();
     if (is_ebreak) {
-      if (ebreak_code==1) {
+      if (ebreak_code == 1) {
         npc_status = NPC_STATUS_QUIT;
         printf("At %d cycle, ebreak called. Exited.\n", cycle_cnt);
       } else {
@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
          "so file>");
     return 1;
   } else {
+    printf("arg1 is %s\n", argv[1]);
     printf("img files is %s\n", argv[2]);
   }
   Verilated::mkdir("logs");
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
   is_ebreak = false;
   contextp->debug(0);
   contextp->randReset(2);
-  //contextp->traceEverOn(true);
+  // contextp->traceEverOn(true);
   contextp->commandArgs(argc, argv);
   imem_en_ref = &top->io_test_imem_en;
   top->reset = 1;
@@ -89,7 +90,7 @@ int main(int argc, char **argv) {
 #endif
 
   top->final();
-  //contextp->coveragep()->write("logs/coverage.dat");
+  // contextp->coveragep()->write("logs/coverage.dat");
   if (npc_status != NPC_STATUS_QUIT) {
     puts("Program exited abnormally.");
     log_close();
