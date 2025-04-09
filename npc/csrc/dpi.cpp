@@ -17,7 +17,7 @@ void ebreak(uint8_t code, int pc) {
 int pmem_read(int raddr) {
   word_t ret = 0;
   bool mmio = false;
-  // raddr = raddr & ~0x3u;
+  raddr = (raddr + 3) & ~0x3u;
   if (raddr == RTC_ADDR) {
     mmio = true;
     ret = (uint32_t)time_tmp;
