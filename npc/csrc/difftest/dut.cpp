@@ -95,8 +95,8 @@ void init_difftest(const char *ref_so_file, long img_size, int port) {
 
   ref_difftest_init(port);
   const uint32_t RESET_VECTOR = CONFIG_MBASE;
-  ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size,
-                      DIFFTEST_TO_REF);
+  // ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size,
+  //                     DIFFTEST_TO_REF);
   auto cpu = get_current_cpu_state();
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
