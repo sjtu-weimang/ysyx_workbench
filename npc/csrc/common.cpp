@@ -1,25 +1,22 @@
 #include "common.h"
+#include <SDL2/SDL.h>
 #include <cstdlib>
 #include <time.h>
 
-FILE* log_fp;
+FILE *log_fp;
 int npc_status;
 
-bool log_enable(){
-    return true;
-}
+bool log_enable() { return true; }
 
 void log_init() {
-    log_fp = fopen("logs/log.txt", "w");
-    if (log_fp==NULL) {
-        printf("Failed to open log file\n");
-        exit(1);
-    }
+  log_fp = fopen("logs/log.txt", "w");
+  if (log_fp == NULL) {
+    printf("Failed to open log file\n");
+    exit(1);
+  }
 }
 
-void log_close() {
-    fclose(log_fp);
-}
+void log_close() { fclose(log_fp); }
 uint64_t get_time_internal() {
   struct timespec now;
   clock_gettime(CLOCK_MONOTONIC_COARSE, &now);
@@ -27,7 +24,21 @@ uint64_t get_time_internal() {
   return us;
 }
 uint64_t get_time() {
-	static uint64_t boot_time=0;
-	if (boot_time==0) boot_time = get_time_internal();
-	return get_time_internal() - boot_time;
+  static uint64_t boot_time = 0;
+  if (boot_time == 0)
+    boot_time = get_time_internal();
+  return get_time_internal() - boot_time;
+}
+
+static SDL_Renderer *renderer = NULL;
+static SDL_Texture *texture = NULL;
+
+void init_vga() {
+  SDL_Window *window = NULL;
+  char title[128];
+  sprintf(title, "riscv32e-NPC");
+  SDL_Init(SDL_INIT_VIDEO);
+  SDL_CreateWindowAndRenderer(800, 600, 0, &window, &renderer);
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+                              SDL_TEXTUREACCESS_STATIC, 400, 300);
 }

@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
   npc_status = NPC_STATUS_GOOD;
 
   init_isa();
+  init_vga();
   init_sdb(elf);
 #ifdef CONFIG_DIFFTEST
   init_difftest(difftest_ref_so_file, img_size, 0);
