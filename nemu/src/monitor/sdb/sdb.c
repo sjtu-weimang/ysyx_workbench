@@ -48,7 +48,7 @@ static int cmd_siN(char *args){
   if (args != NULL) {
     sscanf(args, "%d", &n);
   }
-  printf("n = %d\n", n);
+  printf("n = %d,pc is %08x\n", n, cpu.pc);
   cpu_exec(n);
   return 0;
 }
