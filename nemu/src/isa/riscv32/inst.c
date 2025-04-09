@@ -22,7 +22,7 @@
 static vaddr_t *csr_register(word_t imm) {
   switch (imm) {
   case 0x341:
-    printf("mepc is %d\n", cpu.mepc);
+    printf("mepc is %08x\n", cpu.mepc);
     return &(cpu.mepc);
   case 0x342:
     return &(cpu.mcause);
