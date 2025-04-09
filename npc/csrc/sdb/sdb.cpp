@@ -506,7 +506,6 @@ void trace_exec(uint32_t pc, uint32_t instr) {
     ftrace_exec(ftrace_pc, pc, ftrace_rd, (ftrace_inst & 0x7f) == 0x6f);
     ftrace_inst = 0;
   }
-#endif
 #ifdef CONFIG_DIFFTEST
   if (difftest_pc != 0 && difftest_pc != pc) {
     difftest_step(difftest_pc, pc);
@@ -521,7 +520,7 @@ void trace_exec(uint32_t pc, uint32_t instr) {
     ftrace_pc = pc;
   }
 }
-
+#endif
 #ifdef CONFIG_DTRACE
 void dtrace_read(const char *name, uint32_t addr, uint32_t data) {
   log_write("DTrace: read %s at " FMT_WORD ": " FMT_WORD "\n", name, addr,
