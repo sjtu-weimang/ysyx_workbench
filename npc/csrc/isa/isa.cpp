@@ -52,7 +52,7 @@ void init_isa() {
 void isa_reg_display() {
   puts("Registers:");
   for (int i = 0; i < 32; i++) {
-    printf("%3s: 0x%08x n", regs[i], *reg_ref[i]);
+    printf("%3s: 0x%08x\n", regs[i], *reg_ref[i]);
   }
 }
 
