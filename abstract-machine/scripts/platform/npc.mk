@@ -12,7 +12,6 @@ AM_SRCS := riscv/npc/start.S \
 CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 CFLAGS += -I/usr/include/SDL2
-LDFLAGS += $(shell pkg-config --libs sdl2)
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 NPCFLAGS = +trace batch-on
