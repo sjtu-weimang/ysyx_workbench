@@ -32,6 +32,9 @@ void difftest_exec(uint64_t n) __attribute__((visibility("default")));
 
 void difftest_init(int port) __attribute__((visibility("default")));
 
+void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction)
+    __attribute__((visibility("default")));
+
 void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if (direction == DIFFTEST_TO_REF) {
     for (size_t i = 0; i < n; i++) {
