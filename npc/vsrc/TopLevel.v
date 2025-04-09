@@ -1412,7 +1412,7 @@ module TopLevel(
     _register_file_io_write_data_T_21; // @[Mux.scala 81:58]
   wire [31:0] _register_file_io_write_data_T_25 = 4'h7 == controller_io_WB_sel ? _register_file_io_write_data_T_11 :
     _register_file_io_write_data_T_23; // @[Mux.scala 81:58]
-  wire  _T = controller_io_WB_sel == 4'h8; // @[TopLevel.scala 80:29]
+  wire  _T = PC == 32'h8000031c; // @[TopLevel.scala 80:10]
   reg [31:0] dmem_write_data; // @[TopLevel.scala 112:32]
   Controller controller ( // @[TopLevel.scala 13:26]
     .clock(controller_clock),
