@@ -149,6 +149,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc, vaddr_t npc) {
              i, pc, ref_r->gpr[i], cpu.gpr[i]);
       result = false;
     }
+    printf("ref reg[%d]: %0x", i, ref_r->gpr[i]);
   }
   return result;
 }
