@@ -3,13 +3,13 @@ cmd_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memor
 source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memory/paddr.o := src/memory/paddr.c
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memory/paddr.o := \
+    $(wildcard include/config/mtrace.h) \
     $(wildcard include/config/pmem/malloc.h) \
     $(wildcard include/config/pmem/garray.h) \
     $(wildcard include/config/msize.h) \
     $(wildcard include/config/mbase.h) \
     $(wildcard include/config/mem/random.h) \
     $(wildcard include/config/device.h) \
-    $(wildcard include/config/mtrace.h) \
   /home/zhang/ysyx-workbench/nemu/include/memory/host.h \
     $(wildcard include/config/isa64.h) \
     $(wildcard include/config/rt/check.h) \
