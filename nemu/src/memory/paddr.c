@@ -67,7 +67,7 @@ word_t paddr_read(paddr_t addr, int len) {
     IFDEF(CONFIG_DEVICE, res = mmio_read(addr, len));
     IFNDEF(CONFIG_DEVICE, out_of_bound(addr));
   }
-  Log("pmem_read: raddr=0x%x, data=0x%x\n", addr, res);
+  // Log("pmem_read: raddr=0x%x, data=0x%x\n", addr, res);
 #ifdef CONFIG_MTRACE
   log_write("paddr_read: addr = " FMT_PADDR ", len = %d, data = " FMT_WORD "\n",
             addr, len, res);
@@ -76,7 +76,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  Log("pmem_write: waddr=0x%x, data=0x%x\n", addr, data);
+  // Log("pmem_write: waddr=0x%x, data=0x%x\n", addr, data);
 #ifdef CONFIG_MTRACE
   log_write("paddr_write: addr = " FMT_PADDR ", len = %d, data = " FMT_WORD
             "\n",
