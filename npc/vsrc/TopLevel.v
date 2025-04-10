@@ -663,43 +663,43 @@ module RegisterFile(
   wire [31:0] _GEN_170 = 3'h4 == csr_id[2:0] ? csr_4 : _GEN_169; // @[RegisterFile.scala 64:{33,33}]
   wire [31:0] _GEN_171 = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 64:{33,33}]
   wire [31:0] _csr_T_1 = _GEN_171 | io_csr_wdata; // @[RegisterFile.scala 65:32]
-  wire [31:0] _GEN_184 = io_csr_mret_enable ? 32'h80 : csr_0; // @[RegisterFile.scala 70:34 71:12 38:28]
+  wire [31:0] _GEN_184 = io_csr_mret_enable ? 32'h80 : csr_0; // @[RegisterFile.scala 69:34 70:12 38:28]
   assign io_reg1_data = 5'h1f == io_reg1_addr ? registers_31 : _GEN_94; // @[RegisterFile.scala 46:{16,16}]
   assign io_reg2_data = 5'h1f == io_reg2_addr ? registers_31 : _GEN_126; // @[RegisterFile.scala 47:{16,16}]
-  assign io_csr_rdata = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 76:{16,16}]
-  assign io_csr_ecall_ret = csr_3; // @[RegisterFile.scala 74:19]
-  assign io_csr_mret_ret = csr_1; // @[RegisterFile.scala 75:19]
-  assign io_test_reg_out_1 = registers_1; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_2 = registers_2; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_3 = registers_3; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_4 = registers_4; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_5 = registers_5; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_6 = registers_6; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_7 = registers_7; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_8 = registers_8; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_9 = registers_9; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_10 = registers_10; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_11 = registers_11; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_12 = registers_12; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_13 = registers_13; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_14 = registers_14; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_15 = registers_15; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_16 = registers_16; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_17 = registers_17; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_18 = registers_18; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_19 = registers_19; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_20 = registers_20; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_21 = registers_21; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_22 = registers_22; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_23 = registers_23; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_24 = registers_24; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_25 = registers_25; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_26 = registers_26; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_27 = registers_27; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_28 = registers_28; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_29 = registers_29; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_30 = registers_30; // @[RegisterFile.scala 78:19]
-  assign io_test_reg_out_31 = registers_31; // @[RegisterFile.scala 78:19]
+  assign io_csr_rdata = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 75:{16,16}]
+  assign io_csr_ecall_ret = csr_3; // @[RegisterFile.scala 73:19]
+  assign io_csr_mret_ret = csr_1; // @[RegisterFile.scala 74:19]
+  assign io_test_reg_out_1 = registers_1; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_2 = registers_2; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_3 = registers_3; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_4 = registers_4; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_5 = registers_5; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_6 = registers_6; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_7 = registers_7; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_8 = registers_8; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_9 = registers_9; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_10 = registers_10; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_11 = registers_11; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_12 = registers_12; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_13 = registers_13; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_14 = registers_14; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_15 = registers_15; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_16 = registers_16; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_17 = registers_17; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_18 = registers_18; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_19 = registers_19; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_20 = registers_20; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_21 = registers_21; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_22 = registers_22; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_23 = registers_23; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_24 = registers_24; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_25 = registers_25; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_26 = registers_26; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_27 = registers_27; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_28 = registers_28; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_29 = registers_29; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_30 = registers_30; // @[RegisterFile.scala 77:19]
+  assign io_test_reg_out_31 = registers_31; // @[RegisterFile.scala 77:19]
   always @(posedge clock) begin
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_1 <= 32'h0; // @[RegisterFile.scala 37:34]
@@ -1114,9 +1114,7 @@ module RegisterFile(
       if (3'h0 == csr_id[2:0]) begin // @[RegisterFile.scala 65:17]
         csr_0 <= _csr_T_1; // @[RegisterFile.scala 65:17]
       end
-    end else if (io_csr_ecall_enable) begin // @[RegisterFile.scala 66:35]
-      csr_0 <= 32'h1800; // @[RegisterFile.scala 69:12]
-    end else begin
+    end else if (!(io_csr_ecall_enable)) begin // @[RegisterFile.scala 66:35]
       csr_0 <= _GEN_184;
     end
     if (reset) begin // @[RegisterFile.scala 38:28]
@@ -1412,7 +1410,6 @@ module TopLevel(
     _register_file_io_write_data_T_21; // @[Mux.scala 81:58]
   wire [31:0] _register_file_io_write_data_T_25 = 4'h7 == controller_io_WB_sel ? _register_file_io_write_data_T_11 :
     _register_file_io_write_data_T_23; // @[Mux.scala 81:58]
-  wire  _T = PC == 32'h8000031c; // @[TopLevel.scala 80:10]
   reg [31:0] dmem_write_data; // @[TopLevel.scala 112:32]
   Controller controller ( // @[TopLevel.scala 13:26]
     .clock(controller_clock),
@@ -1616,16 +1613,5 @@ module TopLevel(
     end else begin
       dmem_write_data <= register_file_io_reg2_data; // @[TopLevel.scala 113:19]
     end
-    `ifndef SYNTHESIS
-    `ifdef PRINTF_COND
-      if (`PRINTF_COND) begin
-    `endif
-        if (_T & ~reset) begin
-          $fwrite(32'h80000002,"csr rdata is: %x\n",register_file_io_csr_rdata); // @[TopLevel.scala 81:11]
-        end
-    `ifdef PRINTF_COND
-      end
-    `endif
-    `endif // SYNTHESIS
   end
 endmodule
