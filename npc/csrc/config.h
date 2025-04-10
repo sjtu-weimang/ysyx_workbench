@@ -2,7 +2,7 @@
 
 #define CONFIG_MBASE 0x80000000L
 
-#define CONFIG_TRACE 1
+#define CONFIG_TRACE 0
 #ifdef CONFIG_TRACE
 // #   define CONFIG_DIFFTEST
 #define CONFIG_ITRACE 1
