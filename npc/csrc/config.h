@@ -10,4 +10,5 @@
 #define CONFIG_DTRACE
 #define CONFIG_DIFFTEST
 #define CONFIG_MTRACE
+#define CONFIG_FTRACE
 #endif
