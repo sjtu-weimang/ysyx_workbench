@@ -38,7 +38,7 @@ int pmem_read(int raddr) {
 #endif
     return ret;
   }
-  // raddr = raddr & ~0x3u;
+  raddr = raddr & ~0x3u;
   word_t data = paddr_read(raddr, 4);
 #ifdef CONFIG_MTRACE
   Log("pmem_read: raddr=0x%x, data=0x%x\n", raddr, data);
@@ -51,7 +51,7 @@ int pmem_read(int raddr) {
   return data;
 }
 void pmem_write(int waddr, int wdata, char wmask) {
-  // waddr = waddr & ~0x3u;
+  waddr = waddr & ~0x3u;
   bool mmio = false;
   if (waddr == SERIAL_PORT) {
 #ifdef CONFIG_DTRACE
