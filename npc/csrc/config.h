@@ -7,7 +7,7 @@
 
 #define CONFIG_ITRACE 1
 #define CONFIG_DTRACE 1
-#define CONFIG_DIFFTEST 0
+#define CONFIG_DIFFTEST
 #define CONFIG_MTRACE
 #define CONFIG_FTRACE
 #endif
