@@ -40,7 +40,9 @@ int pmem_read(int raddr) {
   }
   // raddr = raddr & ~0x3u;
   word_t data = paddr_read(raddr, 4);
+#ifdef CONFIG_MTRACE
   Log("pmem_read: raddr=0x%x, data=0x%x\n", raddr, data);
+#endif
 #ifdef CONFIG_TRACE
   if (*imem_en_ref) {
     trace_exec(raddr, data);
@@ -77,6 +79,8 @@ void pmem_write(int waddr, int wdata, char wmask) {
     return;
   }
   paddr_write(waddr, len, wdata);
+#ifdef CONFIG_MTRACE
   Log("pmem_write: waddr=0x%x, data=0x%x\n", waddr, wdata);
+#endif
 }
 }
