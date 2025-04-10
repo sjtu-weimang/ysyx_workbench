@@ -203,47 +203,42 @@ module Controller(
   wire [2:0] _signals_T_245 = _signals_T_7 ? 3'h6 : _signals_T_244; // @[Lookup.scala 34:39]
   wire [2:0] _signals_T_246 = _signals_T_5 ? 3'h6 : _signals_T_245; // @[Lookup.scala 34:39]
   wire [2:0] _signals_T_247 = _signals_T_3 ? 3'h6 : _signals_T_246; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_248 = _signals_T_83 ? 4'h8 : 4'h0; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_249 = _signals_T_81 ? 4'h8 : _signals_T_248; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_250 = _signals_T_79 ? 4'h0 : _signals_T_249; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_251 = _signals_T_77 ? 4'h0 : _signals_T_250; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_252 = _signals_T_75 ? 4'h0 : _signals_T_251; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_253 = _signals_T_73 ? 4'h1 : _signals_T_252; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_254 = _signals_T_71 ? 4'h1 : _signals_T_253; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_255 = _signals_T_69 ? 4'h2 : _signals_T_254; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_256 = _signals_T_67 ? 4'h2 : _signals_T_255; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_257 = _signals_T_65 ? 4'h0 : _signals_T_256; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_258 = _signals_T_63 ? 4'h0 : _signals_T_257; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_259 = _signals_T_61 ? 4'h0 : _signals_T_258; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_260 = _signals_T_59 ? 4'h0 : _signals_T_259; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_261 = _signals_T_57 ? 4'h0 : _signals_T_260; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_262 = _signals_T_55 ? 4'h0 : _signals_T_261; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_263 = _signals_T_53 ? 4'h0 : _signals_T_262; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_264 = _signals_T_51 ? 4'h0 : _signals_T_263; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_265 = _signals_T_49 ? 4'h0 : _signals_T_264; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_266 = _signals_T_47 ? 4'h5 : _signals_T_265; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_267 = _signals_T_45 ? 4'h7 : _signals_T_266; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_268 = _signals_T_43 ? 4'h4 : _signals_T_267; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_269 = _signals_T_41 ? 4'h6 : _signals_T_268; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_270 = _signals_T_39 ? 4'h3 : _signals_T_269; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_271 = _signals_T_37 ? 4'h1 : _signals_T_270; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_272 = _signals_T_35 ? 4'h1 : _signals_T_271; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_273 = _signals_T_33 ? 4'h1 : _signals_T_272; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_274 = _signals_T_31 ? 4'h1 : _signals_T_273; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_275 = _signals_T_29 ? 4'h1 : _signals_T_274; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_276 = _signals_T_27 ? 4'h1 : _signals_T_275; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_277 = _signals_T_25 ? 4'h1 : _signals_T_276; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_278 = _signals_T_23 ? 4'h1 : _signals_T_277; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_279 = _signals_T_21 ? 4'h1 : _signals_T_278; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_280 = _signals_T_19 ? 4'h1 : _signals_T_279; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_281 = _signals_T_17 ? 4'h1 : _signals_T_280; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_282 = _signals_T_15 ? 4'h1 : _signals_T_281; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_283 = _signals_T_13 ? 4'h1 : _signals_T_282; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_284 = _signals_T_11 ? 4'h1 : _signals_T_283; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_285 = _signals_T_9 ? 4'h1 : _signals_T_284; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_286 = _signals_T_7 ? 4'h1 : _signals_T_285; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_287 = _signals_T_5 ? 4'h1 : _signals_T_286; // @[Lookup.scala 34:39]
-  wire [3:0] _signals_T_288 = _signals_T_3 ? 4'h1 : _signals_T_287; // @[Lookup.scala 34:39]
+  wire  _signals_T_254 = _signals_T_71 | _signals_T_73; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_255 = _signals_T_69 ? 2'h2 : {{1'd0}, _signals_T_254}; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_256 = _signals_T_67 ? 2'h2 : _signals_T_255; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_257 = _signals_T_65 ? 2'h0 : _signals_T_256; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_258 = _signals_T_63 ? 2'h0 : _signals_T_257; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_259 = _signals_T_61 ? 2'h0 : _signals_T_258; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_260 = _signals_T_59 ? 2'h0 : _signals_T_259; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_261 = _signals_T_57 ? 2'h0 : _signals_T_260; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_262 = _signals_T_55 ? 2'h0 : _signals_T_261; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_263 = _signals_T_53 ? 2'h0 : _signals_T_262; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_264 = _signals_T_51 ? 2'h0 : _signals_T_263; // @[Lookup.scala 34:39]
+  wire [1:0] _signals_T_265 = _signals_T_49 ? 2'h0 : _signals_T_264; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_266 = _signals_T_47 ? 3'h5 : {{1'd0}, _signals_T_265}; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_267 = _signals_T_45 ? 3'h7 : _signals_T_266; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_268 = _signals_T_43 ? 3'h4 : _signals_T_267; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_269 = _signals_T_41 ? 3'h6 : _signals_T_268; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_270 = _signals_T_39 ? 3'h3 : _signals_T_269; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_271 = _signals_T_37 ? 3'h1 : _signals_T_270; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_272 = _signals_T_35 ? 3'h1 : _signals_T_271; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_273 = _signals_T_33 ? 3'h1 : _signals_T_272; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_274 = _signals_T_31 ? 3'h1 : _signals_T_273; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_275 = _signals_T_29 ? 3'h1 : _signals_T_274; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_276 = _signals_T_27 ? 3'h1 : _signals_T_275; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_277 = _signals_T_25 ? 3'h1 : _signals_T_276; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_278 = _signals_T_23 ? 3'h1 : _signals_T_277; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_279 = _signals_T_21 ? 3'h1 : _signals_T_278; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_280 = _signals_T_19 ? 3'h1 : _signals_T_279; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_281 = _signals_T_17 ? 3'h1 : _signals_T_280; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_282 = _signals_T_15 ? 3'h1 : _signals_T_281; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_283 = _signals_T_13 ? 3'h1 : _signals_T_282; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_284 = _signals_T_11 ? 3'h1 : _signals_T_283; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_285 = _signals_T_9 ? 3'h1 : _signals_T_284; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_286 = _signals_T_7 ? 3'h1 : _signals_T_285; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_287 = _signals_T_5 ? 3'h1 : _signals_T_286; // @[Lookup.scala 34:39]
+  wire [2:0] _signals_T_288 = _signals_T_3 ? 3'h1 : _signals_T_287; // @[Lookup.scala 34:39]
+  wire [2:0] signals_4 = _signals_T_1 ? 3'h1 : _signals_T_288; // @[Lookup.scala 34:39]
   wire [7:0] _signals_T_289 = _signals_T_83 ? 8'h0 : 8'hff; // @[Lookup.scala 34:39]
   wire [7:0] _signals_T_290 = _signals_T_81 ? 8'h0 : _signals_T_289; // @[Lookup.scala 34:39]
   wire [7:0] _signals_T_291 = _signals_T_79 ? 8'h0 : _signals_T_290; // @[Lookup.scala 34:39]
@@ -423,7 +418,7 @@ module Controller(
   assign io_imm_type = _signals_T_1 ? 3'h6 : _signals_T_247; // @[Lookup.scala 34:39]
   assign io_A_sel = _signals_T_1 ? 2'h1 : _signals_T_165; // @[Lookup.scala 34:39]
   assign io_B_sel = {{1'd0}, signals_2}; // @[Controller.scala 108:12]
-  assign io_WB_sel = _signals_T_1 ? 4'h1 : _signals_T_288; // @[Lookup.scala 34:39]
+  assign io_WB_sel = {{1'd0}, signals_4}; // @[Controller.scala 109:13]
   assign io_ALU_sel = {{1'd0}, signals_8}; // @[Controller.scala 121:14]
   assign io_ebreak_en = {{7'd0}, _io_ebreak_en_T_2}; // @[Controller.scala 111:16]
   assign io_ebreak_code = _signals_T_1 ? 8'h0 : _signals_T_329; // @[Lookup.scala 34:39]
@@ -450,7 +445,6 @@ module RegisterFile(
   output [31:0] io_reg2_data,
   input  [31:0] io_csr_addr,
   input  [31:0] io_csr_wdata,
-  output [31:0] io_csr_rdata,
   input         io_csr_rw_enable,
   input         io_csr_rs_enable,
   input         io_csr_ecall_enable,
@@ -657,16 +651,46 @@ module RegisterFile(
   wire [2:0] _csr_id_T_12 = 12'hf12 == io_csr_addr[11:0] ? 3'h5 : _csr_id_T_10; // @[Mux.scala 81:58]
   wire [4:0] csr_id = {{2'd0}, _csr_id_T_12}; // @[RegisterFile.scala 49:28 51:10]
   wire  csr_valid = csr_id != 5'h7; // @[RegisterFile.scala 59:24]
-  wire [31:0] _GEN_167 = 3'h1 == csr_id[2:0] ? csr_1 : csr_0; // @[RegisterFile.scala 64:{33,33}]
-  wire [31:0] _GEN_168 = 3'h2 == csr_id[2:0] ? csr_2 : _GEN_167; // @[RegisterFile.scala 64:{33,33}]
-  wire [31:0] _GEN_169 = 3'h3 == csr_id[2:0] ? csr_3 : _GEN_168; // @[RegisterFile.scala 64:{33,33}]
-  wire [31:0] _GEN_170 = 3'h4 == csr_id[2:0] ? csr_4 : _GEN_169; // @[RegisterFile.scala 64:{33,33}]
-  wire [31:0] _GEN_171 = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 64:{33,33}]
-  wire [31:0] _csr_T_1 = _GEN_171 | io_csr_wdata; // @[RegisterFile.scala 65:32]
-  wire [31:0] _GEN_184 = io_csr_mret_enable ? 32'h80 : csr_0; // @[RegisterFile.scala 69:34 70:12 38:28]
+  wire [31:0] _GEN_161 = 3'h1 == csr_id[2:0] ? csr_1 : csr_0; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_162 = 3'h2 == csr_id[2:0] ? csr_2 : _GEN_161; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_163 = 3'h3 == csr_id[2:0] ? csr_3 : _GEN_162; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_164 = 3'h4 == csr_id[2:0] ? csr_4 : _GEN_163; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_165 = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_164; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_129 = 5'h1 == io_write_address ? _GEN_165 : _GEN_33; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_130 = 5'h2 == io_write_address ? _GEN_165 : _GEN_34; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_131 = 5'h3 == io_write_address ? _GEN_165 : _GEN_35; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_132 = 5'h4 == io_write_address ? _GEN_165 : _GEN_36; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_133 = 5'h5 == io_write_address ? _GEN_165 : _GEN_37; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_134 = 5'h6 == io_write_address ? _GEN_165 : _GEN_38; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_135 = 5'h7 == io_write_address ? _GEN_165 : _GEN_39; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_136 = 5'h8 == io_write_address ? _GEN_165 : _GEN_40; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_137 = 5'h9 == io_write_address ? _GEN_165 : _GEN_41; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_138 = 5'ha == io_write_address ? _GEN_165 : _GEN_42; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_139 = 5'hb == io_write_address ? _GEN_165 : _GEN_43; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_140 = 5'hc == io_write_address ? _GEN_165 : _GEN_44; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_141 = 5'hd == io_write_address ? _GEN_165 : _GEN_45; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_142 = 5'he == io_write_address ? _GEN_165 : _GEN_46; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_143 = 5'hf == io_write_address ? _GEN_165 : _GEN_47; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_144 = 5'h10 == io_write_address ? _GEN_165 : _GEN_48; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_145 = 5'h11 == io_write_address ? _GEN_165 : _GEN_49; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_146 = 5'h12 == io_write_address ? _GEN_165 : _GEN_50; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_147 = 5'h13 == io_write_address ? _GEN_165 : _GEN_51; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_148 = 5'h14 == io_write_address ? _GEN_165 : _GEN_52; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_149 = 5'h15 == io_write_address ? _GEN_165 : _GEN_53; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_150 = 5'h16 == io_write_address ? _GEN_165 : _GEN_54; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_151 = 5'h17 == io_write_address ? _GEN_165 : _GEN_55; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_152 = 5'h18 == io_write_address ? _GEN_165 : _GEN_56; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_153 = 5'h19 == io_write_address ? _GEN_165 : _GEN_57; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_154 = 5'h1a == io_write_address ? _GEN_165 : _GEN_58; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_155 = 5'h1b == io_write_address ? _GEN_165 : _GEN_59; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_156 = 5'h1c == io_write_address ? _GEN_165 : _GEN_60; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_157 = 5'h1d == io_write_address ? _GEN_165 : _GEN_61; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_158 = 5'h1e == io_write_address ? _GEN_165 : _GEN_62; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _GEN_159 = 5'h1f == io_write_address ? _GEN_165 : _GEN_63; // @[RegisterFile.scala 61:{33,33}]
+  wire [31:0] _csr_T_1 = _GEN_165 | io_csr_wdata; // @[RegisterFile.scala 65:32]
+  wire [31:0] _GEN_222 = io_csr_mret_enable ? 32'h80 : csr_0; // @[RegisterFile.scala 69:34 70:12 38:28]
   assign io_reg1_data = 5'h1f == io_reg1_addr ? registers_31 : _GEN_94; // @[RegisterFile.scala 46:{16,16}]
   assign io_reg2_data = 5'h1f == io_reg2_addr ? registers_31 : _GEN_126; // @[RegisterFile.scala 47:{16,16}]
-  assign io_csr_rdata = 3'h5 == csr_id[2:0] ? csr_5 : _GEN_170; // @[RegisterFile.scala 75:{16,16}]
   assign io_csr_ecall_ret = csr_3; // @[RegisterFile.scala 73:19]
   assign io_csr_mret_ret = csr_1; // @[RegisterFile.scala 74:19]
   assign io_test_reg_out_1 = registers_1; // @[RegisterFile.scala 77:19]
@@ -704,403 +728,279 @@ module RegisterFile(
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_1 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_1 <= _GEN_33;
+      registers_1 <= _GEN_129;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_1 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_1 <= _GEN_33;
-      end
+      registers_1 <= _GEN_129;
     end else begin
       registers_1 <= _GEN_33;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_2 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_2 <= _GEN_34;
+      registers_2 <= _GEN_130;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h2 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_2 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_2 <= _GEN_34;
-      end
+      registers_2 <= _GEN_130;
     end else begin
       registers_2 <= _GEN_34;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_3 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_3 <= _GEN_35;
+      registers_3 <= _GEN_131;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h3 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_3 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_3 <= _GEN_35;
-      end
+      registers_3 <= _GEN_131;
     end else begin
       registers_3 <= _GEN_35;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_4 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_4 <= _GEN_36;
+      registers_4 <= _GEN_132;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h4 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_4 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_4 <= _GEN_36;
-      end
+      registers_4 <= _GEN_132;
     end else begin
       registers_4 <= _GEN_36;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_5 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_5 <= _GEN_37;
+      registers_5 <= _GEN_133;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h5 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_5 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_5 <= _GEN_37;
-      end
+      registers_5 <= _GEN_133;
     end else begin
       registers_5 <= _GEN_37;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_6 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_6 <= _GEN_38;
+      registers_6 <= _GEN_134;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h6 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_6 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_6 <= _GEN_38;
-      end
+      registers_6 <= _GEN_134;
     end else begin
       registers_6 <= _GEN_38;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_7 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_7 <= _GEN_39;
+      registers_7 <= _GEN_135;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h7 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_7 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_7 <= _GEN_39;
-      end
+      registers_7 <= _GEN_135;
     end else begin
       registers_7 <= _GEN_39;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_8 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_8 <= _GEN_40;
+      registers_8 <= _GEN_136;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h8 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_8 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_8 <= _GEN_40;
-      end
+      registers_8 <= _GEN_136;
     end else begin
       registers_8 <= _GEN_40;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_9 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_9 <= _GEN_41;
+      registers_9 <= _GEN_137;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h9 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_9 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_9 <= _GEN_41;
-      end
+      registers_9 <= _GEN_137;
     end else begin
       registers_9 <= _GEN_41;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_10 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_10 <= _GEN_42;
+      registers_10 <= _GEN_138;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'ha == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_10 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_10 <= _GEN_42;
-      end
+      registers_10 <= _GEN_138;
     end else begin
       registers_10 <= _GEN_42;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_11 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_11 <= _GEN_43;
+      registers_11 <= _GEN_139;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'hb == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_11 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_11 <= _GEN_43;
-      end
+      registers_11 <= _GEN_139;
     end else begin
       registers_11 <= _GEN_43;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_12 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_12 <= _GEN_44;
+      registers_12 <= _GEN_140;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'hc == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_12 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_12 <= _GEN_44;
-      end
+      registers_12 <= _GEN_140;
     end else begin
       registers_12 <= _GEN_44;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_13 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_13 <= _GEN_45;
+      registers_13 <= _GEN_141;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'hd == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_13 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_13 <= _GEN_45;
-      end
+      registers_13 <= _GEN_141;
     end else begin
       registers_13 <= _GEN_45;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_14 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_14 <= _GEN_46;
+      registers_14 <= _GEN_142;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'he == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_14 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_14 <= _GEN_46;
-      end
+      registers_14 <= _GEN_142;
     end else begin
       registers_14 <= _GEN_46;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_15 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_15 <= _GEN_47;
+      registers_15 <= _GEN_143;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'hf == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_15 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_15 <= _GEN_47;
-      end
+      registers_15 <= _GEN_143;
     end else begin
       registers_15 <= _GEN_47;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_16 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_16 <= _GEN_48;
+      registers_16 <= _GEN_144;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h10 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_16 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_16 <= _GEN_48;
-      end
+      registers_16 <= _GEN_144;
     end else begin
       registers_16 <= _GEN_48;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_17 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_17 <= _GEN_49;
+      registers_17 <= _GEN_145;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h11 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_17 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_17 <= _GEN_49;
-      end
+      registers_17 <= _GEN_145;
     end else begin
       registers_17 <= _GEN_49;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_18 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_18 <= _GEN_50;
+      registers_18 <= _GEN_146;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h12 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_18 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_18 <= _GEN_50;
-      end
+      registers_18 <= _GEN_146;
     end else begin
       registers_18 <= _GEN_50;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_19 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_19 <= _GEN_51;
+      registers_19 <= _GEN_147;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h13 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_19 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_19 <= _GEN_51;
-      end
+      registers_19 <= _GEN_147;
     end else begin
       registers_19 <= _GEN_51;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_20 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_20 <= _GEN_52;
+      registers_20 <= _GEN_148;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h14 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_20 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_20 <= _GEN_52;
-      end
+      registers_20 <= _GEN_148;
     end else begin
       registers_20 <= _GEN_52;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_21 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_21 <= _GEN_53;
+      registers_21 <= _GEN_149;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h15 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_21 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_21 <= _GEN_53;
-      end
+      registers_21 <= _GEN_149;
     end else begin
       registers_21 <= _GEN_53;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_22 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_22 <= _GEN_54;
+      registers_22 <= _GEN_150;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h16 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_22 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_22 <= _GEN_54;
-      end
+      registers_22 <= _GEN_150;
     end else begin
       registers_22 <= _GEN_54;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_23 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_23 <= _GEN_55;
+      registers_23 <= _GEN_151;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h17 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_23 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_23 <= _GEN_55;
-      end
+      registers_23 <= _GEN_151;
     end else begin
       registers_23 <= _GEN_55;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_24 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_24 <= _GEN_56;
+      registers_24 <= _GEN_152;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h18 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_24 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_24 <= _GEN_56;
-      end
+      registers_24 <= _GEN_152;
     end else begin
       registers_24 <= _GEN_56;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_25 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_25 <= _GEN_57;
+      registers_25 <= _GEN_153;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h19 == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_25 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_25 <= _GEN_57;
-      end
+      registers_25 <= _GEN_153;
     end else begin
       registers_25 <= _GEN_57;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_26 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_26 <= _GEN_58;
+      registers_26 <= _GEN_154;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1a == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_26 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_26 <= _GEN_58;
-      end
+      registers_26 <= _GEN_154;
     end else begin
       registers_26 <= _GEN_58;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_27 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_27 <= _GEN_59;
+      registers_27 <= _GEN_155;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1b == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_27 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_27 <= _GEN_59;
-      end
+      registers_27 <= _GEN_155;
     end else begin
       registers_27 <= _GEN_59;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_28 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_28 <= _GEN_60;
+      registers_28 <= _GEN_156;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1c == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_28 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_28 <= _GEN_60;
-      end
+      registers_28 <= _GEN_156;
     end else begin
       registers_28 <= _GEN_60;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_29 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_29 <= _GEN_61;
+      registers_29 <= _GEN_157;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1d == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_29 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_29 <= _GEN_61;
-      end
+      registers_29 <= _GEN_157;
     end else begin
       registers_29 <= _GEN_61;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_30 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_30 <= _GEN_62;
+      registers_30 <= _GEN_158;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1e == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_30 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_30 <= _GEN_62;
-      end
+      registers_30 <= _GEN_158;
     end else begin
       registers_30 <= _GEN_62;
     end
     if (reset) begin // @[RegisterFile.scala 37:34]
       registers_31 <= 32'h0; // @[RegisterFile.scala 37:34]
     end else if (io_csr_rw_enable & csr_valid) begin // @[RegisterFile.scala 60:38]
-      registers_31 <= _GEN_63;
+      registers_31 <= _GEN_159;
     end else if (io_csr_rs_enable & csr_valid) begin // @[RegisterFile.scala 63:44]
-      if (5'h1f == io_write_address) begin // @[RegisterFile.scala 64:33]
-        registers_31 <= _GEN_171; // @[RegisterFile.scala 64:33]
-      end else begin
-        registers_31 <= _GEN_63;
-      end
+      registers_31 <= _GEN_159;
     end else begin
       registers_31 <= _GEN_63;
     end
@@ -1115,7 +1015,7 @@ module RegisterFile(
         csr_0 <= _csr_T_1; // @[RegisterFile.scala 65:17]
       end
     end else if (!(io_csr_ecall_enable)) begin // @[RegisterFile.scala 66:35]
-      csr_0 <= _GEN_184;
+      csr_0 <= _GEN_222;
     end
     if (reset) begin // @[RegisterFile.scala 38:28]
       csr_1 <= 32'h0; // @[RegisterFile.scala 38:28]
@@ -1333,7 +1233,6 @@ module TopLevel(
   wire [31:0] register_file_io_reg2_data; // @[TopLevel.scala 17:29]
   wire [31:0] register_file_io_csr_addr; // @[TopLevel.scala 17:29]
   wire [31:0] register_file_io_csr_wdata; // @[TopLevel.scala 17:29]
-  wire [31:0] register_file_io_csr_rdata; // @[TopLevel.scala 17:29]
   wire  register_file_io_csr_rw_enable; // @[TopLevel.scala 17:29]
   wire  register_file_io_csr_rs_enable; // @[TopLevel.scala 17:29]
   wire  register_file_io_csr_ecall_enable; // @[TopLevel.scala 17:29]
@@ -1408,8 +1307,6 @@ module TopLevel(
     _register_file_io_write_data_T_19; // @[Mux.scala 81:58]
   wire [31:0] _register_file_io_write_data_T_23 = 4'h6 == controller_io_WB_sel ? _register_file_io_write_data_T_7 :
     _register_file_io_write_data_T_21; // @[Mux.scala 81:58]
-  wire [31:0] _register_file_io_write_data_T_25 = 4'h7 == controller_io_WB_sel ? _register_file_io_write_data_T_11 :
-    _register_file_io_write_data_T_23; // @[Mux.scala 81:58]
   reg [31:0] dmem_write_data; // @[TopLevel.scala 112:32]
   Controller controller ( // @[TopLevel.scala 13:26]
     .clock(controller_clock),
@@ -1463,7 +1360,6 @@ module TopLevel(
     .io_reg2_data(register_file_io_reg2_data),
     .io_csr_addr(register_file_io_csr_addr),
     .io_csr_wdata(register_file_io_csr_wdata),
-    .io_csr_rdata(register_file_io_csr_rdata),
     .io_csr_rw_enable(register_file_io_csr_rw_enable),
     .io_csr_rs_enable(register_file_io_csr_rs_enable),
     .io_csr_ecall_enable(register_file_io_csr_ecall_enable),
@@ -1571,8 +1467,8 @@ module TopLevel(
   assign register_file_clock = clock;
   assign register_file_reset = reset;
   assign register_file_io_write_address = inst[11:7]; // @[TopLevel.scala 86:41]
-  assign register_file_io_write_data = 4'h8 == controller_io_WB_sel ? register_file_io_csr_rdata :
-    _register_file_io_write_data_T_25; // @[Mux.scala 81:58]
+  assign register_file_io_write_data = 4'h7 == controller_io_WB_sel ? _register_file_io_write_data_T_11 :
+    _register_file_io_write_data_T_23; // @[Mux.scala 81:58]
   assign register_file_io_write_enable = controller_io_reg_write_en; // @[TopLevel.scala 87:33]
   assign register_file_io_reg1_addr = inst[19:15]; // @[TopLevel.scala 88:37]
   assign register_file_io_reg2_addr = inst[24:20]; // @[TopLevel.scala 89:37]
