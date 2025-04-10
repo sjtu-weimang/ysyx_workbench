@@ -3,6 +3,7 @@ cmd_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/nemu-
 source_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/nemu-main.o := src/nemu-main.c
 
 deps_/home/zhang/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/nemu-main.o := \
+    $(wildcard include/config/mtrace.h) \
     $(wildcard include/config/target/am.h) \
     $(wildcard include/config/debug.h) \
   /home/zhang/ysyx-workbench/nemu/include/common.h \

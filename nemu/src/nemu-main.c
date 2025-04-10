@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
+#define CONFIG_MTRACE
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
