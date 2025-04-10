@@ -44,7 +44,7 @@
   do {                                                                         \
     extern FILE *log_fp;                                                       \
     extern bool log_enable();                                                  \
-    if (log_enable()) {                                                        \
+    if (1) {                                                                   \
       fprintf(log_fp, __VA_ARGS__);                                            \
       fflush(log_fp);                                                          \
     }                                                                          \
