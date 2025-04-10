@@ -51,7 +51,7 @@ int pmem_read(int raddr) {
   return data;
 }
 void pmem_write(int waddr, int wdata, char wmask) {
-  waddr = waddr & ~0x3u;
+  // waddr = waddr & ~0x3u;
   bool mmio = false;
   if (waddr == SERIAL_PORT) {
 #ifdef CONFIG_DTRACE
