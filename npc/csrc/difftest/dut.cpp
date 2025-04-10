@@ -18,6 +18,7 @@
 
 #include "../config.h"
 #include "../isa/isa.h"
+#include "common.h"
 #include "difftest-def.h"
 
 void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n,
