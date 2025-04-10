@@ -35,17 +35,17 @@ static vaddr_t *csr_register(word_t imm) {
     panic("Unknown csr");
   }
 }
-
-#define MRET                                                                   \
-  {                                                                            \
-    s->dnpc = cpu.mepc;                                                        \
-  }
 /*
-  cpu.mstatus &= ~(1 << 3);                                                  \
-  cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4);                            \
-  cpu.mstatus |= (1 << 7);                                                   \
-  cpu.mstatus &= ~((1 << 11) + (1 << 12));                                   \
-}*/
+// #define MRET \
+//   { \
+//     s->dnpc = cpu.mepc;
+// cpu.mstatus = 0x80;
+// }
+//     cpu.mstatus &= ~(1 << 3); \
+//     cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4); \
+//     cpu.mstatus |= (1 << 7); \
+//     cpu.mstatus &= ~((1 << 11) + (1 << 12)); \
+//   }*/
 void trace_exception(word_t NO, vaddr_t epc);
 #define ECALL                                                                  \
   {                                                                            \
@@ -221,7 +221,8 @@ static int decode_exec(Decode *s) {
           R(dest) = (((uint64_t)src1 * (uint64_t)src2)) >> 32);
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw, R,
           R(dest) = SEXT(src1 * src2, 32));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, MRET);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, s->dnpc = cpu.mepc;
+          cpu.mstatus = 0x80;);
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori, I,
           R(dest) = src1 ^ imm);
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or, R,
