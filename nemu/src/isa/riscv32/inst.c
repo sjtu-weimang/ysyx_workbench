@@ -40,7 +40,12 @@ static vaddr_t *csr_register(word_t imm) {
   {                                                                            \
     s->dnpc = cpu.mepc;                                                        \
   }
-
+/*
+  cpu.mstatus &= ~(1 << 3);                                                  \
+  cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4);                            \
+  cpu.mstatus |= (1 << 7);                                                   \
+  cpu.mstatus &= ~((1 << 11) + (1 << 12));                                   \
+}*/
 void trace_exception(word_t NO, vaddr_t epc);
 #define ECALL                                                                  \
   {                                                                            \
