@@ -59,8 +59,6 @@ void pmem_write(int waddr, int wdata, char wmask) {
 #endif
     putchar(wdata);
     mmio = true;
-    // fflush(stdout);
-    // return;
   }
   if (mmio) {
 #ifdef CONFIG_DIFFTEST
