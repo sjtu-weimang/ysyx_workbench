@@ -101,6 +101,9 @@ word_t paddr_read(paddr_t addr, int len) {
 word_t vaddr_read(paddr_t addr, int len) { return paddr_read(addr, len); }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+  if (addr == 0x8211c05c) {
+    printf("at fault position,data is %x,len is%d\n", data, len);
+  }
 
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
     // puts("Invalid memory access");
@@ -110,9 +113,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   if (len >= 2)
     *guest_to_host(addr + 1) = (data / 0x100) & 0xff;
   if (len == 4) {
-    if (addr == 0x8211c05c) {
-      printf("at fault position,data is %x", data);
-    }
+
     *guest_to_host(addr + 2) = (data / 0x10000) & 0xff;
     *guest_to_host(addr + 3) = (data / 0x1000000);
   }
