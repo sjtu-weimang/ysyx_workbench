@@ -69,7 +69,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 
 word_t paddr_read(paddr_t addr, int len) {
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
-    // puts("Invalid memory access");
+    puts("Invalid memory access");
 #ifdef CONFIG_MTRACE
     log_write("paddr_read: addr = " FMT_PADDR ", len = %d, data = INVALID\n",
               addr, len);
@@ -109,7 +109,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
             addr, len, data);
 #endif
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
-    // puts("Invalid memory access");
+    puts("Invalid memory access");
     return;
   }
   *guest_to_host(addr) = data & 0xff;
