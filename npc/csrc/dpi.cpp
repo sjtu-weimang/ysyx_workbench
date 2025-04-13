@@ -78,8 +78,7 @@ void pmem_write(int waddr, int wdata, char wmask) {
   }
   paddr_write(waddr, len, wdata);
 #ifdef CONFIG_MTRACE
-  if Log ("pmem_write: waddr=0x%x, data=0x%x\n", waddr, wdata)
-    ;
+  Log("pmem_write: waddr=0x%x, data=0x%x\n", waddr, wdata);
 #endif
 }
 }
