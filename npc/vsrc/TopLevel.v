@@ -1310,6 +1310,8 @@ module TopLevel(
   wire [31:0] _register_file_io_write_data_T_23 = 4'h6 == controller_io_WB_sel ? _register_file_io_write_data_T_7 :
     _register_file_io_write_data_T_21; // @[Mux.scala 81:58]
   reg [31:0] dmem_write_data; // @[TopLevel.scala 112:32]
+  wire  _T_3 = PC > 32'h8001753c & PC < 32'h80017570 & dmem_wen; // @[TopLevel.scala 121:48]
+  wire  _T_5 = ~reset; // @[TopLevel.scala 122:9]
   Controller controller ( // @[TopLevel.scala 13:26]
     .clock(controller_clock),
     .reset(controller_reset),
@@ -1511,5 +1513,27 @@ module TopLevel(
     end else begin
       dmem_write_data <= register_file_io_reg2_data; // @[TopLevel.scala 113:19]
     end
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_3 & ~reset) begin
+          $fwrite(32'h80000002,"dmem write addr is: %x\n",dmem_waddr); // @[TopLevel.scala 122:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
+    `ifndef SYNTHESIS
+    `ifdef PRINTF_COND
+      if (`PRINTF_COND) begin
+    `endif
+        if (_T_3 & _T_5) begin
+          $fwrite(32'h80000002,"dmem write data is: %x\n",dmem_wdata); // @[TopLevel.scala 123:9]
+        end
+    `ifdef PRINTF_COND
+      end
+    `endif
+    `endif // SYNTHESIS
   end
 endmodule
