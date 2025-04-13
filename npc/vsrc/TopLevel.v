@@ -1518,7 +1518,7 @@ module TopLevel(
       if (`PRINTF_COND) begin
     `endif
         if (_T_3 & ~reset) begin
-          $fwrite(32'h80000002,"dmem write addr is: %x\n",dmem_waddr); // @[TopLevel.scala 122:9]
+          $fwrite(32'h80000002,"atPC:%x,dmem write addr is: %x,",PC,dmem_waddr); // @[TopLevel.scala 122:9]
         end
     `ifdef PRINTF_COND
       end
