@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
   if (f == nullptr) {
     puts("Open executable image failed");
   }
-  const char *elf = argv[4];
-  const char *difftest_ref_so_file = argv[3];
+  const char *elf = argv[3];
+  const char *difftest_ref_so_file = argv[4];
   int img_size = fread(mem, 1, MEM_SIZE, f);
   is_ebreak = false;
   contextp->debug(0);
