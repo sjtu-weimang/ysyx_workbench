@@ -103,7 +103,7 @@ word_t vaddr_read(paddr_t addr, int len) { return paddr_read(addr, len); }
 void paddr_write(paddr_t addr, int len, word_t data) {
 
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
-    printf("Invalid memory access:%x\n", addr);
+    // printf("Invalid memory access:%x\n", addr);
     return;
   }
   *guest_to_host(addr) = data & 0xff;
