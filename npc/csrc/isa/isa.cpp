@@ -94,20 +94,13 @@ word_t paddr_read(paddr_t addr, int len) {
 #endif
     return 0;
   }
-#ifdef CONFIG_MTRACE
-  log_write("paddr_read: addr = " FMT_PADDR ", len = %d, data = " FMT_WORD "\n",
-            addr, len, result);
-#endif
+
   return result;
 }
 word_t vaddr_read(paddr_t addr, int len) { return paddr_read(addr, len); }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-#ifdef CONFIG_MTRACE
-  log_write("paddr_write: addr = " FMT_PADDR ", len = %d, data = " FMT_WORD
-            "\n",
-            addr, len, data);
-#endif
+
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
     puts("Invalid memory access");
     return;
