@@ -110,7 +110,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   if (len >= 2)
     *guest_to_host(addr + 1) = (data / 0x100) & 0xff;
   if (len == 4) {
-    if (addr == 8211c05c) {
+    if (addr == 0x8211c05c) {
       printf("at fault position,data is %x", data);
     }
     *guest_to_host(addr + 2) = (data / 0x10000) & 0xff;
