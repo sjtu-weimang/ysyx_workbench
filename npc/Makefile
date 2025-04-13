@@ -3,6 +3,7 @@ all:
 
 IMG = yield-os-riscv32e-npc.bin
 DIFFTEST_REF= ../nemu/build/riscv32-nemu-interpreter-so
+ELF = ../am-kernels/rt-thread-am/bsp/abstract-machine/build/rtthread-riscv32e-npc.elf
 LLVM_CONFIG ?= llvm-config
 LLVM_CXXFLAGS := $(shell $(LLVM_CONFIG) --cxxflags)
 LLVM_CXXFLAGS := $(filter-out -D__STDC_FORMAT_MACROS, $(LLVM_CXXFLAGS))
