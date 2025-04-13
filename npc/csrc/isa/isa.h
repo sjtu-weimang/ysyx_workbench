@@ -5,7 +5,7 @@
 #include "VTopLevel.h"
 #include <verilated.h>
 
-constexpr int MEM_SIZE = 2147483648;
+constexpr int MEM_SIZE = 1024 * 1024 * 30;
 extern uint8_t mem[MEM_SIZE];
 
 extern const std::unique_ptr<VerilatedContext> contextp;
