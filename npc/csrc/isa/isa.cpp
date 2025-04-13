@@ -1,6 +1,7 @@
 #include "isa.h"
 #include "../common.h"
 #include <stdint.h>
+#include <stdio.h>
 
 const char *regs[] = {"$0", "ra", "sp",  "gp",  "tp", "t0", "t1", "t2",
                       "s0", "s1", "a0",  "a1",  "a2", "a3", "a4", "a5",
@@ -69,7 +70,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
 
 word_t paddr_read(paddr_t addr, int len) {
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
-    puts("Invalid memory access");
+    // puts("Invalid memory access");
 #ifdef CONFIG_MTRACE
     log_write("paddr_read: addr = " FMT_PADDR ", len = %d, data = INVALID\n",
               addr, len);
@@ -102,13 +103,16 @@ word_t vaddr_read(paddr_t addr, int len) { return paddr_read(addr, len); }
 void paddr_write(paddr_t addr, int len, word_t data) {
 
   if (addr < CONFIG_MBASE || addr >= CONFIG_MBASE + MEM_SIZE) {
-    puts("Invalid memory access");
+    // puts("Invalid memory access");
     return;
   }
   *guest_to_host(addr) = data & 0xff;
   if (len >= 2)
     *guest_to_host(addr + 1) = (data / 0x100) & 0xff;
   if (len == 4) {
+    if (addr == 8211c05c) {
+      printf("at fault position,data is %x", data);
+    }
     *guest_to_host(addr + 2) = (data / 0x10000) & 0xff;
     *guest_to_host(addr + 3) = (data / 0x1000000);
   }
