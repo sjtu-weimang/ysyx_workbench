@@ -1,7 +1,7 @@
 .PHONY: sim clean
 all:
 
-IMG = yield-os-riscv32e-nemu.bin
+IMG = rtthread-riscv32e-nemu.bin
 DIFFTEST_REF= ../nemu/build/riscv32-nemu-interpreter-so
 ELF = ../am-kernels/rt-thread-am/bsp/abstract-machine/build/rtthread-riscv32e-npc.elf
 LLVM_CONFIG ?= llvm-config
