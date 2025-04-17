@@ -6,7 +6,9 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-static char HEX[] = "0123456789ABCDEF";
+#define HEX_LOWER "0123456789abcdef"
+#define HEX_UPPER "0123456789ABCDEF"
+
 // 使用va_list处理可变长度参数
 int printf(const char *fmt, ...) {
   char buffer[2048];
@@ -41,119 +43,244 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
   return ret;
 }
 
-// 实现%0n类型的功能
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  // panic("Not implemented");
-  char buffer[128];
-  char *txt, cha; // 字符串类型和字符类型
-  int num, len;
-  unsigned int unum; // 无符号整数
-  uint32_t pointer;  // 指针
-  int state = 0, i, j;
-  // bool fillFlag = false; // 补齐标志
-  // int fillSize = 0; // 对齐位数
-  for (i = 0, j = 0; fmt[i] != '\0'; i++) {
-    switch (state) {
-    case 0: // 正常复制
-      if (fmt[i] != '%') {
-        out[j] = fmt[i];
-        j++;
-      } else // 检测到%时进入类型匹配的阶段
-        state = 1;
-      break;
-    case 1: // 类型匹配
-      switch (fmt[i]) {
-      case '0': // 需要进行补齐
-        // fillFlag = true;
-        break;
-      case '2':
-      case '4':
-      case '8':
-        // fillFlag = fmt[i] - '0';
-        break;
-      case 's':
-        txt = va_arg(ap, char *);
-        for (int k = 0; txt[k] != '\0'; k++) {
-          out[j] = txt[k];
-          j++;
-        }
-        break;
-      case 'd':
-      case 'l':
-        num = va_arg(ap, int);
-        if (num == 0) {
-          out[j] = '0';
-          j++;
-          break;
-        }
-        if (num < 0) {
-          out[j] = '-';
-          j++;
-          num = -num;
-        }
-        for (len = 0; num; num /= 10, len++)
-          buffer[len] = HEX[num % 10];
-        for (int k = len - 1; k >= 0; k--) {
-          out[j] = buffer[k];
-          j++;
-        }
-        break;
-      case 'c':
-        cha = (char)va_arg(ap, int);
-        out[j] = cha;
-        j++;
-        break;
-      case 'p':
-        pointer = va_arg(ap, uint32_t);
-        for (len = 0; pointer; pointer /= 16, len++)
-          buffer[len] = HEX[pointer % 16];
-        for (int k = 0; k < 8 - len; k++) {
-          out[j] = '0';
-          j++;
-        }
-        for (int k = len - 1; k >= 0; k--) {
-          out[j] = buffer[k];
-          j++;
-        }
-        break;
-      case 'x':
-        unum = va_arg(ap, unsigned int);
-        if (unum == 0) {
-          out[j] = '0';
-          j++;
-          break;
-        }
-        for (len = 0; unum; unum >>= 4, len++)
-          buffer[len] = HEX[unum & 0xF];
-        for (int k = len - 1; k >= 0; k--) {
-          out[j] = buffer[k];
-          j++;
-        }
-        break;
-      case 'u':
-        unum = va_arg(ap, unsigned int);
-        if (unum == 0) {
-          out[j] = '0';
-          j++;
-          break;
-        }
-        for (len = 0; unum; unum /= 10, len++)
-          buffer[len] = HEX[unum % 10];
-        for (int k = len - 1; k >= 0; k--) {
-          out[j] = buffer[k];
-          j++;
-        }
-        break;
+typedef struct {
+  bool alternate;    // #
+  bool zero_pad;     // 0
+  bool left_align;   // -
+  bool space;        //
+  bool sign;         // +
+  int width;         // minimum field width
+  int precision;     // precision
+  bool is_long;      // l
+  bool is_long_long; // ll
+  char specifier;    // conversion specifier
+} FormatFlags;
 
-      default:
-        assert(0);
-      }
-      state = 0;
+static void parse_flags(const char **fmt, FormatFlags *flags) {
+  while (1) {
+    switch (**fmt) {
+    case '#':
+      flags->alternate = true;
       break;
+    case '0':
+      flags->zero_pad = true;
+      break;
+    case '-':
+      flags->left_align = true;
+      break;
+    case ' ':
+      flags->space = true;
+      break;
+    case '+':
+      flags->sign = true;
+      break;
+    default:
+      return;
     }
+    (*fmt)++;
   }
-  out[j] = '\0';
-  return j;
 }
 
+static int parse_number(const char **fmt, va_list *ap) {
+  if (**fmt == '*') {
+    (*fmt)++;
+    return va_arg(*ap, int);
+  }
+  int num = 0;
+  while (**fmt >= '0' && **fmt <= '9') {
+    num = num * 10 + (**fmt - '0');
+    (*fmt)++;
+  }
+  return num;
+}
+
+static void parse_format(const char **fmt, va_list *ap, FormatFlags *flags) {
+  parse_flags(fmt, flags);
+
+  // Parse width
+  flags->width = parse_number(fmt, ap);
+
+  // Parse precision
+  if (**fmt == '.') {
+    (*fmt)++;
+    flags->precision = parse_number(fmt, ap);
+  }
+
+  // Parse length
+  if (**fmt == 'l') {
+    (*fmt)++;
+    if (**fmt == 'l') {
+      (*fmt)++;
+      flags->is_long_long = true;
+    } else {
+      flags->is_long = true;
+    }
+  }
+
+  flags->specifier = **fmt;
+}
+
+static int write_char(char *out, int n, int *j, char c) {
+  if (*j < n - 1)
+    out[(*j)++] = c;
+  return 1;
+}
+
+static int write_num(char *out, int n, int *j, const char *buf, int len,
+                     FormatFlags *flags) {
+  int padding = flags->width > len ? flags->width - len : 0;
+  int total = 0;
+  char pad_char = flags->zero_pad && !flags->left_align ? '0' : ' ';
+
+  // Left padding
+  if (!flags->left_align) {
+    while (padding-- > 0)
+      total += write_char(out, n, j, pad_char);
+  }
+
+  // Number content
+  for (int i = 0; i < len; i++)
+    total += write_char(out, n, j, buf[i]);
+
+  // Right padding
+  if (flags->left_align) {
+    while (padding-- > 0)
+      total += write_char(out, n, j, ' ');
+  }
+  return total;
+}
+
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
+  char buffer[32];
+  int j = 0;
+  FormatFlags flags;
+
+  for (; *fmt && j < n; fmt++) {
+    if (*fmt != '%') {
+      write_char(out, n, &j, *fmt);
+      continue;
+    }
+
+    fmt++; // Skip '%'
+    if (*fmt == '%') {
+      write_char(out, n, &j, '%');
+      continue;
+    }
+
+    // Parse format specifier
+    flags = (FormatFlags){0};
+    parse_format(&fmt, &ap, &flags);
+
+    switch (flags.specifier) {
+    case 'n': {
+      int *ptr = va_arg(ap, int *);
+      *ptr = j;
+      break;
+    }
+    case 's': {
+      const char *s = va_arg(ap, const char *);
+      int len = 0;
+      while (s[len] && (flags.precision < 0 || len < flags.precision))
+        len++;
+      write_num(out, n, &j, s, len, &flags);
+      break;
+    }
+    case 'c': {
+      char c = (char)va_arg(ap, int);
+      write_num(out, n, &j, &c, 1, &flags);
+      break;
+    }
+    case 'd':
+    case 'i': {
+      long num = flags.is_long ? va_arg(ap, long) : va_arg(ap, int);
+      int neg = num < 0;
+      unsigned long unum = neg ? -num : num;
+
+      int idx = 0;
+      do {
+        buffer[idx++] = '0' + (unum % 10);
+        unum /= 10;
+      } while (unum > 0);
+
+      if (neg)
+        buffer[idx++] = '-';
+      else if (flags.sign)
+        buffer[idx++] = '+';
+      else if (flags.space)
+        buffer[idx++] = ' ';
+
+      // Reverse buffer
+      for (int i = 0; i < idx / 2; i++) {
+        char tmp = buffer[i];
+        buffer[i] = buffer[idx - 1 - i];
+        buffer[idx - 1 - i] = tmp;
+      }
+      write_num(out, n, &j, buffer, idx, &flags);
+      break;
+    }
+    case 'x':
+    case 'X': {
+      const char *hex = (flags.specifier == 'X') ? HEX_UPPER : HEX_LOWER;
+      unsigned long unum =
+          flags.is_long ? va_arg(ap, unsigned long) : va_arg(ap, unsigned int);
+      int idx = 0;
+
+      if (flags.alternate) {
+        write_char(out, n, &j, '0');
+        write_char(out, n, &j, flags.specifier);
+      }
+
+      do {
+        buffer[idx++] = hex[unum % 16];
+        unum /= 16;
+      } while (unum > 0);
+
+      // Reverse buffer
+      for (int i = 0; i < idx / 2; i++) {
+        char tmp = buffer[i];
+        buffer[i] = buffer[idx - 1 - i];
+        buffer[idx - 1 - i] = tmp;
+      }
+      write_num(out, n, &j, buffer, idx, &flags);
+      break;
+    }
+    case 'p': {
+      uintptr_t ptr = (uintptr_t)va_arg(ap, void *);
+      const char *hex = HEX_LOWER;
+      int idx = 0;
+
+      write_char(out, n, &j, '0');
+      write_char(out, n, &j, 'x');
+
+      do {
+        buffer[idx++] = hex[ptr % 16];
+        ptr /= 16;
+      } while (ptr > 0);
+
+      // Add leading zeros if needed
+      while (idx < (int)sizeof(void *) * 2)
+        buffer[idx++] = '0';
+
+      // Reverse buffer
+      for (int i = 0; i < idx / 2; i++) {
+        char tmp = buffer[i];
+        buffer[i] = buffer[idx - 1 - i];
+        buffer[idx - 1 - i] = tmp;
+      }
+      write_num(out, n, &j, buffer, idx, &flags);
+      break;
+    }
+    default:
+      write_char(out, n, &j, '%');
+      write_char(out, n, &j, flags.specifier);
+    }
+  }
+
+  if (j < n)
+    out[j] = '\0';
+  else if (n > 0)
+    out[n - 1] = '\0';
+
+  return j;
+}
 #endif
