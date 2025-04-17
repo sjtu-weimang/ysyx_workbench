@@ -82,59 +82,73 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         break;
 
       case 'd':
-            case 'i':
-              num = va_arg(ap, int);
-              if (num == 0) {
-                append('0');
-                break;
-              }
-              if (num < 0) {
-                append('-');
-                num = 0 - num;
-              }
-              for (len = 0; num; num /= 10, ++len)
-                // buffer[len] = num % 10 + '0';//逆序的
-                buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
-              for (int k = len - 1; k >= 0; --k)
-                append(buffer[k]);
-              break;
-            case 'l':
-              i++;
-              continue;
-            case 'c':
-              cha = (char)va_arg(ap, int);
-              append(cha);
-              break;
+      case 'i':
+        num = va_arg(ap, int);
+        if (num == 0) {
+          append('0');
+          break;
+        }
+        if (num < 0) {
+          append('-');
+          num = 0 - num;
+        }
+        for (len = 0; num; num /= 10, ++len)
+          // buffer[len] = num % 10 + '0';//逆序的
+          buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
+        for (int k = len - 1; k >= 0; --k)
+          append(buffer[k]);
+        break;
+      case 'l':
+        num = va_arg(ap, int);
+        if (num == 0) {
+          append('0');
+          break;
+        }
+        if (num < 0) {
+          append('-');
+          num = 0 - num;
+        }
+        for (len = 0; num; num /= 10, ++len)
+          // buffer[len] = num % 10 + '0';//逆序的
+          buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
+        for (int k = len - 1; k >= 0; --k)
+          append(buffer[k]);
+        i++;
+        break;
+      case 'c':
+        cha = (char)va_arg(ap, int);
+        append(cha);
+        break;
 
-            case 'p':
-              pointer = va_arg(ap, uint32_t);
-              for (len = 0; pointer; pointer /= 16, ++len)
-                buffer[len] = HEX_CHARACTERS[pointer % 16]; // 逆序的
-              for (int k = 0; k < BIT_WIDE_HEX - len; ++k)
-                append('0');
+      case 'p':
+        pointer = va_arg(ap, uint32_t);
+        for (len = 0; pointer; pointer /= 16, ++len)
+          buffer[len] = HEX_CHARACTERS[pointer % 16]; // 逆序的
+        for (int k = 0; k < BIT_WIDE_HEX - len; ++k)
+          append('0');
 
-              for (int k = len - 1; k >= 0; --k)
-                append(buffer[k]);
-              break;
+        for (int k = len - 1; k >= 0; --k)
+          append(buffer[k]);
+        break;
 
-            case 'x':
-            case 'X':
-              unum = va_arg(ap, unsigned int);
-              if (unum == 0) {
-                append('0');
-                break;
-              }
-              for (len = 0; unum; unum >>= 4, ++len)
-                buffer[len] = HEX_CHARACTERS[unum & 0xF]; // 逆序的
+      case 'x':
+      case 'X':
+        unum = va_arg(ap, unsigned int);
+        if (unum == 0) {
+          append('0');
+          break;
+        }
+        for (len = 0; unum; unum >>= 4, ++len)
+          buffer[len] = HEX_CHARACTERS[unum & 0xF]; // 逆序的
 
-              for (int k = len - 1; k >= 0; --k)
-                append(buffer[k]);
-              break;
-            case 'n': {
-              int *ptr = va_arg(ap, int *);
-              *ptr = j;
-              break;
-            }
+        for (int k = len - 1; k >= 0; --k)
+          append(buffer[k]);
+        break;
+      case 'n': {
+        int *ptr = va_arg(ap, int *);
+        *ptr = j;
+        break;
+      }
       case '#':
       case '0':
       case ' ':
