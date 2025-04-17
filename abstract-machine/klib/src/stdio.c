@@ -81,23 +81,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           append(txt[k]);
         break;
 
-      case 'd':
-        num = va_arg(ap, int);
-        if (num == 0) {
-          append('0');
-          break;
-        }
-        if (num < 0) {
-          append('-');
-          num = 0 - num;
-        }
-        for (len = 0; num; num /= 10, ++len)
-          // buffer[len] = num % 10 + '0';//逆序的
-          buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
-        for (int k = len - 1; k >= 0; --k)
-          append(buffer[k]);
-        break;
       case 'l':
+      case 'd':
         num = va_arg(ap, int);
         if (num == 0) {
           append('0');
