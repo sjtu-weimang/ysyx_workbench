@@ -112,7 +112,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2,
       src1R();
       src2R();
       break;
-  }
+    }
 }
 
 void trace_func_call(paddr_t pc, paddr_t target, bool is_tail);
@@ -269,6 +269,8 @@ static int decode_exec(Decode *s) {
           R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
   INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw, R,
           R(dest) = (sword_t)SEXT(src1, 32) >> BITS(src2, 4, 0));
+  INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra, R,
+          R(dest) = (sword_t)src1 >> BITS(src2, 5, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai, I,
           R(dest) = (sword_t)src1 >> BITS(imm, 5, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00110 11", sraiw, I,
