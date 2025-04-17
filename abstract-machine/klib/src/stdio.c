@@ -134,6 +134,12 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         *ptr = j;
         break;
       }
+      case '#':
+      case '0':
+      case ' ':
+      case '+':
+      case '-':
+        break;
 
       default:
         assert(0);
