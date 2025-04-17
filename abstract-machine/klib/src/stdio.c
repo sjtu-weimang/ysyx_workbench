@@ -83,6 +83,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 
       case 'l':
       case 'd':
+      case 'i':
         num = va_arg(ap, int);
         if (num == 0) {
           append('0');
