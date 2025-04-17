@@ -144,6 +144,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
 
       default:
         putch(state);
+        putch(state);
+        putch(state);
+        putch(state);
+        putch(state);
+        putch('\n');
         assert(0);
       }
       state = 0;
