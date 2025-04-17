@@ -113,7 +113,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
         for (int k = len - 1; k >= 0; --k)
           append(buffer[k]);
-        i++;
+        i += 2;
         break;
       case 'c':
         cha = (char)va_arg(ap, int);
