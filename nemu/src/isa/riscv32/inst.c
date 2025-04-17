@@ -95,6 +95,15 @@ enum {
                 13);                                                           \
   } while (0)
 
+#define MRET                                                                   \
+  {                                                                            \
+    s->dnpc = cpu.mepc;                                                        \
+    cpu.mstatus &= ~(1 << 3);                                                  \
+    cpu.mstatus |= ((cpu.mstatus & (1 << 7)) >> 4);                            \
+    cpu.mstatus |= (1 << 7);                                                   \
+    cpu.mstatus &= ~((1 << 11) + (1 << 12));                                   \
+  }
+
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2,
                            word_t *imm, int type) {
   uint32_t i = s->isa.inst;
@@ -215,16 +224,9 @@ static int decode_exec(Decode *s) {
           R(dest) = Mr(src1 + imm, 4));
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul, R,
           R(dest) = src1 * src2);
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh, R,
-          R(dest) = ((uint64_t)((int64_t)((sword_t)src1) *
-                                (int64_t)((sword_t)src2))) >>
-                    32);
-  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu, R,
-          R(dest) = (((uint64_t)src1 * (uint64_t)src2)) >> 32);
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw, R,
           R(dest) = SEXT(src1 * src2, 32));
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, s->dnpc = cpu.mepc;
-          cpu.mstatus = 0x80;);
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret, R, MRET);
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori, I,
           R(dest) = src1 ^ imm);
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or, R,
@@ -273,8 +275,6 @@ static int decode_exec(Decode *s) {
           R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
   INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw, R,
           R(dest) = (sword_t)SEXT(src1, 32) >> BITS(src2, 4, 0));
-  INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra, R,
-          R(dest) = (sword_t)src1 >> BITS(src2, 5, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00100 11", srai, I,
           R(dest) = (sword_t)src1 >> BITS(imm, 5, 0));
   INSTPAT("010000? ????? ????? 101 ????? 00110 11", sraiw, I,
@@ -294,8 +294,6 @@ static int decode_exec(Decode *s) {
           NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
-
-  R(0) = 0; // reset $zero to 0
 
   return 0;
 }
