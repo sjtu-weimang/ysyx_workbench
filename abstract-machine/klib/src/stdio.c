@@ -81,8 +81,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           append(txt[k]);
         break;
 
-      case 'l':
-      case 'd':
+            case 'd':
       case 'i':
         num = va_arg(ap, int);
         if (num == 0) {
@@ -99,7 +98,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         for (int k = len - 1; k >= 0; --k)
           append(buffer[k]);
         break;
-
+      case 'l':
+        i++;
+        continue;
       case 'c':
         cha = (char)va_arg(ap, int);
         append(cha);
