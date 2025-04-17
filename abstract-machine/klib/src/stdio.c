@@ -129,6 +129,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         for (int k = len - 1; k >= 0; --k)
           append(buffer[k]);
         break;
+      case 'n': {
+        int *ptr = va_arg(ap, int *);
+        *ptr = j;
+        break;
+      }
 
       default:
         assert(0);
