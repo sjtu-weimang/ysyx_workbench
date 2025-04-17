@@ -128,7 +128,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         break;
 
       default:
-        printf("unregnite state:%s\n", state);
         assert(0);
       }
       state = 0;
