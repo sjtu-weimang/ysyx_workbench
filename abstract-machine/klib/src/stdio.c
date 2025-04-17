@@ -158,6 +158,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
       case '*':
       case 'D':
       case 'g':
+      case 'G':
         break;
 
       default:
