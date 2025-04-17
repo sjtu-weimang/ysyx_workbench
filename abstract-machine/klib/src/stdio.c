@@ -116,6 +116,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         break;
 
       case 'x':
+      case 'X':
         unum = va_arg(ap, unsigned int);
         if (unum == 0) {
           append('0');
