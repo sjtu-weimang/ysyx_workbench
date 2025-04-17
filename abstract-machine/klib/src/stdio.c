@@ -67,7 +67,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   for (i = 0, j = 0; fmt[i] != '\0'; ++i) {
     switch (state) {
     case 0:
-      if (fmt[i] == '%') {
+      if (fmt[i] != '%') {
         append(fmt[i]);
       } else
         state = 1;
@@ -81,25 +81,9 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           append(txt[k]);
         break;
 
-         case 'd':
-      case 'i':
-        num = va_arg(ap, int);
-        if (num == 0) {
-          append('0');
-          break;
-        }
-        if (num < 0) {
-          append('-');
-          num = 0 - num;
-        }
-        for (len = 0; num; num /= 10, ++len)
-          // buffer[len] = num % 10 + '0';//逆序的
-          buffer[len] = HEX_CHARACTERS[num % 10]; // 逆序的
-        for (int k = len - 1; k >= 0; --k)
-          append(buffer[k]);
-        break;
       case 'l':
-        i++;
+      case 'd':
+      case 'i':
         num = va_arg(ap, int);
         if (num == 0) {
           append('0');
@@ -159,7 +143,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         break;
 
       default:
-        state = 0;
+        assert(0);
       }
       state = 0;
       break;
